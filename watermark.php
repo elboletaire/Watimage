@@ -817,10 +817,3 @@ class WatermarkComponent extends Object
 		return $destimg;
 	}
 }
-$wm = new Watermark();
-$wm->setImage('imatge23.jpg');
-$wm->setWatermark(array('file' => 'watermark.png', 'position' => 'bottom right', 'size' => '150%'));
-$wm->rotateImage(array('degrees' => 45, 'bgcolor' => 0));
-$wm->resize(array('type' => 'resizecrop', 'size' => array('300', '200')));
-$wm->applyWatermark();
-$wm->generate();
