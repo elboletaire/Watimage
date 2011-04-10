@@ -1,5 +1,6 @@
 <?php
 /**
+ * 
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
  * 
  * This program is free software; you can redistribute it and/or modify
@@ -13,7 +14,9 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License along
- * with this program. If not, see <http://www.gnu.org/licenses/>.
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
  */
 class WatermarkComponent extends Object
 {
@@ -74,7 +77,7 @@ class WatermarkComponent extends Object
 	 * Set image options
 	 * @param array $options [optional]
 	 */
-	function setImage($file)
+	public function setImage($file)
 	{
 		if (!empty($file))
 		{
@@ -363,7 +366,7 @@ class WatermarkComponent extends Object
 					$this->sizes['image']['height'] = $this->resize['size']['y'];
 					break;
 			}
-			if($this->file['watermark'])
+			if(isset($this->file['watermark']))
 			{
 				$this->getWatermarkPosition();
 			}
@@ -477,6 +480,7 @@ class WatermarkComponent extends Object
 				return $this->error('Watermark::generate: could not destroy watermark tempfile');
 			}
 		}
+		unset($this->file);
 		return true;
 	}
 
@@ -494,6 +498,8 @@ class WatermarkComponent extends Object
 			case 'image/jpeg':
 				$create = imagecreatefromjpeg($file);
 				break;
+			default: 
+				$create = false;
 		}
 		return $create;
 	}
@@ -680,7 +686,7 @@ class WatermarkComponent extends Object
 		return $destImage;
 	}
 	
-	private function error($type, $text)
+	private function error($text)
 	{
 		if(!is_array($this->errors)) $this->errors = array();
 		array_push($this->errors, $text);
