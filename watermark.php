@@ -541,7 +541,7 @@ class Watermark//Component extends Object
 			{
 				if ( preg_match('/bmp|tiff|jpg|jpeg/', $this->extension['image']) )
 					$this->output = 'image/jpeg';
-				elseif ( $this->extension['image'] = 'gif' )
+				elseif ( $this->extension['image'] == 'gif' )
 					$this->output = 'image/gif';
 				else
 					$this->output = 'image/png';
