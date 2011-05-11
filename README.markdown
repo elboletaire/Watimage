@@ -1,8 +1,9 @@
 ## You can find info about the implementation here:
 http://www.racotecnic.com
 
-Spanish post (newer): http://www.racotecnic.com/2011/04/clase-php-para-tratar-imagenes-rotar-redimensionar-anadir-marcas-de-agua/
-English post (without new features): http://www.racotecnic.com/2010/04/watermark-image-component-for-cakephp/
+· Spanish post (newer): http://www.racotecnic.com/2011/04/clase-php-para-tratar-imagenes-rotar-redimensionar-anadir-marcas-de-agua/
+
+· English post (without new features): http://www.racotecnic.com/2010/04/watermark-image-component-for-cakephp/
 
 
 ### LICENSE
