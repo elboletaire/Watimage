@@ -1,6 +1,6 @@
 <?php
 // error_reporting(E_ALL);
-// ini_set('display_errors', '1');
+// ini_set('display_errors', 1);
 /**
  * 
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
@@ -23,7 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
-
 
  // Uncomment next comment to use as CakePHP Component
 class Watermark//Component extends Object
@@ -68,7 +67,8 @@ class Watermark//Component extends Object
 	private $image;
 	private $watermark = false;
 	private $output;
-	private $quality = 80;
+	private $quality = 80; // image export quality. You can set it with $watermark->setQuality(50);
+						   // or with $watermark->setImage(array('quality' => 50, 'file' => 'file.jpg')
 	private $file;
 	private $extension;
 	
@@ -81,9 +81,22 @@ class Watermark//Component extends Object
 			$this->setWatermark($watermark);
 	}
 	
+	
 	/**
-	 * Set image options
-	 * @param array $options [optional]
+	 * Contructor function for CakePHP
+	 * @param Object &$controller pointer to calling controller
+	 */
+	public function initialize(&$controller, $options = array()) {
+		if ( !empty($options) )
+		{
+			if ( !empty($options['quality']) ) $this->setQuality($options['quality']);
+		}
+	}
+	
+	/**
+	 *	Set image options
+	 *	@param array $options [optional]
+	 *	@return true on success; otherwise will return false
 	 */
 	public function setImage($file)
 	{
@@ -131,8 +144,8 @@ class Watermark//Component extends Object
 	 *									or you can set an array of options like:
 	 *									$options = array(
 	 *										'file' => 'watermark.png',
-	 *										'position' => 'bottom center',
-	 *										'margin' => array('20', '10')
+	 *										'position' => 'bottom center', // 'bottom center' by default
+	 *										'margin' => array('20', '10') // 0 by default
 	 *									);
 	 * @return true on success; false on failure
 	 */
@@ -206,7 +219,11 @@ class Watermark//Component extends Object
 
 	/**
 	 *	Resizes the image
-	 *	@param array $options = array('type' => 'resizemin|resizecrop|resize|crop', 'size' => array('x' => 2000, 'y' => 500))
+	 *	@param array $options = array(
+						'type' => 'resizemin|resizecrop|resize|crop', 
+						'size' => array('x' => 2000, 'y' => 500)
+					)
+				You can also set the size without specifying x and y: array(2000, 500). Or directly 'size' => 2000 (takes 2000x2000)
 	 *	@return bool true on success; otherwise false
 	 */
 	public function resize($options = array())
@@ -257,7 +274,7 @@ class Watermark//Component extends Object
 			// Resize image!
 			switch ( $this->resize['type'] )
 			{
-				/**
+				/*
 				 * Maintains the aspect ratio of the image and makes sure that it fits
 				 * within the max width and max height (thus some side will be smaller)
 				 */
@@ -296,7 +313,7 @@ class Watermark//Component extends Object
 					$this->current_size['image']['width'] = $new_x;
 					$this->current_size['image']['height'] = $new_y;
 				break;
-				/**
+				/*
 				 * Maintains aspect ratio but resizes the image so that once
 				 * one side meets its max width or max height condition, it stays at that size
 				 * (thus one side will be larger)
@@ -332,7 +349,7 @@ class Watermark//Component extends Object
 					$this->current_size['image']['width'] = $new_x;
 					$this->current_size['image']['height'] = $new_y;
 				break;
-				/**
+				/*
 				 * resize to max, then crop to center
 				 */
 				case 'resizecrop':
@@ -364,8 +381,7 @@ class Watermark//Component extends Object
 					$this->current_size['image']['width'] = $this->resize['size']['x'];
 					$this->current_size['image']['height'] = $this->resize['size']['y'];
 				break;
-				
-				/**
+				/*
 				 * a straight centered crop
 				 */
 				case 'crop':
@@ -405,7 +421,8 @@ class Watermark//Component extends Object
 
 	/**
 	 *	Rotates an image
-	 *	@param mixed $options. You can specify directly the degrees or you can pass an array with degrees and bgcolor
+	 *	@param mixed $options = array('bgcolor' => 230, 'degrees' => -90); or $options = -90; // takes bgcolor = -1 by default
+	 *	@return true on success; false on failure
 	 */
 	public function rotateImage($options = array())
 	{
@@ -448,13 +465,17 @@ class Watermark//Component extends Object
 	}
 	
 	/**
-	 *	Shortcut for rotateImage
+	 *	rotateImage alias
 	 */
 	public function rotate($options = array())
 	{
 		return $this->rotateImage($options);
 	}
 
+	/**
+	 *	Applies a watermark to the image. Needs to be initialized with $this->setWatermark()
+	 *	@return true on success, otherwise false
+	 */
 	public function applyWatermark()
 	{
 		if ( !empty($this->errors) ) return false;
@@ -501,6 +522,7 @@ class Watermark//Component extends Object
 	/**
 	 *	Flips an image. 
 	 *	@param string $type [optional] type of flip: horizontal / vertical / both 
+	 *	@return true on success. Otherwise false
 	 */
 	public function flip($type = 'horizontal')
 	{
@@ -542,6 +564,7 @@ class Watermark//Component extends Object
 	 *	Generates the image file.
 	 *	@param string $path [optional] if not specified image will be printed on screen
 	 *	@param string $output [optional] mime type for output image (image/png, image/gif, image/jpeg)
+	 *	@return true on success. Otherwise false
 	 */
 	public function generate($path = null, $output = null)
 	{
@@ -615,6 +638,7 @@ class Watermark//Component extends Object
 
 	/**
 	 *	Creates an image from string
+	 *	@return true on success. Otherwise throws an Exception
 	 */
 	private function createImage($file)
 	{
@@ -631,6 +655,7 @@ class Watermark//Component extends Object
 
 	/**
 	 *	Applies some values to image for handling transparency
+	 *	@throw Exception on error
 	 */
 	private function handleTransparentImage()
 	{
@@ -652,6 +677,10 @@ class Watermark//Component extends Object
 		}
 	}
 
+	/**
+	 *	Gets the file extension
+	 *	@return string with extension. Throws an Exception on error
+	 */
 	private function getFileExtension( &$file )
 	{
 		$f = pathinfo($file);
@@ -663,7 +692,7 @@ class Watermark//Component extends Object
 
 	/**
 	 * Obtains image sizes
-	 * @return 
+	 * @return void
 	 */
 	private function getSizes()
 	{
@@ -743,7 +772,7 @@ class Watermark//Component extends Object
 
 	/**
 	 * Calculates the position using the 'position' and 'margin' vars
-	 * @return 
+	 * @return void
 	 */
 	private function getWatermarkPosition()
 	{
@@ -792,6 +821,7 @@ class Watermark//Component extends Object
 	
 	/**
 	 *	Reseizes a png image preserving transparency
+	 *	@return image resource
 	 */
 	private function resize_png_image($src_image, $width, $height)
 	{
