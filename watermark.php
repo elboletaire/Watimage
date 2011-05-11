@@ -6,7 +6,8 @@
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
  * @version 0.2 2011/04/16 
  *		Changes: now works with Exceptions. mime_content_type function has been removed. Added flip function & minor bugfixes)
- *
+ * @version 0.2.1 2011/05/11
+ *		Changes: added 'setQuality' method. Solved png exportation issue (bad quality calc)
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
@@ -22,6 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
+
+
  // Uncomment next comment to use as CakePHP Component
 class Watermark//Component extends Object
 {
@@ -86,8 +89,16 @@ class Watermark//Component extends Object
 	{
 		try
 		{
-			if ( empty($file) )
+			if ( is_array($file) && isset($file['file']) )
+			{
+				if ( isset($file['quality']) ) $this->setQuality($file['quality']);
+				$file = $file['file'];
+			}
+			elseif ( empty($file) || (is_array($file) && !isset($file['file'])) )
+			{
 				throw new Exception('Empty file');
+			}
+			
 			if ( file_exists($file) )
 			{
 				$this->file['image'] = $file;
@@ -107,6 +118,11 @@ class Watermark//Component extends Object
 			return false;
 		}
 		return true;
+	}
+	
+	public function setQuality($quality)
+	{
+		$this->quality = $quality;
 	}
 	
 	/**
@@ -539,7 +555,7 @@ class Watermark//Component extends Object
 			}
 			else
 			{
-				if ( preg_match('/bmp|tiff|jpg|jpeg/', $this->extension['image']) )
+				if ( preg_match('/jp(e)?g/', $this->extension['image']) )
 					$this->output = 'image/jpeg';
 				elseif ( $this->extension['image'] == 'gif' )
 					$this->output = 'image/gif';
@@ -555,7 +571,7 @@ class Watermark//Component extends Object
 			switch($this->output)
 			{
 				case 'image/png':
-					(int)$this->quality /= 10;
+					$this->quality = round(abs(($this->quality - 100) / 11.111111));
 					if ( !imagepng($this->image, $path, $this->quality) )
 					{
 						throw new Exception('could not generate png output image');
