@@ -5,7 +5,7 @@ require 'watermark.php';
 
 // Applying watermarks
 $wm = new Watermark();
-$wm->setImage('test.png');
+$wm->setImage(array('file' => 'test.png', 'quality' => 50));
 $wm->setWatermark(array('file' => 'watermark.png', 'position' => 'top right'));
 $wm->applyWatermark();
 if ( !$wm->generate('test1.png') ) {
