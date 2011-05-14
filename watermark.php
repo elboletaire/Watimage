@@ -5,9 +5,12 @@
  * 
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
  * @version 0.2 2011/04/16 
- *		Changes: now works with Exceptions. mime_content_type function has been removed. Added flip function & minor bugfixes)
+ *		Changes: · Now works with Exceptions. · mime_content_type function has been removed. · Added flip function. · Minor bugfixes
  * @version 0.2.1 2011/05/11
  *		Changes: added 'setQuality' method. Solved png exportation issue (bad quality calc)
+ *				 Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
+ * @version 0.2.2 2011/05/14
+ *		Changes: solved an issue that where reducing exponentially the image quality when inside a loop
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
@@ -24,8 +27,8 @@
  *
  */
 
- // Uncomment next comment to use as CakePHP Component
-class Watermark//Component extends Object
+// Uncomment next comment to use as CakePHP Component
+class WatermarkComponent extends Object
 {
 	
 
@@ -86,7 +89,8 @@ class Watermark//Component extends Object
 	 * Contructor function for CakePHP
 	 * @param Object &$controller pointer to calling controller
 	 */
-	public function initialize(&$controller, $options = array()) {
+	public function initialize(&$controller, $options = array())
+	{
 		if ( !empty($options) )
 		{
 			if ( !empty($options['quality']) ) $this->setQuality($options['quality']);
@@ -141,12 +145,12 @@ class Watermark//Component extends Object
 	/**
 	 * Set watermark options
 	 * @param mixed $options [optional] you can set the watermark without options 
-	 *									or you can set an array of options like:
-	 *									$options = array(
-	 *										'file' => 'watermark.png',
-	 *										'position' => 'bottom center', // 'bottom center' by default
-	 *										'margin' => array('20', '10') // 0 by default
-	 *									);
+	 *				or you can set an array of options like:
+	 *				$options = array(
+	 *					'file' => 'watermark.png',
+	 *					'position' => 'bottom center', // 'bottom center' by default
+	 *					'margin' => array('20', '10') // 0 by default
+	 *				);
 	 * @return true on success; false on failure
 	 */
 	public function setWatermark($options = array())
@@ -229,7 +233,7 @@ class Watermark//Component extends Object
 	public function resize($options = array())
 	{
 		if ( !empty($this->errors) ) return false;
-		
+
 		try
 		{
 			if ( !empty($options['type']) )
@@ -241,7 +245,9 @@ class Watermark//Component extends Object
 				}
 			}
 			else
+			{
 				throw new Exception('You must specify the type of resize (resizecrop|crop|resize|resizemin)');
+			}
 			
 			if ( !empty($options['size']) )
 			{
@@ -270,7 +276,10 @@ class Watermark//Component extends Object
 				}
 			}
 			else
+			{
 				throw new Exception('You must specify the size to being resized');
+			}
+
 			// Resize image!
 			switch ( $this->resize['type'] )
 			{
@@ -578,51 +587,47 @@ class Watermark//Component extends Object
 			}
 			else
 			{
-				if ( preg_match('/jp(e)?g/', $this->extension['image']) )
+				if ( preg_match('/jp(e)?g/', $this->extension['image']) ) {
 					$this->output = 'image/jpeg';
-				elseif ( $this->extension['image'] == 'gif' )
+				} elseif ( $this->extension['image'] == 'gif' ) {
 					$this->output = 'image/gif';
-				else
+				} else {
 					$this->output = 'image/png';
+				}
 			}
-			if ( is_null($path) )
-			{
+
+			if ( is_null($path) ) {
 				header('Content-type: ' . $this->output);
 			}
-			
+
 			// Output / save image
 			switch($this->output)
 			{
 				case 'image/png':
-					$this->quality = round(abs(($this->quality - 100) / 11.111111));
-					if ( !imagepng($this->image, $path, $this->quality) )
-					{
+					$quality = round(abs(($this->quality - 100) / 11.111111));
+					if ( !imagepng($this->image, $path, $quality) ) {
 						throw new Exception('could not generate png output image');
 					}
 				break;
 				case 'image/jpeg':
-					if ( !imagejpeg($this->image, $path, $this->quality) )
-					{
+					if ( !imagejpeg($this->image, $path, $this->quality) ) {
 						throw new Exception('could not generate output jpeg image');
 					}
 				break;
 				case 'image/gif':
-					if ( !imagegif($this->image, $path, $this->quality) )
-					{
+					if ( !imagegif($this->image, $path, $this->quality) ) {
 						throw new Exception('could not generate output gif image');
 					}
 				break;
 			}
 
 			// Destroy image
-			if ( !imagedestroy($this->image) )
-			{
+			if ( !imagedestroy($this->image) ) {
 				throw new Exception('could not destroy image tempfile');
 			}
 			if ( isset($this->file['watermark']) )
 			{
-				if ( !imagedestroy($this->watermark) )
-				{
+				if ( !imagedestroy($this->watermark) ) {
 					throw new Exception('could not destroy watermark tempfile');
 				}
 			}
@@ -776,45 +781,37 @@ class Watermark//Component extends Object
 	 */
 	private function getWatermarkPosition()
 	{
-		if ( is_array($this->position) )
+		if ( is_array($this->position) ) {
 			$position = $this->position['string'];
-		else 
+		} else {
 			$position = $this->position;
+		}
 		
-		if( $this->size['watermark'] == 'full' )
-		{
+		if( $this->size['watermark'] == 'full' ) {
 			$position = 'center center';
 		}
 		
 		// Horizontal
-		if ( preg_match('/right/', $position) )
-		{
+		if ( preg_match('/right/', $position) ) {
 			$x = $this->current_size['image']['width'] - $this->current_size['watermark']['width'] + $this->margin['x'];
-		}
-		elseif ( preg_match('/left/', $position) )
-		{
+		} elseif ( preg_match('/left/', $position) ) {
 			$x = 0  + $this->margin['x'];
-		}
-		elseif ( preg_match('/center/', $position) )
-		{
+		} elseif ( preg_match('/center/', $position) ) {
 			$x = $this->current_size['image']['width'] / 2 - $this->current_size['watermark']['width'] / 2  + $this->margin['x'];
 		}
 		
 		// Vertical
-		if ( preg_match('/bottom/', $position) )
-		{
+		if ( preg_match('/bottom/', $position) ) {
 			$y = $this->current_size['image']['height'] - $this->current_size['watermark']['height']  + $this->margin['y'];
-		}
-		elseif ( preg_match('/top/', $position) )
-		{
+		} elseif ( preg_match('/top/', $position) ) {
 			$y = 0  + $this->margin['y'];
-		}
-		elseif ( preg_match('/center/', $position) )
-		{
+		} elseif ( preg_match('/center/', $position) ) {
 			$y = $this->current_size['image']['height'] / 2 - $this->current_size['watermark']['height'] / 2  + $this->margin['y'];
 		}
-		if ( !isset($x) || !isset($y) )
+		
+		if ( !isset($x) || !isset($y) ) {
 			throw new Exception('Watermark position has been set wrong');
+		}
 
 		$this->position = array('x' => $x,'y' => $y,'string' => $position);
 	}
