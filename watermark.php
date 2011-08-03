@@ -28,7 +28,7 @@
  */
 
 // Uncomment next comment to use as CakePHP Component
-class WatermarkComponent extends Object
+class Watermark//Component extends Object
 {
 	
 
