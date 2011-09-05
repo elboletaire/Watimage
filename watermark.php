@@ -104,6 +104,8 @@ class Watermark//Component extends Object
 	 */
 	public function setImage($file)
 	{
+		// Remove possible errors...
+		$this->errors = array();
 		try
 		{
 			if ( is_array($file) && isset($file['file']) )
