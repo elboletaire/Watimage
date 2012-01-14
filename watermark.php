@@ -313,23 +313,23 @@ class Watermark//Component extends Object
 						$new_y = $this->current_size['image']['height'];
 					}
 
-                                        if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
-                                            if ( !$dest_image = imagecreate($new_x, $new_y) )
-                                            {
-                                                throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }else{
-                                            if ( !$dest_image = imagecreatetruecolor($new_x, $new_y) )
-                                            {
-                                                    throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }
-                                        if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
-                                        {
-                                                throw new Exception('Could not copy resampled image while resizing');
-                                        }
-                                        $this->current_size['image']['width'] = $new_x;
-                                        $this->current_size['image']['height'] = $new_y;
+					if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
+						if ( !$dest_image = imagecreate($new_x, $new_y) )
+						{
+							throw new Exception('Could not create tempfile while resizing');
+						}
+					}else{
+						if ( !$dest_image = imagecreatetruecolor($new_x, $new_y) )
+						{
+								throw new Exception('Could not create tempfile while resizing');
+						}
+					}
+					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
+					{
+							throw new Exception('Could not copy resampled image while resizing');
+					}
+					$this->current_size['image']['width'] = $new_x;
+					$this->current_size['image']['height'] = $new_y;
 				break;
 				/*
 				 * Maintains aspect ratio but resizes the image so that once
@@ -357,16 +357,16 @@ class Watermark//Component extends Object
 					}
 
 					if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
-                                            if ( !$dest_image = imagecreate($new_x, $new_y) )
-                                            {
-                                                throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }else{
-                                            if ( !$dest_image = imagecreatetruecolor($new_x, $new_y) )
-                                            {
-                                                    throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }
+						if ( !$dest_image = imagecreate($new_x, $new_y) )
+						{
+							throw new Exception('Could not create tempfile while resizing');
+						}
+					}else{
+						if ( !$dest_image = imagecreatetruecolor($new_x, $new_y) )
+						{
+								throw new Exception('Could not create tempfile while resizing');
+						}
+					}
 					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
 					{
 						throw new Exception('Could not copy resampled image while resizing');
@@ -395,17 +395,17 @@ class Watermark//Component extends Object
 						$this->current_size['image']['height'] = round($this->resize['size']['y'] / $ratioX);
 					}
 
-                                        if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
-                                            if ( !$dest_image = imagecreate($this->resize['size']['x'], $this->resize['size']['y']) )
-                                            {
-                                                throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }else{
-                                            if ( !$dest_image = imagecreatetruecolor($this->resize['size']['x'], $this->resize['size']['y']) )
-                                            {
-                                                    throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }
+					if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
+						if ( !$dest_image = imagecreate($this->resize['size']['x'], $this->resize['size']['y']) )
+						{
+							throw new Exception('Could not create tempfile while resizing');
+						}
+					}else{
+						if ( !$dest_image = imagecreatetruecolor($this->resize['size']['x'], $this->resize['size']['y']) )
+						{
+								throw new Exception('Could not create tempfile while resizing');
+						}
+					}
 					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, $new_x, $new_y, $this->resize['size']['x'], $this->resize['size']['y'], $this->current_size['image']['width'], $this->current_size['image']['height']) )
 					{
 						throw new Exception('Could not copy resampled image while resizing');
@@ -421,16 +421,16 @@ class Watermark//Component extends Object
 					$startX = ($this->current_size['image']['width'] - $this->resize['size']['x'])/2;
 
 					if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
-                                            if ( !$dest_image = imagecreate($this->resize['size']['x'], $this->resize['size']['y']) )
-                                            {
-                                                throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }else{
-                                            if ( !$dest_image = imagecreatetruecolor($this->resize['size']['x'], $this->resize['size']['y']) )
-                                            {
-                                                    throw new Exception('Could not create tempfile while resizing');
-                                            }
-                                        }
+						if ( !$dest_image = imagecreate($this->resize['size']['x'], $this->resize['size']['y']) )
+						{
+							throw new Exception('Could not create tempfile while resizing');
+						}
+					}else{
+						if ( !$dest_image = imagecreatetruecolor($this->resize['size']['x'], $this->resize['size']['y']) )
+						{
+								throw new Exception('Could not create tempfile while resizing');
+						}
+					}
 					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, $startX, $startY, $this->resize['size']['x'], $this->resize['size']['y'], $this->resize['size']['x'], $this->resize['size']['y']) )
 					{
 						throw new Exception('Could not copy resampled image while resizing');
