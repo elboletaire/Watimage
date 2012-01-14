@@ -4,7 +4,7 @@ ini_set('display_errors', '1');
 require 'watermark.php';
 
 // Applying watermarks
-$wm = new Watermark();
+$wm = new Watimage();
 $wm->setImage(array('file' => 'test.png', 'quality' => 50));
 $wm->setWatermark(array('file' => 'watermark.png', 'position' => 'top right'));
 $wm->applyWatermark();
@@ -14,7 +14,7 @@ if ( !$wm->generate('test1.png') ) {
 }
 
 // Resize
-$wm = new Watermark('test.png');
+$wm = new Watimage('test.png');
 $wm->resize(array('type' => 'resizecrop', 'size' => array(400, 200)));
 if ( !$wm->generate('test2.png') ) {
 	// handle error...
@@ -23,7 +23,7 @@ if ( !$wm->generate('test2.png') ) {
 
 
 // Rotate
-$wm = new Watermark('test.png');
+$wm = new Watimage('test.png');
 $wm->rotate(90);
 if ( !$wm->generate('test3.png') ) {
 	// handle error...
@@ -31,14 +31,14 @@ if ( !$wm->generate('test3.png') ) {
 }
 
 // Exporting to other format
-$wm = new Watermark('test.png');
+$wm = new Watimage('test.png');
 if ( !$wm->generate('test4.jpg') ) {
 	// handle error...
 	print_r($wm->errors);
 }
 
 // Flip
-$wm = new Watermark('test.png');
+$wm = new Watimage('test.png');
 $wm->flip('vertical');
 if ( !$wm->generate('test5.png') ) {
 	// handle error...
@@ -46,7 +46,7 @@ if ( !$wm->generate('test5.png') ) {
 }
 
 // All together
-$wm = new Watermark('test.png', 'watermark.png');
+$wm = new Watimage('test.png', 'watermark.png');
 $wm->resize(array('type' => 'resizecrop', 'size' => 400));
 $wm->flip('horizontal');
 $wm->rotate(90);

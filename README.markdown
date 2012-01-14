@@ -9,6 +9,8 @@ It was initially thought as a CakePHP Component, so it's really easy to use it a
 ### As standalone class
 
 ```
+require_once 'watimage.php';
+
 $wm = new Watimage('test.png', 'watermark.png');
 
 // Resize image to 400x400px
@@ -30,7 +32,7 @@ if ( !$wm->generate('test6.png') ) {
 }
 ```
 
-#### As a CakePHP Component
+### As a CakePHP Component
 
 Before using Watimage as a CakePHP Component, you must uncoment this:
 
@@ -90,11 +92,11 @@ You have an example.php file with more examples.
 * [2011/05/11] 0.2.1 
 	* added 'setQuality' method. Solved png exportation issue (bad quality calc)
 	* Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
- * [2011/05/14] 0.2.2
+* [2011/05/14] 0.2.2
 	* Fix exponential reduction of image quality when inside a loop
- * [2012/01/12] 0.2.3
+* [2012/01/12] 0.2.3
 	* Resolved transparency issues on rotate (by https://github.com/fcjurado)
- * [2012/01/14] 0.5 Resolved all transparency issues
+* [2012/01/14] 0.5 Resolved all transparency issues
 
 ## More info
 
