@@ -47,6 +47,7 @@ class WatermarkComponent extends Object
 ```
 
 Example Controller:
+
 ```
 class FooController extends AppController
 {
@@ -80,6 +81,7 @@ class FooController extends AppController
 	}
 }
 ```
+
 You have an example.php file with more examples.
 
 ## Changelog
