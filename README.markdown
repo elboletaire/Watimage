@@ -86,19 +86,23 @@ You have an example.php file with more examples.
 
 ## Changelog
 
-* [2012/01/14] 0.5 Resolved all transparency issues
-* [2012/01/12] 0.2.3
+* **0.5** [2012/01/14] 
+	* Resolved all transparency issues
+* **0.2.3** [2012/01/12]
 	* Resolved transparency issues on rotate (by https://github.com/fcjurado)
-* [2011/05/14] 0.2.2
+* **0.2.2** [2011/05/14]
 	* Fix exponential reduction of image quality when inside a loop
-* [2011/05/11] 0.2.1 
-	* added 'setQuality' method. Solved png exportation issue (bad quality calc)
+* **0.2.1** [2011/05/11]
+	* Added 'setQuality' method. 
+ 	* Solved png exportation issue (bad quality calc)
 	* Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
-* [2011/04/16] 0.2
+* **0.2** [2011/04/16]
 	* Now works with Exceptions. 
 	* mime_content_type function has been removed (as it was deprecated).
 	* Added flip function. 
 	* Minor bugfixes
+* **0.1** [2010/06/10]
+        * First version
 
 ## More info
 
