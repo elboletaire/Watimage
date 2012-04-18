@@ -268,7 +268,7 @@ class Watimage//Component extends Object
 			{
 				if( is_array($options['size']) )
 				{
-					if ( array_key_exists('x', $options['size']) && array_key_exists('y', $options) )
+					if ( array_key_exists('x', $options['size']) && array_key_exists('y', $options['size']) )
 					{
 						$this->resize['size'] = $options['size'];
 					}
