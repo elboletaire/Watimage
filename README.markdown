@@ -61,14 +61,15 @@ class FooController extends AppController
 		// Set image and watermark
 		$this->Watimage->setImage('test.png');
 		$this->Watimage->setWatermark('watermark.png');
+
 		// Resize image to 400x400px
 		$this->Watimage->resize(array('type' => 'resizecrop', 'size' => 400));
 
 		// Flip it horitzontally
 		$this->Watimage->flip('horizontal');
 
-		// Rotate 90 degrees
-		$this->Watimage->rotate(90);
+		// Rotate 45 degrees
+		$this->Watimage->rotate(45);
 
 		// Apply the watermark
 		$this->Watimage->applyWatermark();
@@ -86,6 +87,9 @@ You have an example.php file with more examples.
 
 ## Changelog
 
+* **0.6** [2012/04/18] 
+	* Added new method 'crop' for using it with cropping tools like jcrop
+	* Minor bugfixes
 * **0.5** [2012/01/14] 
 	* Resolved all transparency issues
 * **0.2.3** [2012/01/12]
@@ -102,7 +106,8 @@ You have an example.php file with more examples.
 	* Added flip function. 
 	* Minor bugfixes
 * **0.1** [2010/06/10]
-        * First version
+	* First version
+
 
 ## More info
 

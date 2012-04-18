@@ -2,7 +2,8 @@
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 0.5
+ * @version 0.6
+ * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,20 +20,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
-
 // Uncomment next comment to use as CakePHP Component
 class Watimage//Component extends Object
 {
 	/**
 	 * Sizes especified by user to enlarge or
 	 * reduce watermark and / or final image
-	 * @var
+	 * @public array $size
 	 */
 	public $size;
 
+	/**
+	 * Any error returned by the class will be stored here
+	 * @public array $errors
+	 */
 	public $errors;
 
+	/**
+	 * If enabled it will return more info on error
+	 * @public bool $debug
+	 */
 	public $debug = false;
+
 	/**
 	 * Current sizes of image files
 	 * @private array $sizes
@@ -44,16 +53,19 @@ class Watimage//Component extends Object
 	 * @private array $resize
 	 */
 	private $resize = false;
+
 	/**
 	 * Watermark margins
 	 * @private array $margin
 	 */
 	private $margin = array('x' => 0, 'y' => 0);
+
 	/**
 	 * Watermark position
 	 * @private string $position
 	 */
 	private $position = "bottom right";
+
 	/**
 	 *	Some other private vars...
 	 */
@@ -75,7 +87,6 @@ class Watimage//Component extends Object
 			$this->setWatermark($watermark);
 	}
 
-
 	/**
 	 * Contructor function for CakePHP
 	 * @param Object &$controller pointer to calling controller
@@ -83,9 +94,8 @@ class Watimage//Component extends Object
 	public function initialize(&$controller, $options = array())
 	{
 		if ( !empty($options) )
-		{
-			if ( !empty($options['quality']) ) $this->setQuality($options['quality']);
-		}
+			if ( !empty($options['quality']) )
+				$this->setQuality($options['quality']);
 	}
 
 	/**
@@ -101,7 +111,8 @@ class Watimage//Component extends Object
 		{
 			if ( is_array($file) && isset($file['file']) )
 			{
-				if ( isset($file['quality']) ) $this->setQuality($file['quality']);
+				if ( isset($file['quality']) )
+					$this->setQuality($file['quality']);
 				$file = $file['file'];
 			}
 			elseif ( empty($file) || (is_array($file) && !isset($file['file'])) )
@@ -110,10 +121,10 @@ class Watimage//Component extends Object
 			}
 
 			if ( file_exists($file) )
-			{
 				$this->file['image'] = $file;
-			}
-			else throw new Exception('File "' . $file . '" does not exist');
+			else
+				throw new Exception('File "' . $file . '" does not exist');
+
 			// Obtain extension
 			$this->extension['image'] = $this->getFileExtension($this->file['image']);
 			// Obtain file sizes
@@ -148,7 +159,8 @@ class Watimage//Component extends Object
 	 */
 	public function setWatermark($options = array())
 	{
-		try {
+		try
+		{
 			if ( empty($options) )
 				throw new Exception('You must set watermark options');
 
@@ -171,20 +183,30 @@ class Watimage//Component extends Object
 				// Margins
 				if ( !empty($options['margin']) )
 				{
-					if ( !is_array($options['margin']) || count($options['margin']) == 1 )
+					if ( !is_array($options['margin']) )
 					{
 						$this->margin['x'] = $this->margin['y'] = $options['margin'];
 					}
 					else
 					{
-						foreach ($options['margin'] as $key => $margin)
+						if ( count($options['margin']) == 1 )
 						{
-							if ($key === 0)
-								$this->margin['x'] = $margin;
-							elseif ($key === 1)
-								$this->margin['y'] = $margin;
-							else
-								$this->margin[$key] = $margin;
+							$this->margin['x'] = $this->margin['y'] = array_pop($options['margin']);
+						}
+						else
+						{
+							if ( !empty($options['margin'][0]) )
+							{
+								$this->margin['x'] = $options['margin'][0];
+								if (!empty($options['margin'][1]))
+								{
+									$this->margin['y'] = $options['margin'][1];
+								}
+							}
+							else if ( !empty($options['margin']['x']) || !empty($options['margin']['y']) )
+							{
+								$this->margin = $options['margin'];
+							}
 						}
 					}
 				}
@@ -308,33 +330,34 @@ class Watimage//Component extends Object
 
 					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
 					{
-							throw new Exception('Could not copy resampled image while resizing');
+						throw new Exception('Could not copy resampled image while resizing');
 					}
 					$this->current_size['image']['width'] = $new_x;
 					$this->current_size['image']['height'] = $new_y;
 				break;
+
 				/*
 				 * Maintains aspect ratio but resizes the image so that once
 				 * one side meets its max width or max height condition, it stays at that size
 				 * (thus one side will be larger)
 				 */
 				case 'resizemin':
-					$ratioX = $this->resize['size']['x'] / $this->current_size['image']['width'];
-					$ratioY = $this->resize['size']['y'] / $this->current_size['image']['height'];
+					$ratio_x = $this->resize['size']['x'] / $this->current_size['image']['width'];
+					$ratio_y = $this->resize['size']['y'] / $this->current_size['image']['height'];
 
 					if ( ($this->current_size['image']['width'] == $this->resize['size']['x']) && ($this->current_size['image']['height'] == $this->resize['size']['y']) )
 					{
 						$new_x = $this->current_size['image']['width'];
 						$new_y = $this->current_size['image']['height'];
 					}
-					else if ( ($ratioX * $this->current_size['image']['height']) > $this->resize['size']['y'] )
+					else if ( ($ratio_x * $this->current_size['image']['height']) > $this->resize['size']['y'] )
 					{
 						$new_x = $this->resize['size']['x'];
-						$new_y = ceil($ratioX * $this->current_size['image']['height']);
+						$new_y = ceil($ratio_x * $this->current_size['image']['height']);
 					}
 					else
 					{
-						$new_x = ceil($ratioY * $this->current_size['image']['width']);
+						$new_x = ceil($ratio_y * $this->current_size['image']['width']);
 						$new_y = $this->resize['size']['y'];
 					}
 
@@ -347,25 +370,26 @@ class Watimage//Component extends Object
 					$this->current_size['image']['width'] = $new_x;
 					$this->current_size['image']['height'] = $new_y;
 				break;
+
 				/*
 				 * resize to max, then crop to center
 				 */
 				case 'resizecrop':
-					$ratioX = $this->resize['size']['x'] / $this->current_size['image']['width'];
-					$ratioY = $this->resize['size']['y'] / $this->current_size['image']['height'];
+					$ratio_x = $this->resize['size']['x'] / $this->current_size['image']['width'];
+					$ratio_y = $this->resize['size']['y'] / $this->current_size['image']['height'];
 
-					if ( $ratioX < $ratioY )
+					if ( $ratio_x < $ratio_y )
 					{
-						$new_x = round(($this->current_size['image']['width'] - ($this->resize['size']['x'] / $ratioY)) / 2);
+						$new_x = round(($this->current_size['image']['width'] - ($this->resize['size']['x'] / $ratio_y)) / 2);
 						$new_y = 0;
-						$this->current_size['image']['width'] = round($this->resize['size']['x'] / $ratioY);
+						$this->current_size['image']['width'] = round($this->resize['size']['x'] / $ratio_y);
 						$this->current_size['image']['height'] = $this->current_size['image']['height'];
 					}
 					else
 					{
 						$new_x = 0;
-						$new_y = round(($this->current_size['image']['height'] - ($this->resize['size']['y'] / $ratioX)) / 2);
-						$this->current_size['image']['height'] = round($this->resize['size']['y'] / $ratioX);
+						$new_y = round(($this->current_size['image']['height'] - ($this->resize['size']['y'] / $ratio_x)) / 2);
+						$this->current_size['image']['height'] = round($this->resize['size']['y'] / $ratio_x);
 					}
 
 					$dest_image = $this->createDestImage($this->resize['size']['x'], $this->resize['size']['y']);
@@ -377,33 +401,67 @@ class Watimage//Component extends Object
 					$this->current_size['image']['width'] = $this->resize['size']['x'];
 					$this->current_size['image']['height'] = $this->resize['size']['y'];
 				break;
+
 				/*
 				 * a straight centered crop
 				 */
 				case 'crop':
-					$startY = ($this->current_size['image']['height'] - $this->resize['size']['y'])/2;
-					$startX = ($this->current_size['image']['width'] - $this->resize['size']['x'])/2;
+					$start_y = ($this->current_size['image']['height'] - $this->resize['size']['y']) / 2;
+					$start_x = ($this->current_size['image']['width'] - $this->resize['size']['x']) / 2;
 
 					$dest_image = $this->createDestImage($this->resize['size']['x'], $this->resize['size']['y']);
 
-					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, $startX, $startY, $this->resize['size']['x'], $this->resize['size']['y'], $this->resize['size']['x'], $this->resize['size']['y']) )
+					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, $start_x, $start_y, $this->resize['size']['x'], $this->resize['size']['y'], $this->resize['size']['x'], $this->resize['size']['y']) )
 					{
 						throw new Exception('Could not copy resampled image while resizing');
 					}
 					$this->current_size['image']['width'] = $this->resize['size']['x'];
 					$this->current_size['image']['height'] = $this->resize['size']['y'];
 				break;
+
 			}
 
 			if ( isset($this->file['watermark']) )
-			{
 				$this->getWatermarkPosition();
-			}
+
 			if ( !imagedestroy($this->image) )
-			{
 				throw new Exception('Could not destroy tempfile image');
-			}
+
 			$this->image = $dest_image;
+		}
+		catch ( Exception $e )
+		{
+			$this->error($e);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * Crops an image based on specified coords and size
+	 * @param mixed $options = array('x' => 23, 'y' => 23, 'width' => 230, 'height' => 230)
+	 * @return bool success
+	 */
+	public function crop($options = array())
+	{
+		if (!empty($this->errors)) return false;
+
+		try
+		{
+			if (!is_array($options) || empty($options))
+				throw new Exception('You must specify options for cropping');
+			else if (!isset($options['x']) || !isset($options['y']) || !isset($options['width']) || !isset($options['height']))
+				throw new Exception('You left some options for croppping');
+
+			$crop_image = $this->createDestImage($options['width'], $options['height']);
+
+			if ( !imagecopyresampled($crop_image, $this->image, 0, 0, $options['x'], $options['y'], $options['width'], $options['height'], $options['width'], $options['height']) )
+				throw new Exception('Could not copy resampled image while resizing');
+
+			$this->image = $crop_image;
+
+			$this->current_size['image']['width'] = $options['width'];
+			$this->current_size['image']['height'] = $options['height'];
 		}
 		catch ( Exception $e )
 		{
@@ -422,7 +480,8 @@ class Watimage//Component extends Object
 	{
 		if ( !empty($this->errors) ) return false;
 
-		try {
+		try
+		{
 			if ( empty($options) )
 				throw new Exception('You must set options for rotate method');
 
@@ -435,14 +494,11 @@ class Watimage//Component extends Object
 			else
 			{
 				$this->rotate['degrees'] = $options['degrees'];
+
 				if ( !empty($options['bgcolor']) )
-				{
 					$this->rotate['bgcolor'] = $options['bgcolor'];
-				}
 				else
-				{
 					$this->rotate['bgcolor'] = -1;
-				}
 			}
 
 			$this->image = $this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
@@ -474,42 +530,35 @@ class Watimage//Component extends Object
 	{
 		if ( !empty($this->errors) ) return false;
 
-		try {
+		try
+		{
 			$this->getWatermarkPosition();
+
 			if ( !$this->watermark = $this->createImage($this->file['watermark']) )
-			{
 				throw new Exception('Could not create watermark image');
-			}
 
-			// Little trick for saving transparency
-			if ( $this->resize === false && $this->rotate === false )
-			{
-				if ( !$dest_image = imagecreatetruecolor($this->current_size['image']['width'], $this->current_size['image']['height']) )
-				{
-					throw new Exception('Could not create tempfile while resizing');
-				}
+			// transparency trick
+			if ( !$dest_image = imagecreatetruecolor($this->current_size['image']['width'], $this->current_size['image']['height']) )
+				throw new Exception('Could not create tempfile while resizing');
 
-				$bgcolor = imagecolortransparent($dest_image, imagecolorallocatealpha($this->image, 255, 255, 255, 127));
-				imagefill($dest_image, 0, 0, $bgcolor);
-				imagesavealpha($dest_image, true);
-				
-				if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $this->current_size['image']['width'], $this->current_size['image']['height'], $this->current_size['image']['width'], $this->current_size['image']['height']) )
-				{
-					throw new Exception('Could not copy resampled image while resizing');
-				}
+			$bgcolor = imagecolortransparent($dest_image, imagecolorallocatealpha($this->image, 255, 255, 255, 127));
+			imagefill($dest_image, 0, 0, $bgcolor);
+			imagesavealpha($dest_image, true);
+			imagealphablending($dest_image, false);
 
-				$this->image = $dest_image;
-			}
+			if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $this->current_size['image']['width'], $this->current_size['image']['height'], $this->current_size['image']['width'], $this->current_size['image']['height']) )
+				throw new Exception('Could not copy resampled image while resizing');
 
-			if ( !empty($this->size) )
-			{
+			imagealphablending($dest_image, true);
+			imagesavealpha($dest_image, false);
+			$this->image = $dest_image;
+			// end transparency trick
+
+			if ( !empty($this->size['watermark']) )
 				$this->watermark = $this->resize_png_image($this->watermark, $this->current_size['watermark']['width'], $this->current_size['watermark']['width']);
-			}
-			
+
 			if ( !imagecopy($this->image, $this->watermark, $this->position['x'], $this->position['y'], 0, 0, $this->current_size['watermark']['width'], $this->current_size['watermark']['height']) )
-			{
 				throw new Exception('Could not apply watermark to image');
-			}
 		}
 		catch ( Exception $e )
 		{
@@ -532,25 +581,32 @@ class Watimage//Component extends Object
 			$size_y = imagesy($this->image);
 			$temp = imagecreatetruecolor($size_x, $size_y);
 
-			if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
+			if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' )
+			{
 				// preserve transparency
 				imagealphablending($temp, false);
 			}
-			if ( $type == 'horizontal' )
-				$resampled = imagecopyresampled($temp, $this->image, 0, 0, ($size_x - 1), 0, $size_x, $size_y, 0 - $size_x, $size_y);
+			
+			switch ($type)
+			{
+				case 'horizontal':
+					$resampled = imagecopyresampled($temp, $this->image, 0, 0, ($size_x - 1), 0, $size_x, $size_y, 0 - $size_x, $size_y);
+				break;
 
-			elseif ( $type == 'vertical' )
-				$resampled = imagecopyresampled($temp, $this->image, 0, 0, 0, ($size_y - 1), $size_x, $size_y, $size_x, 0 - $size_y);
+				case 'vertical':
+					$resampled = imagecopyresampled($temp, $this->image, 0, 0, 0, ($size_y - 1), $size_x, $size_y, $size_x, 0 - $size_y);
+				break;
 
-			elseif ( $type == 'both') // same as $this->rotate(180)
-				$resampled = imagecopyresampled($temp, $this->image, 0, 0, ($size_x - 1), ($size_y - 1), $size_x, $size_y, 0- $size_x, 0 - $size_y);
+				case 'both': // same as $this->rotate(180)
+					$resampled = imagecopyresampled($temp, $this->image, 0, 0, ($size_x - 1), ($size_y - 1), $size_x, $size_y, 0- $size_x, 0 - $size_y);
+				break;
 
-			else
-				throw new Exception('Invalid flip type (horizontal|vertical|both)');
-
-			if ( !$resampled ) {
-				throw new Exception('Image could not be flipped');
+				default:
+					throw new Exception('Invalid flip type (horizontal|vertical|both)');
 			}
+
+			if ( !$resampled )
+				throw new Exception('Image could not be flipped');
 		}
 		catch ( Exception $e )
 		{
@@ -579,55 +635,53 @@ class Watimage//Component extends Object
 			}
 			else
 			{
-				if ( preg_match('/jp(e)?g/', $this->extension['image']) ) {
+				if ( preg_match('/jpe?g/', $this->extension['image']) )
 					$this->output = 'image/jpeg';
-				} elseif ( $this->extension['image'] == 'gif' ) {
+				elseif ( $this->extension['image'] == 'gif' )
 					$this->output = 'image/gif';
-				} else {
+				else
 					$this->output = 'image/png';
-				}
 			}
 
-			if ( is_null($path) ) {
+			// If there is no path specified.. we want to output the image
+			if ( is_null($path) )
 				header('Content-type: ' . $this->output);
-			}
-			
+
 			if ($this->extension['image'] == 'gif' || $this->extension['image'] == 'png')
-			{
 				imagesavealpha($this->image, true);
-			}
 
 			// Output / save image
 			switch($this->output)
 			{
 				case 'image/png':
 					$quality = round(abs(($this->quality - 100) / 11.111111));
-					if ( !imagepng($this->image, $path, $quality) ) {
+					if ( !imagepng($this->image, $path, $quality) )
 						throw new Exception('could not generate png output image');
-					}
 				break;
+
 				case 'image/jpeg':
-					if ( !imagejpeg($this->image, $path, $this->quality) ) {
+					if ( !imagejpeg($this->image, $path, $this->quality) )
 						throw new Exception('could not generate output jpeg image');
-					}
 				break;
+
 				case 'image/gif':
-					if ( !imagegif($this->image, $path, $this->quality) ) {
+					if ( !imagegif($this->image, $path, $this->quality) )
 						throw new Exception('could not generate output gif image');
-					}
 				break;
+				
+				default:
+					throw new Exception("Invalid output format ({$this->output})");
 			}
 
-			// Destroy image
-			if ( !imagedestroy($this->image) ) {
+			// Destroy image boundary
+			if ( !imagedestroy($this->image) )
 				throw new Exception('could not destroy image tempfile');
-			}
+
+			// Destroy watermark boundary (if exists..)
 			if ( isset($this->file['watermark']) )
-			{
-				if ( !imagedestroy($this->watermark) ) {
+				if ( !imagedestroy($this->watermark) )
 					throw new Exception('could not destroy watermark tempfile');
-				}
-			}
+
 			unset($this->file);
 		}
 		catch ( Exception $e )
@@ -638,18 +692,17 @@ class Watimage//Component extends Object
 		return true;
 	}
 
-	private function createDestImage($new_x, $new_y)
+	private function createDestImage($width, $height)
 	{
-		if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' ) {
-			if ( !$dest_image = imagecreate($new_x, $new_y) )
-			{
+		if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' )
+		{
+			if ( !$dest_image = imagecreate($width, $height) )
 				throw new Exception('Could not create tempfile while resizing');
-			}
-		}else{
-			if ( !$dest_image = imagecreatetruecolor($new_x, $new_y) )
-			{
+		}
+		else
+		{
+			if ( !$dest_image = imagecreatetruecolor($width, $height) )
 				throw new Exception('Could not create tempfile while resizing');
-			}
 		}
 		return $dest_image;
 	}
@@ -665,9 +718,8 @@ class Watimage//Component extends Object
 		fclose($ihandle);
 
 		if ( false === ( $img = imagecreatefromstring($image) ) )
-		{
 			throw new Exception("Image not valid");
-		}
+
 		return $img;
 	}
 
@@ -679,18 +731,17 @@ class Watimage//Component extends Object
 	{
 		if ( preg_match('/gif|png/', $this->extension['image']) )
 		{
-			if ( !imagealphablending($this->image, true) ) {
+			if ( !imagealphablending($this->image, true) )
 				throw new Exception("Can't apply imagealphablending to image");
-			}
+
 			if ( $this->current_size['image']['format'] == 3 )
 			{
 				// Save alpha for transparent png files
-				if ( !imagealphablending($this->image, false) ) {
+				if ( !imagealphablending($this->image, false) )
 					throw new Exception("Can't apply imagealphablending to image");
-				}
-				if ( !imagesavealpha($this->image, true) ) {
+
+				if ( !imagesavealpha($this->image, true) )
 					throw new Exception("Can't apply imagesavealpha to image");
-				}
 			}
 		}
 	}
@@ -702,9 +753,10 @@ class Watimage//Component extends Object
 	private function getFileExtension( &$file )
 	{
 		$f = pathinfo($file);
-		if ( empty($f['extension']) ) {
-			throw new Exception("Can't get file extension for file $file");
-		}
+
+		if ( empty($f['extension']) )
+			throw new Exception("Can't get file extension of $file");
+
 		return $f['extension'];
 	}
 
@@ -794,37 +846,33 @@ class Watimage//Component extends Object
 	 */
 	private function getWatermarkPosition()
 	{
-		if ( is_array($this->position) ) {
+		if ( is_array($this->position) )
 			$position = $this->position['string'];
-		} else {
+		else
 			$position = $this->position;
-		}
 
-		if( $this->size['watermark'] == 'full' ) {
+		if ( $this->size['watermark'] == 'full' )
 			$position = 'center center';
-		}
 
 		// Horizontal
-		if ( preg_match('/right/', $position) ) {
+		if ( preg_match('/right/', $position) )
 			$x = $this->current_size['image']['width'] - $this->current_size['watermark']['width'] + $this->margin['x'];
-		} elseif ( preg_match('/left/', $position) ) {
+		elseif ( preg_match('/left/', $position) )
 			$x = 0  + $this->margin['x'];
-		} elseif ( preg_match('/center/', $position) ) {
+		elseif ( preg_match('/center/', $position) )
 			$x = $this->current_size['image']['width'] / 2 - $this->current_size['watermark']['width'] / 2  + $this->margin['x'];
-		}
 
 		// Vertical
-		if ( preg_match('/bottom/', $position) ) {
+		if ( preg_match('/bottom/', $position) )
 			$y = $this->current_size['image']['height'] - $this->current_size['watermark']['height']  + $this->margin['y'];
-		} elseif ( preg_match('/top/', $position) ) {
+		elseif ( preg_match('/top/', $position) )
 			$y = 0  + $this->margin['y'];
-		} elseif ( preg_match('/center/', $position) ) {
+		elseif ( preg_match('/center/', $position) )
 			$y = $this->current_size['image']['height'] / 2 - $this->current_size['watermark']['height'] / 2  + $this->margin['y'];
-		}
 
-		if ( !isset($x) || !isset($y) ) {
+		if ( !isset($x) || !isset($y) )
 			throw new Exception('Watermark position has been set wrong');
-		}
+
 
 		$this->position = array('x' => $x,'y' => $y,'string' => $position);
 	}
@@ -882,7 +930,7 @@ class Watimage//Component extends Object
 	}
 
 
-	// from http://php.net/manual/es/function.imagerotate.php comments
+	// extracted from http://php.net/manual/es/function.imagerotate.php comments
 	private function imagerotateEquivalent($src_image, $angle, $bgcolor, $ignore_transparent = 0)
 	{
 		function rotateX($x, $y, $theta)
@@ -903,10 +951,11 @@ class Watimage//Component extends Object
 		//Set rotate to clockwise
 		$angle = -$angle;
 
-		if ( $angle == 0 ) {
-			if ($ignore_transparent == 0) {
+		if ( $angle == 0 )
+		{
+			if ($ignore_transparent == 0)
 				imagesavealpha($src_image, true);
-			}
+
 			return $src_image;
 		}
 
@@ -999,7 +1048,8 @@ class Watimage//Component extends Object
 
 	private function error($exception)
 	{
-		if ( $this->debug == true ) {
+		if ( $this->debug == true )
+		{
 			$this->errors[] = array(
 				'message' => $exception->getMessage(),
 				'code' => $exception->getCode(),
@@ -1007,7 +1057,9 @@ class Watimage//Component extends Object
 				'line' => $exception->getLine(),
 				'trace' => array('array' => $exception->getTrace(), 'string' => $exception->getTraceAsString())
 			);
-		} else {
+		}
+		else
+		{
 			$this->errors[] = $exception->getMessage();
 		}
 	}
