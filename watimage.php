@@ -694,15 +694,14 @@ class Watimage//Component extends Object
 
 	private function createDestImage($width, $height)
 	{
+		if ( !$dest_image = imagecreatetruecolor($width, $height) )
+			throw new Exception('Could not create tempfile while resizing');
+
 		if ( $this->extension['image'] == 'gif' || $this->extension['image'] == 'png' )
 		{
-			if ( !$dest_image = imagecreate($width, $height) )
-				throw new Exception('Could not create tempfile while resizing');
-		}
-		else
-		{
-			if ( !$dest_image = imagecreatetruecolor($width, $height) )
-				throw new Exception('Could not create tempfile while resizing');
+			imagecolortransparent($dest_image, imagecolorallocatealpha($dest_image, 0, 0, 0, 127));
+			imagealphablending($dest_image, false);
+			imagesavealpha($dest_image, true);
 		}
 		return $dest_image;
 	}
