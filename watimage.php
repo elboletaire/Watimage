@@ -254,7 +254,7 @@ class Watimage//Component extends Object
 			if ( !empty($options['type']) )
 			{
 				$this->resize['type'] = $options['type'];
-				if ( !preg_match('/resize(min|crop)?|crop/', $this->resize['type']) )
+				if ( !preg_match('/resize(min|crop)?|crop|reduce/', $this->resize['type']) )
 				{
 					throw new Exception('Specified resize type "'.$this->resize['type'].'" does not exist');
 				}
@@ -340,6 +340,7 @@ class Watimage//Component extends Object
 				 * Maintains aspect ratio but resizes the image so that once
 				 * one side meets its max width or max height condition, it stays at that size
 				 * (thus one side will be larger)
+				 * TODO: This method must be fixed, does not work as expected...
 				 */
 				case 'resizemin':
 					$ratio_x = $this->resize['size']['x'] / $this->current_size['image']['width'];
@@ -359,6 +360,35 @@ class Watimage//Component extends Object
 					{
 						$new_x = ceil($ratio_y * $this->current_size['image']['width']);
 						$new_y = $this->resize['size']['y'];
+					}
+
+					$dest_image = $this->createDestImage($new_x, $new_y);
+
+					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
+					{
+						throw new Exception('Could not copy resampled image while resizing');
+					}
+					$this->current_size['image']['width'] = $new_x;
+					$this->current_size['image']['height'] = $new_y;
+				break;
+
+				/*
+				 * only resize if the specified sizes are lower than the image (only resizes to small, never to big)
+				 */
+				case 'reduce':
+					$new_x = $this->current_size['image']['width'];
+					$new_y = $this->current_size['image']['height'];
+					if ( $this->current_size['image']['width'] > $this->resize['size']['x'] || $this->current_size['image']['height'] > $this->resize['size']['y'] )
+					{
+						//Checking wich is our big limitation
+						$ratio_x = $this->current_size['image']['width'] / $this->resize['size']['x'];
+						$ratio_y = $this->current_size['image']['height'] / $this->resize['size']['y'];
+
+						$ratio = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+
+						//Getting the new image size
+						$new_x = (int)($this->current_size['image']['width'] / $ratio);
+						$new_y = (int)($this->current_size['image']['height'] / $ratio);
 					}
 
 					$dest_image = $this->createDestImage($new_x, $new_y);

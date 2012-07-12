@@ -23,7 +23,7 @@ if ( !$wm->generate('test1.png') ) {
  *** RESIZE IMAGES ***
  *********************/
 $wm = new Watimage('test.png');
-// allowed types: resize, resizecrop, resizemin, crop
+// allowed types: resize, resizecrop, resizemin, crop and reduce
 $wm->resize(array('type' => 'resizecrop', 'size' => array(400, 200)));
 if ( !$wm->generate('test2.png') ) {
 	// handle errors...
