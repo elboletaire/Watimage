@@ -87,6 +87,8 @@ You have an example.php file with more examples.
 
 ## Changelog
 
+* **0.7** [2012/07/12] 
+	* Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
 * **0.6** [2012/04/18] 
 	* Added new method 'crop' for using it with cropping tools like jcrop
 	* Minor bugfixes

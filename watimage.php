@@ -2,7 +2,7 @@
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 0.6
+ * @version 0.7
  * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
@@ -239,10 +239,10 @@ class Watimage//Component extends Object
 	/**
 	 *	Resizes the image
 	 *	@param array $options = array(
-						'type' => 'resizemin|resizecrop|resize|crop',
-						'size' => array('x' => 2000, 'y' => 500)
-					)
-				You can also set the size without specifying x and y: array(2000, 500). Or directly 'size' => 2000 (takes 2000x2000)
+	 *					'type' => 'resizemin|resizecrop|resize|crop',
+	 *					'size' => array('x' => 2000, 'y' => 500)
+	 *				)
+	 *			You can also set the size without specifying x and y: array(2000, 500). Or directly 'size' => 2000 (takes 2000x2000)
 	 *	@return bool true on success; otherwise false
 	 */
 	public function resize($options = array())
