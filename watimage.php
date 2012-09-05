@@ -2,7 +2,7 @@
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 0.7
+ * @version 0.8
  * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,7 +21,7 @@
  *
  */
 // Uncomment next comment to use as CakePHP Component
-class Watimage//Component extends Object
+class WatimageComponent extends Component
 {
 	/**
 	 * Sizes especified by user to enlarge or
@@ -77,15 +77,6 @@ class Watimage//Component extends Object
 						   // or with $watermark->setImage(array('quality' => 50, 'file' => 'file.jpg')
 	private $file;
 	private $extension;
-
-	public function __construct($file = null, $watermark = null)
-	{
-		if ( !empty($file) )
-			$this->setImage($file);
-
-		if ( !empty($watermark) )
-			$this->setWatermark($watermark);
-	}
 
 	/**
 	 * Contructor function for CakePHP
