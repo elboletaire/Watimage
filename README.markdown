@@ -70,20 +70,22 @@ class FooController extends AppController
 		// Flip it horitzontally
 		$this->Watimage->flip('horizontal');
 
-		// Rotate 45 degrees
-		$this->Watimage->rotate(45);
+		// Rotate 90 degrees
+		$this->Watimage->rotate(90);
 
 		// Apply the watermark
 		$this->Watimage->applyWatermark();
 
 		// Generate and save image
-		if ( !$this->Watimage->generate('test6.png') ) {
+		if ( !$this->Watimage->generate('result.png') ) {
 			// handle errors...
-			print_r($this->Watimage->errors);
+			debug($this->Watimage->errors);
 		}
 	}
 }
 ```
+
+![result_example](http://www.racotecnic.com/wp-content/uploads/2011/04/test6.png "result_example")
 
 You have an example.php file with more examples.
 
@@ -91,26 +93,34 @@ You have an example.php file with more examples.
 
 * **0.8** [2012/09/05] 
 	* Version for CakePHP 2.X (thanks to Pyo [pexiweb.be])
+
 * **0.7** [2012/07/12] 
 	* Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
+
 * **0.6** [2012/04/18] 
 	* Added new method 'crop' for using it with cropping tools like jcrop
 	* Minor bugfixes
+
 * **0.5** [2012/01/14] 
 	* Resolved all transparency issues
+
 * **0.2.3** [2012/01/12]
 	* Resolved transparency issues on rotate (by https://github.com/fcjurado)
+
 * **0.2.2** [2011/05/14]
 	* Fix exponential reduction of image quality when inside a loop
+
 * **0.2.1** [2011/05/11]
 	* Added 'setQuality' method. 
  	* Solved png exportation issue (bad quality calc)
 	* Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
+
 * **0.2** [2011/04/16]
 	* Now works with Exceptions. 
 	* mime_content_type function has been removed (as it was deprecated).
 	* Added flip function. 
 	* Minor bugfixes
+
 * **0.1** [2010/06/10]
 	* First version
 
