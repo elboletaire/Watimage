@@ -11,7 +11,9 @@ It was initially thought as a CakePHP Component, so it's really easy to use it a
 ```
 require_once 'watimage.php';
 
-$wm = new Watimage('test.png', 'watermark.png');
+$wm = new Watimage();
+$wm->setImage('test.png');
+$wm->setWatermark('watermark.png');
 
 // Resize image to 400x400px
 $wm->resize(array('type' => 'resizecrop', 'size' => 400));
@@ -87,6 +89,8 @@ You have an example.php file with more examples.
 
 ## Changelog
 
+* **0.8** [2012/09/05] 
+	* Version for CakePHP 2.X (thanks to Pyo [pexiweb.be])
 * **0.7** [2012/07/12] 
 	* Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
 * **0.6** [2012/04/18] 
