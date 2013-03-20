@@ -8,7 +8,7 @@ It was initially thought as a CakePHP Component, so it's really easy to use it a
 
 ### As standalone class
 
-```
+```php
 require_once 'watimage.php';
 
 $wm = new Watimage('test.png', 'watermark.png');
@@ -36,19 +36,19 @@ if ( !$wm->generate('test6.png') ) {
 
 Before using Watimage as a CakePHP Component, you must uncoment this:
 
-```
+```php
 class Watermark//Component extends Object
 ```
 
 So that it is..
 
-```
+```php
 class WatermarkComponent extends Object
 ```
 
 Example Controller:
 
-```
+```php
 class FooController extends AppController
 {
 	public $components = array(
