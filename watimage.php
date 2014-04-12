@@ -75,7 +75,7 @@ class WatimageComponent extends Component
 	private $output;
 	private $quality = 80; // image export quality. You can set it with $watermark->setQuality(50);
 						   // or with $watermark->setImage(array('quality' => 50, 'file' => 'file.jpg')
-	private $file;
+	private $file = array();
 	private $extension;
 
 	/**
@@ -703,7 +703,7 @@ class WatimageComponent extends Component
 				if ( !imagedestroy($this->watermark) )
 					throw new Exception('could not destroy watermark tempfile');
 
-			unset($this->file);
+			$this->file = array();
 		}
 		catch ( Exception $e )
 		{
