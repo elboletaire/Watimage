@@ -337,39 +337,46 @@ class Watimage//Component extends Object
 				break;
 
 				/*
-				 * Maintains aspect ratio but resizes the image so that once
-				 * one side meets its max width or max height condition, it stays at that size
-				 * (thus one side will be larger)
-				 * TODO: This method must be fixed, does not work as expected...
+				 * Intended for generating images which do not exceed the
+				 * specified boundaries ($max_width and $max_height) under any circumstances,
+				 * while maintaining the original aspect ratio.
 				 */
 				case 'resizemin':
-					$ratio_x = $this->resize['size']['x'] / $this->current_size['image']['width'];
-					$ratio_y = $this->resize['size']['y'] / $this->current_size['image']['height'];
+					$max_width  = $this->resize['size']['x'];
+					$max_height = $this->resize['size']['y'];
+					$old_width  = $this->current_size['image']['width'];
+					$old_height = $this->current_size['image']['height'];
 
-					if ( ($this->current_size['image']['width'] == $this->resize['size']['x']) && ($this->current_size['image']['height'] == $this->resize['size']['y']) )
-					{
-						$new_x = $this->current_size['image']['width'];
-						$new_y = $this->current_size['image']['height'];
-					}
-					else if ( ($ratio_x * $this->current_size['image']['height']) > $this->resize['size']['y'] )
-					{
-						$new_x = $this->resize['size']['x'];
-						$new_y = ceil($ratio_x * $this->current_size['image']['height']);
-					}
-					else
-					{
-						$new_x = ceil($ratio_y * $this->current_size['image']['width']);
-						$new_y = $this->resize['size']['y'];
+					$ratio_resize = 1; // image will be left "as is", unless it is eligible for resizing
+
+					$needs_resize = !(($old_width < $max_width) && ($old_height < $max_height)); // `true` when source image is smaller than both the requested boundaries
+
+					if ($needs_resize) {
+						$ratio_resize_x = $old_width / $max_width;
+						$ratio_resize_y = $old_height / $max_height;
+
+						// we need to choose one of the most convenient ratios (among these two) for our resize. the biggest one, it is.
+						$ratio_resize = $ratio_resize_x > $ratio_resize_y ? $ratio_resize_x : $ratio_resize_y;
 					}
 
-					$dest_image = $this->createDestImage($new_x, $new_y);
+					$new_width  = $old_width / $ratio_resize;
+					$new_height = $old_height / $ratio_resize;
 
-					if ( !imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $new_x, $new_y, $this->current_size['image']['width'], $this->current_size['image']['height']) )
-					{
-						throw new Exception('Could not copy resampled image while resizing');
-					}
-					$this->current_size['image']['width'] = $new_x;
-					$this->current_size['image']['height'] = $new_y;
+					$dest_image = $this->createDestImage($new_width, $new_height);
+
+					$success =
+					imagecopyresampled(
+						$dest_image,
+						$this->image,
+						0, 0, 0, 0,
+						$new_width, $new_height,
+						$old_width, $old_height
+					);
+
+					if (!$success) { throw new Exception('Could not copy resampled image while resizing'); }
+
+					$this->current_size['image']['width']  = $new_width;
+					$this->current_size['image']['height'] = $new_height;
 				break;
 
 				/*
@@ -616,7 +623,7 @@ class Watimage//Component extends Object
 				// preserve transparency
 				imagealphablending($temp, false);
 			}
-			
+
 			switch ($type)
 			{
 				case 'horizontal':
@@ -698,7 +705,7 @@ class Watimage//Component extends Object
 					if ( !imagegif($this->image, $path, $this->quality) )
 						throw new Exception('could not generate output gif image');
 				break;
-				
+
 				default:
 					throw new Exception("Invalid output format ({$this->output})");
 			}
