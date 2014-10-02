@@ -87,6 +87,9 @@ You have an example.php file with more examples.
 
 ## Changelog
 
+* **0.8** [2014/10/02]
+        * Fixed `resizemin` resizing method (thanks to @albertboada).
+        * Fixed "indirect modification of overloaded property"
 * **0.7** [2012/07/12] 
 	* Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
 * **0.6** [2012/04/18] 
