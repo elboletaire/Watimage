@@ -27,8 +27,8 @@ $wm->applyWatermark();
 
 // Generate and save image
 if ( !$wm->generate('test6.png') ) {
-	// handle errors...
-	print_r($wm->errors);
+    // handle errors...
+    print_r($wm->errors);
 }
 ```
 
@@ -51,35 +51,35 @@ Example Controller:
 ```php
 class FooController extends AppController
 {
-	public $components = array(
-		// You can set this later using setQuality()
-		'Watimage' => array('quality' => 80)
-	);
-	
-	public function bar()
-	{
-		// Set image and watermark
-		$this->Watimage->setImage('test.png');
-		$this->Watimage->setWatermark('watermark.png');
+    public $components = array(
+        // You can set this later using setQuality()
+        'Watimage' => array('quality' => 80)
+    );
+    
+    public function bar()
+    {
+        // Set image and watermark
+        $this->Watimage->setImage('test.png');
+        $this->Watimage->setWatermark('watermark.png');
 
-		// Resize image to 400x400px
-		$this->Watimage->resize(array('type' => 'resizecrop', 'size' => 400));
+        // Resize image to 400x400px
+        $this->Watimage->resize(array('type' => 'resizecrop', 'size' => 400));
 
-		// Flip it horitzontally
-		$this->Watimage->flip('horizontal');
+        // Flip it horitzontally
+        $this->Watimage->flip('horizontal');
 
-		// Rotate 45 degrees
-		$this->Watimage->rotate(45);
+        // Rotate 45 degrees
+        $this->Watimage->rotate(45);
 
-		// Apply the watermark
-		$this->Watimage->applyWatermark();
+        // Apply the watermark
+        $this->Watimage->applyWatermark();
 
-		// Generate and save image
-		if ( !$this->Watimage->generate('test6.png') ) {
-			// handle errors...
-			print_r($this->Watimage->errors);
-		}
-	}
+        // Generate and save image
+        if ( !$this->Watimage->generate('test6.png') ) {
+            // handle errors...
+            print_r($this->Watimage->errors);
+        }
+    }
 }
 ```
 
@@ -87,31 +87,31 @@ You have an example.php file with more examples.
 
 ## Changelog
 
-* **0.8** [2014/10/02]
-        * Fixed `resizemin` resizing method (thanks to @albertboada).
-        * Fixed "indirect modification of overloaded property"
+* **0.8** [2014/10/02] 
+    * Fixed `resizemin` resizing method (thanks to @albertboada).
+    * Fixed "indirect modification of overloaded property"
 * **0.7** [2012/07/12] 
-	* Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
+    * Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
 * **0.6** [2012/04/18] 
-	* Added new method 'crop' for using it with cropping tools like jcrop
-	* Minor bugfixes
+    * Added new method 'crop' for using it with cropping tools like jcrop
+    * Minor bugfixes
 * **0.5** [2012/01/14] 
-	* Resolved all transparency issues
+    * Resolved all transparency issues
 * **0.2.3** [2012/01/12]
-	* Resolved transparency issues on rotate (by https://github.com/fcjurado)
+    * Resolved transparency issues on rotate (by https://github.com/fcjurado)
 * **0.2.2** [2011/05/14]
-	* Fix exponential reduction of image quality when inside a loop
+    * Fix exponential reduction of image quality when inside a loop
 * **0.2.1** [2011/05/11]
-	* Added 'setQuality' method. 
- 	* Solved png exportation issue (bad quality calc)
-	* Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
+    * Added 'setQuality' method. 
+    * Solved png exportation issue (bad quality calc)
+    * Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
 * **0.2** [2011/04/16]
-	* Now works with Exceptions. 
-	* mime_content_type function has been removed (as it was deprecated).
-	* Added flip function. 
-	* Minor bugfixes
+    * Now works with Exceptions. 
+    * mime_content_type function has been removed (as it was deprecated).
+    * Added flip function. 
+    * Minor bugfixes
 * **0.1** [2010/06/10]
-	* First version
+    * First version
 
 
 ## More info
