@@ -2,7 +2,7 @@
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 0.7
+ * @version 0.8
  * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
