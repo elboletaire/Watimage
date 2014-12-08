@@ -14,7 +14,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Elboletaire\\Watimage": ""
+            "Elboletaire\\Watimage\\": ""
         }
     }
 }
