@@ -1,0 +1,20 @@
+{
+    "name": "elboletaire/watimage",
+    "description": "Watermark and Image PHP class",
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Òscar Casajuana",
+            "email": "elboletaire@underave.net"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Elboletaire\\Watimage\\": "src/"
+        }
+    }
+}

@@ -1,10 +1,10 @@
-<?php 
+<?php
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
 date_default_timezone_set('UTC');
 
-require 'watimage.php';
+require 'src/watimage.php';
 
 
 /************************
@@ -69,7 +69,7 @@ $wm = new Watimage('test.png');
 $wm->crop(array( // values from the cropper
 	'width' => 500, // the cropped width
 	'height' => 500, // "     "	   height
-	'x' => 50, 
+	'x' => 50,
 	'y' => 80
 ));
 if ( !$wm->generate('test6.png') ) {
