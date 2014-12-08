@@ -1,8 +1,9 @@
 <?php
+namespace Elboletaire\Watimage;
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 0.8
+ * @version 1.0
  * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
@@ -20,8 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
  */
-// Uncomment next comment to use as CakePHP Component
-class WatimageComponent extends Component
+class Watimage
 {
 	/**
 	 * Sizes especified by user to enlarge or
@@ -78,15 +78,13 @@ class WatimageComponent extends Component
 	private $file = array();
 	private $extension;
 
-	/**
-	 * Contructor function for CakePHP
-	 * @param Object &$controller pointer to calling controller
-	 */
-	public function initialize(&$controller, $options = array())
+	public function __construct($file = null, $watermark = null)
 	{
-		if ( !empty($options) )
-			if ( !empty($options['quality']) )
-				$this->setQuality($options['quality']);
+		if ( !empty($file) )
+			$this->setImage($file);
+
+		if ( !empty($watermark) )
+			$this->setWatermark($watermark);
 	}
 
 	/**
