@@ -1,18 +1,39 @@
-#About
+Watimage: Watermark and Image PHP Class
+=======================================
+
 Watimage is a PHP class to resize, rotate and apply watermark to images.
 
-It was initially thought as a CakePHP Component, so it's really easy to use it as is.
+It was initially thought as a CakePHP Component, but now is a standalone class,
+so you can use it everywhere :D
 
+Installing
+----------
 
-##Usage
+With composer:
+
+```bash
+composer require elboletaire/watimage 1.0.0
+```
+
+As a git submodule:
+
+```bash
+git submodule add https://github.com/elboletaire/twbs-cake-plugin.git Vendor/Elboletaire/Watimage
+```
+
+Usage
+-----
 
 ### As standalone class
 
 ```php
-require_once 'watimage.php';
+// In top of your document (if you use composer's autoloader)
+use Elboletaire\Watimage\Watimage;
+// If you're not using composer's autoloader, then require it manually
+// require_once 'Vendor/Elboletaire/Watimage/src/Watimage.php';
 
 $wm = new Watimage();
-$wm->setImage('test.png');
+$wm->setImage('original_file.png');
 $wm->setWatermark('watermark.png');
 
 // Resize image to 400x400px
@@ -28,60 +49,9 @@ $wm->rotate(90);
 $wm->applyWatermark();
 
 // Generate and save image
-if ( !$wm->generate('test6.png') ) {
+if ( !$wm->generate('result.png') ) {
     // handle errors...
     print_r($wm->errors);
-}
-```
-
-### As a CakePHP Component
-
-Before using Watimage as a CakePHP Component, you must uncoment this:
-
-```php
-class Watermark//Component extends Object
-```
-
-So that it is..
-
-```php
-class WatermarkComponent extends Object
-```
-
-Example Controller:
-
-```php
-class FooController extends AppController
-{
-    public $components = array(
-        // You can set this later using setQuality()
-        'Watimage' => array('quality' => 80)
-    );
-    
-    public function bar()
-    {
-        // Set image and watermark
-        $this->Watimage->setImage('test.png');
-        $this->Watimage->setWatermark('watermark.png');
-
-        // Resize image to 400x400px
-        $this->Watimage->resize(array('type' => 'resizecrop', 'size' => 400));
-
-        // Flip it horitzontally
-        $this->Watimage->flip('horizontal');
-
-        // Rotate 45 degrees
-        $this->Watimage->rotate(45);
-
-        // Apply the watermark
-        $this->Watimage->applyWatermark();
-
-        // Generate and save image
-        if ( !$this->Watimage->generate('result.png') ) {
-            // handle errors...
-            print_r($this->Watimage->errors);
-        }
-    }
 }
 ```
 
@@ -91,21 +61,25 @@ You have an example.php file with more examples.
 
 ## Changelog
 
-* **0.8** [2014/10/02] 
+* **1.0.0** [2014/12/08]
+    * Added to packagist (composer)
+    * Changed everything to work as a vendor class
+
+* **0.8** [2014/10/02]
     * Fixed `resizemin` resizing method (thanks to @albertboada).
     * Fixed "indirect modification of overloaded property"
 
-* **0.8** [2012/09/05] 
+* **0.8** [2012/09/05]
 	* Version for CakePHP 2.X (thanks to Pyo [pexiweb.be])
 
-* **0.7** [2012/07/12] 
+* **0.7** [2012/07/12]
     * Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
 
-* **0.6** [2012/04/18] 
+* **0.6** [2012/04/18]
     * Added new method 'crop' for using it with cropping tools like jcrop
     * Minor bugfixes
 
-* **0.5** [2012/01/14] 
+* **0.5** [2012/01/14]
     * Resolved all transparency issues
 
 * **0.2.3** [2012/01/12]
@@ -115,14 +89,14 @@ You have an example.php file with more examples.
     * Fix exponential reduction of image quality when inside a loop
 
 * **0.2.1** [2011/05/11]
-    * Added 'setQuality' method. 
+    * Added 'setQuality' method.
     * Solved png exportation issue (bad quality calc)
     * Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
 
 * **0.2** [2011/04/16]
-    * Now works with Exceptions. 
+    * Now works with Exceptions.
     * mime_content_type function has been removed (as it was deprecated).
-    * Added flip function. 
+    * Added flip function.
     * Minor bugfixes
 
 * **0.1** [2010/06/10]
