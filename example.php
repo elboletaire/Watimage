@@ -10,7 +10,7 @@ require 'src/watimage.php';
 /************************
  *** APPLY WATERMARKS ***
  ************************/
-$wm = new Watimage();
+$wm = new Elboletaire\Watimage\Watimage();
 $wm->setImage(array('file' => 'test.png', 'quality' => 70)); // file to use and export quality
 $wm->setWatermark(array('file' => 'watermark.png', 'position' => 'top right')); // watermark to use and it's position
 $wm->applyWatermark(); // apply watermark to the canvas
@@ -22,7 +22,7 @@ if ( !$wm->generate('test1.png') ) {
 /*********************
  *** RESIZE IMAGES ***
  *********************/
-$wm = new Watimage('test.png');
+$wm = new Elboletaire\Watimage\Watimage('test.png');
 // allowed types: resize, resizecrop, resizemin, crop and reduce
 $wm->resize(array('type' => 'resizecrop', 'size' => array(400, 200)));
 if ( !$wm->generate('test2.png') ) {
@@ -34,7 +34,7 @@ if ( !$wm->generate('test2.png') ) {
 /*********************
  *** ROTATE IMAGES ***
  *********************/
-$wm = new Watimage('test.png');
+$wm = new Elboletaire\Watimage\Watimage('test.png');
 $wm->rotate(90);
 if ( !$wm->generate('test3.png') ) {
 	// handle errors...
@@ -44,7 +44,7 @@ if ( !$wm->generate('test3.png') ) {
 /**********************************
  *** EXPORTING TO OTHER FORMATS ***
  **********************************/
-$wm = new Watimage('test.png');
+$wm = new Elboletaire\Watimage\Watimage('test.png');
 if ( !$wm->generate('test4.jpg', 'image/jpeg') ) {
 	// handle errors...
 	print_r($wm->errors);
@@ -53,7 +53,7 @@ if ( !$wm->generate('test4.jpg', 'image/jpeg') ) {
 /*******************
  *** FLIP IMAGES ***
  *******************/
-$wm = new Watimage('test.png');
+$wm = new Elboletaire\Watimage\Watimage('test.png');
 $wm->flip('vertical'); // or "horizontal"
 if ( !$wm->generate('test5.png') ) {
 	// handle errors...
@@ -65,7 +65,7 @@ if ( !$wm->generate('test5.png') ) {
  *** CROPPING IMAGES ***
  ***********************/
 // Usefull for cropping plugins like https://github.com/tapmodo/Jcrop
-$wm = new Watimage('test.png');
+$wm = new Elboletaire\Watimage\Watimage('test.png');
 $wm->crop(array( // values from the cropper
 	'width' => 500, // the cropped width
 	'height' => 500, // "     "	   height
@@ -82,7 +82,7 @@ if ( !$wm->generate('test6.png') ) {
  *** EVERYTHING TOGETHER ***
  ***************************/
 
-$wm = new Watimage();
+$wm = new Elboletaire\Watimage\Watimage();
 
 // Set the image
 $wm->setImage('test.png'); // you can also set the quality with setImage, you only need to change it with an array: array('file' => 'test.png', 'quality' => 70)
