@@ -527,7 +527,7 @@ class Watimage
 					$this->rotate['bgcolor'] = -1;
 			}
 
-			$this->image = $this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
+			$this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
 			// Obtain new image dimensions
 			$this->current_size['image']['width'] = imagesx($this->image);
 			$this->current_size['image']['height'] = imagesy($this->image);
@@ -946,12 +946,14 @@ class Watimage
 		return $dest_image;
 	}
 
-	private function imgRotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
+	private function imgRotate(&$src_image, $angle, $bgcolor, $ignore_transparent = 0)
 	{
-		if ( function_exists("imagerotate") )
+		if (function_exists("imagerotate")) {
 			return imagerotate($src_image, $angle, $bgcolor, $ignore_transparent);
-		else
-			return $this->imagerotateEquivalent($src_image, $angle, $bgcolor, $ignore_transparent);
+		}
+		else {
+			$src_image = $this->imagerotateEquivalent($src_image, $angle, $bgcolor, $ignore_transparent);
+		}
 	}
 
 
