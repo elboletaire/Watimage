@@ -530,7 +530,7 @@ class Watimage
             imagesavealpha($dest_image, true);
             imagealphablending($dest_image, false);
 
-            if (!imagecopyresampled($dest_image, $this->image, 0, 0, 0, 0, $this->current_size['image']['width'], $this->current_size['image']['height'], $this->current_size['image']['width'], $this->current_size['image']['height'])) {
+            if (!$this->imagecopy($this->extension['image'], $dest_image, $this->image, 0, 0, 0, 0, $this->current_size['image']['width'], $this->current_size['image']['height'], $this->current_size['image']['width'], $this->current_size['image']['height'])) {
                 throw new Exception('Could not copy resampled image while resizing');
             }
 
@@ -1028,5 +1028,13 @@ class Watimage
         } else {
             $this->errors[] = $exception->getMessage();
         }
+    }
+
+    private function imagecopy($extension, $dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h)
+    {
+        if ($extension == 'gif') {
+            return imagecopyresized($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+        }
+        return imagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
     }
 }
