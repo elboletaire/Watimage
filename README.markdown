@@ -18,7 +18,7 @@ composer require elboletaire/watimage 1.0.0
 As a git submodule:
 
 ```bash
-git submodule add https://github.com/elboletaire/twbs-cake-plugin.git Vendor/Elboletaire/Watimage
+git submodule add https://github.com/elboletaire/Watimage.git Vendor/Elboletaire/Watimage
 ```
 
 Usage
@@ -59,7 +59,35 @@ if ( !$wm->generate('result.png') ) {
 
 You have an example.php file with more examples.
 
+Testing
+-------
+
+Currently there are only methods to visually check that all images are properly
+generated.
+
+To run them just cd into the visual tests folders and run the `run_them_all.php` script:
+
+```bash
+cd tests/visual
+php run_them_all.php
+```
+
+It will generate a bunch of files in `tests/visual/results` where you can check
+if everything is running as expected.
+
 ## Changelog
+
+* **1.0.2** [2015/06/27]
+    * Minor coding style changes.
+    * Fixed applying watermarks to gif files will make its background black.
+    * Images are allways rotated clockwise (imagerotate was rotating them reversely).
+    * Fixed imagerotate crashing when receiving a bgcolor of -1.
+    * Added different compression value for png files.
+    * Added visual tests.
+
+* **1.0.1** [2015/06/25]
+    * Fixed example to use namespaces.
+    * Fixed issue with imagerotate.
 
 * **1.0.0** [2014/12/08]
     * Added to packagist (composer)
