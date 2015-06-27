@@ -67,7 +67,7 @@ class Watimage
      */
     private $position = "bottom right";
 
-    /**
+    /*
      *  Some other private vars...
      */
     private $rotate = false;
@@ -566,7 +566,7 @@ class Watimage
             $temp = imagecreatetruecolor($size_x, $size_y);
 
             if ($this->extension['image'] == 'gif' || $this->extension['image'] == 'png') {
-            // preserve transparency
+                // preserve transparency
                 imagealphablending($temp, false);
             }
 
