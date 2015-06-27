@@ -12,7 +12,7 @@ require 'src/watimage.php';
  ************************/
 $wm = new Elboletaire\Watimage\Watimage();
 $wm->setImage(array('file' => 'test.png', 'quality' => 70)); // file to use and export quality
-$wm->setWatermark(array('file' => 'watermark.png', 'position' => 'top right')); // watermark to use and it's position
+$wm->setWatermark(array('file' => 'watermark.png', 'position' => 'top right')); // watermark to use and its position
 $wm->applyWatermark(); // apply watermark to the canvas
 if ( !$wm->generate('test1.png') ) {
 	// handle errors...
