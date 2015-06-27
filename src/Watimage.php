@@ -44,6 +44,11 @@ class Watimage
     public $debug = false;
 
     /**
+     * Set to true for debugging purposes
+     */
+    const DEBUG_ROTATE = false;
+
+    /**
      * Current sizes of image files
      * @private array $sizes
      */
@@ -484,7 +489,7 @@ class Watimage
                 }
             }
 
-            $this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
+            $this->image = $this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
             // Obtain new image dimensions
             $this->current_size['image']['width'] = imagesx($this->image);
             $this->current_size['image']['height'] = imagesy($this->image);
@@ -903,29 +908,22 @@ class Watimage
         return $dest_image;
     }
 
-    private function imgRotate(&$src_image, $angle, $bgcolor, $ignore_transparent = 0)
+    private function imgRotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
     {
-        if (function_exists("imagerotate")) {
-            return imagerotate($src_image, $angle, $bgcolor, $ignore_transparent);
-        } else {
-            $src_image = $this->imagerotateEquivalent($src_image, $angle, $bgcolor, $ignore_transparent);
+        if (function_exists("imagerotate") && !self::DEBUG_ROTATE) {
+            if ($bgcolor === -1) {
+                $bgcolor = imagecolorallocatealpha($src_image, 0, 0, 0, 127);
+            }
+            return imagerotate($src_image, $angle * -1, $bgcolor, $ignore_transparent);
         }
+        return $this->imagerotate($src_image, $angle, $bgcolor, $ignore_transparent);
     }
 
 
     // extracted from http://php.net/manual/es/function.imagerotate.php comments
-    private function imagerotateEquivalent($src_image, $angle, $bgcolor, $ignore_transparent = 0)
+    // slightly modified to maintain transparencies
+    private function imagerotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
     {
-        function rotateX($x, $y, $theta)
-        {
-            return $x * cos($theta) - $y * sin($theta);
-        }
-
-        function rotateY($x, $y, $theta)
-        {
-            return $x * sin($theta) + $y * cos($theta);
-        }
-
         $srcw = imagesx($src_image);
         $srch = imagesy($src_image);
 
@@ -970,10 +968,10 @@ class Watimage
         } else {
             // Calculate the width of the destination image.
             $temp = array (
-                rotateX(0, 0, 0-$theta),
-                rotateX($srcw, 0, 0-$theta),
-                rotateX(0, $srch, 0-$theta),
-                rotateX($srcw, $srch, 0-$theta)
+                $this->rotateX(0, 0, 0-$theta),
+                $this->rotateX($srcw, 0, 0-$theta),
+                $this->rotateX(0, $srch, 0-$theta),
+                $this->rotateX($srcw, $srch, 0-$theta)
             );
             $minX = floor(min($temp));
             $maxX = ceil(max($temp));
@@ -981,10 +979,10 @@ class Watimage
 
             // Calculate the height of the destination image.
             $temp = array (
-                rotateY(0, 0, 0-$theta),
-                rotateY($srcw, 0, 0-$theta),
-                rotateY(0, $srch, 0-$theta),
-                rotateY($srcw, $srch, 0-$theta)
+                $this->rotateY(0, 0, 0-$theta),
+                $this->rotateY($srcw, 0, 0-$theta),
+                $this->rotateY(0, $srch, 0-$theta),
+                $this->rotateY($srcw, $srch, 0-$theta)
             );
             $minY = floor(min($temp));
             $maxY = ceil(max($temp));
@@ -1002,14 +1000,14 @@ class Watimage
         for ($x = $minX; $x < $maxX; $x++) {
             for ($y = $minY; $y < $maxY; $y++) {
                 // fetch corresponding pixel from the source image
-                $srcX = round(rotateX($x, $y, $theta));
-                $srcY = round(rotateY($x, $y, $theta));
+                $srcX = round($this->rotateX($x, $y, $theta));
+                $srcY = round($this->rotateY($x, $y, $theta));
                 if ($srcX >= 0 && $srcX < $srcw && $srcY >= 0 && $srcY < $srch) {
                     $color = imagecolorat($src_image, $srcX, $srcY);
                 } else {
                     $color = $bgcolor;
                 }
-                    imagesetpixel($destimg, $x-$minX, $y-$minY, $color);
+                imagesetpixel($destimg, $x-$minX, $y-$minY, $color);
             }
         }
         return $destimg;
@@ -1036,5 +1034,15 @@ class Watimage
             return imagecopyresized($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
         }
         return imagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
+    }
+
+    private function rotateX($x, $y, $theta)
+    {
+        return $x * cos($theta) - $y * sin($theta);
+    }
+
+    private function rotateY($x, $y, $theta)
+    {
+        return $x * sin($theta) + $y * cos($theta);
     }
 }
