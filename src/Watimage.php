@@ -136,6 +136,10 @@ class Watimage
 
     public function __construct($file = null, $watermark = null)
     {
+        if (!extension_loaded('gd')) {
+            throw new Exception("PHP GD extension is required by Watimage and it has not been loaded");
+        }
+
         if (!empty($file)) {
             $this->setImage($file);
         }
@@ -143,6 +147,8 @@ class Watimage
         if (!empty($watermark)) {
             $this->setWatermark($watermark);
         }
+
+        return $this;
     }
 
     /**
@@ -152,36 +158,62 @@ class Watimage
      */
     public function setImage($file)
     {
-        // Remove possible errors...
-        $this->errors = array();
-        try {
-            if (is_array($file) && isset($file['file'])) {
-                if (isset($file['quality'])) {
-                    $this->setQuality($file['quality']);
-                }
-                $file = $file['file'];
-            } elseif (empty($file) || (is_array($file) && !isset($file['file']))) {
-                throw new Exception('Empty file');
-            }
 
-            if (file_exists($file)) {
-                $this->file['image'] = $file;
-            } else {
-                throw new Exception('File "' . $file . '" does not exist');
+        if (is_array($file)) {
+            if (isset($file['quality'])) {
+                $this->setQuality($file['quality']);
             }
-
-            // Obtain extension
-            $this->extension['image'] = $this->getFileExtension($this->file['image']);
-            // Obtain file sizes
-            $this->getSizes();
-            // Create image boundary
-            $this->image = $this->createImage($this->file['image']);
-            $this->handleTransparentImage();
-        } catch (Exception $e) {
-            $this->error($e);
-            return false;
+            $file = $file['file'];
         }
-        return true;
+
+        if (empty($file)) {
+            throw new Exception("Image file has not been set");
+        }
+
+        if (!file_exists($file)) {
+            throw new Exception("Image file \"$file\" does not exist");
+        }
+
+        $this->metadata = $this->getMetadata($file);
+
+        return $this;
+
+        // Remove possible errors...
+        // $this->errors = array();
+        // try {
+        //     if (is_array($file) && isset($file['file'])) {
+        //         if (isset($file['quality'])) {
+        //             $this->setQuality($file['quality']);
+        //         }
+        //         $file = $file['file'];
+        //     } elseif (empty($file) || (is_array($file) && !isset($file['file']))) {
+        //         throw new Exception('Empty file');
+        //     }
+
+        //     if (file_exists($file)) {
+        //         $this->file['image'] = $file;
+        //     } else {
+        //         throw new Exception('File "' . $file . '" does not exist');
+        //     }
+
+        //     // Obtain extension
+        //     $this->extension['image'] = $this->getFileExtension($this->file['image']);
+        //     // Obtain file sizes
+        //     $this->getSizes();
+        //     // Create image boundary
+        //     $this->image = $this->createImage($this->file['image']);
+        //     $this->handleTransparentImage();
+        // } catch (Exception $e) {
+        //     $this->error($e);
+        //     return false;
+        // }
+        // return true;
+    }
+
+    public function getMetadata($filename)
+    {
+        $info = getimagesize($filename);
+
     }
 
     /**
