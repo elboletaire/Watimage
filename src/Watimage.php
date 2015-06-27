@@ -86,10 +86,12 @@ class Watimage
      *
      * @var resource
      */
-    private $image;
+    protected $image;
+
+    protected $metadata;
 
     /**
-     * Watermark image resource handler.
+     * Contains all information related to the watermark.
      *
      * @var mixed False if no watermark set, resource otherwise.
      */
@@ -137,7 +139,7 @@ class Watimage
     public function __construct($file = null, $watermark = null)
     {
         if (!extension_loaded('gd')) {
-            throw new Exception("PHP GD extension is required by Watimage and it has not been loaded");
+            throw new Exception("PHP GD extension is required by Watimage but it's not loaded");
         }
 
         if (!empty($file)) {
@@ -151,30 +153,50 @@ class Watimage
         return $this;
     }
 
-    /**
-     *  Set image options
-     *  @param array $options [optional]
-     *  @return true on success; otherwise will return false
-     */
-    public function setImage($file)
+    public function getImage()
     {
+        return $this->image;
+    }
 
-        if (is_array($file)) {
-            if (isset($file['quality'])) {
-                $this->setQuality($file['quality']);
-            }
-            $file = $file['file'];
+    public function getMetadata()
+    {
+        $image = $this->metadata;
+        if (is_array($this->watermark)) {
+            $watermark = $this->watermark['metadata'];
         }
 
-        if (empty($file)) {
+        return compact('image', 'watermark');
+    }
+
+    /**
+     *  Sets image and (optionally) its options
+     *
+     *  @param mixed $filename Filename string or array containing both filename and quality
+     *  @return Watimage
+     *  @throws Exception
+     */
+    public function setImage($filename)
+    {
+        if (is_array($filename)) {
+            if (isset($filename['quality'])) {
+                $this->setQuality($filename['quality']);
+            }
+            $filename = $filename['file'];
+        }
+
+        if (empty($filename)) {
             throw new Exception("Image file has not been set");
         }
 
-        if (!file_exists($file)) {
-            throw new Exception("Image file \"$file\" does not exist");
+        if (!file_exists($filename)) {
+            throw new Exception("Image file \"$filename\" does not exist");
         }
 
-        $this->metadata = $this->getMetadata($file);
+
+        $this->filename = $filename;
+        $this->getMetadataForImage();
+        $this->image = $this->createResourceImage($filename, $this->metadata['format']);
+        $this->handleTransparency($this->image);
 
         return $this;
 
@@ -210,10 +232,42 @@ class Watimage
         // return true;
     }
 
-    public function getMetadata($filename)
+    /**
+     * Loads metadata to internal variables.
+     *
+     * @return void
+     */
+    protected function getMetadataForImage()
+    {
+        $this->metadata = $this->getMetadataFromFile($this->filename);
+
+        $this->width = $this->metadata['width'];
+        $this->height = $this->metadata['height'];
+    }
+
+    /**
+     * Gets metadata information from given $filename.
+     *
+     * @param  string $filename File path
+     * @return array
+     */
+    public function getMetadataFromFile($filename)
     {
         $info = getimagesize($filename);
 
+        $metadata = [
+            'width'  => $info[0],
+            'height' => $info[1],
+            'mime'   => $info['mime'],
+            'format' => preg_replace('@^image/@', '', $info['mime']),
+            'exif'   => null // set later
+        ];
+
+        if (function_exists('exif_read_data') && $metadata['format'] == 'jpeg') {
+            $metadata['exif'] = exif_read_data($filename);
+        }
+
+        return $metadata;
     }
 
     /**
@@ -237,32 +291,87 @@ class Watimage
     }
 
     /**
-     * Set watermark options
+     * Set watermark and (optionally) its options.
+     *
      * @param mixed $options [optional] you can set the watermark without options
      *              or you can set an array of options like:
      *              $options = array(
-     *                  'file' => 'watermark.png',
-     *                  'position' => 'bottom center', // 'bottom center' by default
-     *                  'margin' => array('20', '10') // 0 by default
+     *                  'file'     => 'watermark.png',
+     *                  'position' => 'bottom right', // default
+     *                  'margin'   => array('20', '10') // 0 by default
      *              );
      * @return true on success; false on failure
      */
     public function setWatermark($options = array())
     {
-        try {
-            if (empty($options)) {
-                throw new Exception('You must set watermark options');
+        if (is_array($options) && empty($options)) {
+            throw new Exception('You must set watermark options');
+        }
+
+        $defaults = [
+            'position' => 'bottom right',
+            'margin'   => ['x' => 0, 'y' => 0],
+            'size'     => '100%'
+        ];
+
+        if (!is_array($options)) {
+            $options = ['file' => $options];
+        }
+
+        if (isset($options['margin'])) {
+            if (!is_array($options['margin'])) {
+                $options['margin'] = [
+                    'x' => $options['margin'],
+                    'y' => $options['margin']
+                ];
+            } elseif (is_array($options['margin']) && isset($options['margin'][0])) {
+                if (count($options['margin']) == 2) {
+                    $options['margin'] = [
+                        'x' => $options['margin'][0],
+                        'y' => $options['margin'][1]
+                    ];
+                } else {
+                    $options['margin'] = [
+                        'x' => $options['margin'][0],
+                        'y' => $options['margin'][0]
+                    ];
+                }
             }
+        }
+
+        $options = array_merge($defaults, $options);
+
+        if (empty($options['file'])) {
+            throw new Exception('You must set the watermark file');
+        }
+
+        $this->watermark = [
+            'options'  => $options,
+            'metadata' => $this->getMetadataFromFile($options['file']),
+            'image'    => null
+        ];
+
+        $this->watermark['image'] = $this->createResourceImage(
+            $options['file'],
+            $this->watermark['metadata']['format']
+        );
+
+        return $this;
+
+        try {
+            // if (empty($options)) {
+            //     throw new Exception('You must set watermark options');
+            // }
 
             if (!is_array($options)) {
-                $this->file['watermark'] = $options;
+                // $this->file['watermark'] = $options;
             } else {
                 // Watermark image file
-                if (!empty($options['file'])) {
-                    $this->file['watermark'] = $options['file'];
-                } else {
-                    throw new Exception('You must set the watermark file');
-                }
+                // if (!empty($options['file'])) {
+                //     $this->file['watermark'] = $options['file'];
+                // } else {
+                //     throw new Exception('You must set the watermark file');
+                // }
 
                 // Position
                 if (!empty($options['position'])) {
@@ -306,6 +415,11 @@ class Watimage
             return false;
         }
         return true;
+    }
+
+    protected function calculateWatermarkSize()
+    {
+
     }
 
     /**
@@ -572,6 +686,9 @@ class Watimage
                 throw new Exception('You must set options for rotate method');
             }
 
+
+            // TODO: Per a què treballar amb un array?! Permetre especificar dos paràmetres
+            // però amb backwards compatibility
             if (!is_array($options)) {
                 $this->rotate['degrees'] = $options;
                 // Take transparent as default background color if it's not specified
@@ -794,44 +911,62 @@ class Watimage
     }
 
     /**
-     *  Creates an image from string
-     *  @return true on success. Otherwise throws an Exception
+     * Creates a resource image.
+     *
+     * This method was using imagecreatefromstring but I decided to switch after
+     * reading this: https://thenewphalls.wordpress.com/2012/12/27/imagecreatefromstring-vs-imagecreatefromformat
+     *
+     * @param  string $filename Image file path/name.
+     * @param  string $format   Image format (gif, png or jpeg).
+     * @return resource
      */
-    private function createImage($file)
+    protected function createResourceImage($filename, $format)
     {
-        $ihandle = fopen($file, 'r');
-        $image = fread($ihandle, filesize($file));
-        fclose($ihandle);
+        switch ($format) {
+            case 'gif':
+                $image = imagecreatefromgif($filename);
+                break;
 
-        if (false === ( $img = imagecreatefromstring($image) )) {
-            throw new Exception("Image not valid");
+            case 'png':
+                $image = imagecreatefrompng($filename);
+                break;
+
+            case 'jpeg':
+                $image = imagecreatefromjpeg($filename);
+                break;
+
+            default:
+                throw new Exception("Mime type \"{$this->metadata['mime']}\" not allowed or not recognised");
         }
 
-        return $img;
+        return $image;
     }
 
     /**
      *  Applies some values to image for handling transparency
-     *  @throw Exception on error
+     *
+     * @return void
      */
-    private function handleTransparentImage()
+    protected function handleTransparency(&$image)
     {
-        if (preg_match('/gif|png/', $this->extension['image'])) {
-            if (!imagealphablending($this->image, true)) {
-                throw new Exception("Can't apply imagealphablending to image");
-            }
+        imagesavealpha($image, true);
+        imagealphablending($image, true);
+        // if (preg_match('/gif|png/', $this->extension['image'])) {
+        //     if (!imagealphablending($this->image, true)) {
+        //         throw new Exception("Can't apply imagealphablending to image");
+        //     }
 
-            if ($this->current_size['image']['format'] == 3) {
-            // Save alpha for transparent png files
-                if (!imagealphablending($this->image, false)) {
-                    throw new Exception("Can't apply imagealphablending to image");
-                }
+        //     if ($this->current_size['image']['format'] == 3) {
+        //     // Save alpha for transparent png files
+        //         if (!imagealphablending($this->image, false)) {
+        //             throw new Exception("Can't apply imagealphablending to image");
+        //         }
 
-                if (!imagesavealpha($this->image, true)) {
-                    throw new Exception("Can't apply imagesavealpha to image");
-                }
-            }
-        }
+        //         if (!imagesavealpha($this->image, true)) {
+        //             throw new Exception("Can't apply imagesavealpha to image");
+        //         }
+        //     }
+        // }
     }
 
     /**
@@ -1004,12 +1139,12 @@ class Watimage
         return $dest_image;
     }
 
-    private function imagerotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
+    private function imagerotate($src_image, $angle, $bgcolor)
     {
         if ($bgcolor === -1) {
             $bgcolor = imagecolorallocatealpha($src_image, 0, 0, 0, 127);
         }
-        return imagerotate($src_image, $angle * -1, $bgcolor, $ignore_transparent);
+        return imagerotate($src_image, $angle * -1, $bgcolor);
     }
 
     private function error($exception)
@@ -1033,15 +1168,5 @@ class Watimage
             return imagecopyresized($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
         }
         return imagecopyresampled($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-    }
-
-    private function rotateX($x, $y, $theta)
-    {
-        return $x * cos($theta) - $y * sin($theta);
-    }
-
-    private function rotateY($x, $y, $theta)
-    {
-        return $x * sin($theta) + $y * cos($theta);
     }
 }
