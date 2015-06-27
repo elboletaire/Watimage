@@ -1,6 +1,8 @@
 <?php
 namespace Elboletaire\Watimage;
 
+use Exception;
+
 /**
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
