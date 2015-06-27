@@ -586,7 +586,7 @@ class Watimage
                 }
             }
 
-            $this->image = $this->imgRotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
+            $this->image = $this->imagerotate($this->image, $this->rotate['degrees'], $this->rotate['bgcolor']);
             // Obtain new image dimensions
             $this->current_size['image']['width'] = imagesx($this->image);
             $this->current_size['image']['height'] = imagesy($this->image);
@@ -1004,109 +1004,12 @@ class Watimage
         return $dest_image;
     }
 
-    private function imgRotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
-    {
-        if (function_exists("imagerotate") && !self::DEBUG_ROTATE) {
-            if ($bgcolor === -1) {
-                $bgcolor = imagecolorallocatealpha($src_image, 0, 0, 0, 127);
-            }
-            return imagerotate($src_image, $angle * -1, $bgcolor, $ignore_transparent);
-        }
-        return $this->imagerotate($src_image, $angle, $bgcolor, $ignore_transparent);
-    }
-
-
-    // extracted from http://php.net/manual/es/function.imagerotate.php comments
-    // slightly modified to maintain transparencies
     private function imagerotate($src_image, $angle, $bgcolor, $ignore_transparent = 0)
     {
-        $srcw = imagesx($src_image);
-        $srch = imagesy($src_image);
-
-        //Normalize angle
-        $angle %= 360;
-        //Set rotate to clockwise
-        $angle = -$angle;
-
-        if ($angle == 0) {
-            if ($ignore_transparent == 0) {
-                imagesavealpha($src_image, true);
-            }
-
-            return $src_image;
+        if ($bgcolor === -1) {
+            $bgcolor = imagecolorallocatealpha($src_image, 0, 0, 0, 127);
         }
-
-        // Convert the angle to radians
-        $theta = deg2rad($angle);
-
-        //Standart case of rotate
-        if ((abs($angle) == 90) || (abs($angle) == 270)) {
-            $width = $srch;
-            $height = $srcw;
-            if (($angle == 90) || ($angle == -270)) {
-                $minX = 0;
-                $maxX = $width;
-                $minY = -$height+1;
-                $maxY = 1;
-            } elseif (($angle == -90) || ($angle == 270)) {
-                $minX = -$width+1;
-                $maxX = 1;
-                $minY = 0;
-                $maxY = $height;
-            }
-        } elseif (abs($angle) === 180) {
-            $width = $srcw;
-            $height = $srch;
-            $minX = -$width+1;
-            $maxX = 1;
-            $minY = -$height+1;
-            $maxY = 1;
-        } else {
-            // Calculate the width of the destination image.
-            $temp = array (
-                $this->rotateX(0, 0, 0-$theta),
-                $this->rotateX($srcw, 0, 0-$theta),
-                $this->rotateX(0, $srch, 0-$theta),
-                $this->rotateX($srcw, $srch, 0-$theta)
-            );
-            $minX = floor(min($temp));
-            $maxX = ceil(max($temp));
-            $width = $maxX - $minX;
-
-            // Calculate the height of the destination image.
-            $temp = array (
-                $this->rotateY(0, 0, 0-$theta),
-                $this->rotateY($srcw, 0, 0-$theta),
-                $this->rotateY(0, $srch, 0-$theta),
-                $this->rotateY($srcw, $srch, 0-$theta)
-            );
-            $minY = floor(min($temp));
-            $maxY = ceil(max($temp));
-            $height = $maxY - $minY;
-        }
-
-        $destimg = imagecreatetruecolor($width, $height);
-        if ($ignore_transparent == 0) {
-            $bgcolor = imagecolorallocatealpha($destimg, 0, 0, 0, 127);
-            imagefill($destimg, 0, 0, $bgcolor);
-            imagesavealpha($destimg, true);
-        }
-
-        // sets all pixels in the new image
-        for ($x = $minX; $x < $maxX; $x++) {
-            for ($y = $minY; $y < $maxY; $y++) {
-                // fetch corresponding pixel from the source image
-                $srcX = round($this->rotateX($x, $y, $theta));
-                $srcY = round($this->rotateY($x, $y, $theta));
-                if ($srcX >= 0 && $srcX < $srcw && $srcY >= 0 && $srcY < $srch) {
-                    $color = imagecolorat($src_image, $srcX, $srcY);
-                } else {
-                    $color = $bgcolor;
-                }
-                imagesetpixel($destimg, $x-$minX, $y-$minY, $color);
-            }
-        }
-        return $destimg;
+        return imagerotate($src_image, $angle * -1, $bgcolor, $ignore_transparent);
     }
 
     private function error($exception)
