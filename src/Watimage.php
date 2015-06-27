@@ -72,17 +72,65 @@ class Watimage
      */
     private $position = "bottom right";
 
-    /*
-     *  Some other private vars...
+    /**
+     * Rotation information.
+     *
+     * @var mixed False if no rotation set. Integer otherwise.
      */
     private $rotate = false;
+
+    /**
+     * Image resource handler.
+     *
+     * @var resource
+     */
     private $image;
+
+    /**
+     * Watermark image resource handler.
+     *
+     * @var mixed False if no watermark set, resource otherwise.
+     */
     private $watermark = false;
+
+    /**
+     * The mime of the result image.
+     *
+     * @var string
+     */
     private $output;
-    private $quality = 80; // image export quality. You can set it with $watermark->setQuality(50);
-                           // or with $watermark->setImage(array('quality' => 50, 'file' => 'file.jpg')
+
+    /**
+     * Image export quality for gif and jpg files.
+     *
+     * You can set it with setQuality or setImage methods.
+     *
+     * @var integer
+     */
+    private $quality = 80;
+
+    /**
+     * Image compression value for png files.
+     *
+     * You can set it with setCompression method.
+     *
+     * @var integer
+     */
+    private $compression = 9;
+
+    /**
+     * Array containing images paths.
+     *
+     * @var array
+     */
     private $file = array();
-    private $extension;
+
+    /**
+     * Array containing extensions of the images being used.
+     *
+     * @var array
+     */
+    private $extension = array();
 
     public function __construct($file = null, $watermark = null)
     {
@@ -134,9 +182,24 @@ class Watimage
         return true;
     }
 
+    /**
+     * Sets quality for gif and jpg files.
+     *
+     * @param int $quality A value from 0 (zero quality) to 100 (max quality).
+     */
     public function setQuality($quality)
     {
         $this->quality = $quality;
+    }
+
+    /**
+     * Sets compression for png files.
+     *
+     * @param int $compression A value from 0 (no compression, not recommended) to 9.
+     */
+    public function setCompression($compression)
+    {
+        $this->compression = $compression;
     }
 
     /**
@@ -641,8 +704,7 @@ class Watimage
             // Output / save image
             switch ($this->output) {
                 case 'image/png':
-                    $quality = round(abs(($this->quality - 100) / 11.111111));
-                    if (!imagepng($this->image, $path, $quality)) {
+                    if (!imagepng($this->image, $path, $this->compression)) {
                         throw new Exception('could not generate png output image');
                     }
                     break;
