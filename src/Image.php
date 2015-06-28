@@ -158,6 +158,8 @@ class Image
             throw new Exception("Image file \"$filename\" does not exist");
         }
 
+        $this->destroy();
+
         $this->filename = $filename;
         $this->getMetadataForImage();
         $this->image = $this->createResourceImage($filename, $this->metadata['format']);
@@ -189,6 +191,126 @@ class Image
     }
 
     /**
+     * Flips an image. If PHP version is 5.5.0 or greater will use
+     * proper php gd imageflip method. Otherwise will fallback to
+     * convenienceflip.
+     *
+     * @param  string $type Type of flip, can be any of: horizontal, vertical, both
+     * @return Image
+     * @throws Exception    If invalid flip $type
+     */
+    public function flip($type = 'horizontal')
+    {
+        if (version_compare(PHP_VERSION, '5.5.0', '<')) {
+            return $this->convenienceFlip($type);
+        }
+
+        $types = [
+            'horizontal' => IMG_FLIP_HORIZONTAL,
+            'vertical'   => IMG_FLIP_VERTICAL,
+            'both'       => IMG_FLIP_BOTH
+        ];
+
+        if (!array_key_exists($type, $types)) {
+            throw new Exception("Incorrect flip type \"{$type}\"");
+        }
+
+        imageflip($this->image, $types[$type]);
+
+        return $this;
+    }
+
+    /**
+     * Flip method for PHP versions < 5.5.0
+     *
+     * @param  string $type Type of flip, can be any of: horizontal, vertical, both
+     * @return Image
+     * @throws Exception    If invalid flip $type
+     */
+    public function convenienceFlip($type = 'horizontal')
+    {
+        $type = strtolower($type);
+
+        if ($type == 'both') {
+            return $this->rotate(180);
+        }
+
+        $resampled = imagecreatetruecolor($this->width, $this->height);
+        imagealphablending($resampled, false);
+        imagesavealpha($resampled, true);
+
+        switch ($type) {
+            case 'vertical':
+                for ($y = 0; $y < $this->height; $y++) {
+                    imagecopy($resampled, $this->image, 0, $y, 0, $this->height - $y - 1, $this->width, 1);
+                }
+                break;
+            case 'horizontal':
+                for ($x = 0; $x < $this->width; $x++) {
+                    imagecopy($resampled, $this->image, $x, 0, $this->width - $x - 1, 0, 1, $this->height);
+                }
+                break;
+            default:
+                imagedestroy($resampled);
+                throw new Exception("Incorrect flip type \"{$type}\"");
+        }
+
+        $this->image = $resampled;
+
+        return $this;
+    }
+
+    /**
+     * Blurs the image.
+     *
+     * @param  mixed   $type   Type of blur to be used between: gaussian, selective.
+     * @param  integer $passes Number of times to apply the filter.
+     * @return Image
+     */
+    public function blur($type = null, $passes = 1)
+    {
+        switch (strtolower($type)) {
+            case IMG_FILTER_GAUSSIAN_BLUR:
+            case 'selective':
+                $type = IMG_FILTER_GAUSSIAN_BLUR;
+                break;
+
+            case null:
+            case 'gaussian':
+            case IMG_FILTER_SELECTIVE_BLUR:
+                $type = IMG_FILTER_SELECTIVE_BLUR;
+                break;
+
+            default:
+                throw new Exception("Incorrect blur type \"{$type}\"");
+        }
+
+        for ($i = 0; $i < $passes; $i++) {
+            imagefilter($this->image, $type);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Pixelates the image.
+     *
+     * @param  int     $block_size Block size in pixels.
+     * @param  boolean $advanced   Set to true to enable advanced pixelation.
+     * @return Image
+     */
+    public function pixelate($block_size = 3, $advanced = false)
+    {
+        if ($block_size <= 0) {
+            $block_size = 1;
+        }
+
+        imagefilter($this->image, IMG_FILTER_PIXELATE, $block_size, $advanced);
+
+        return $this;
+    }
+
+    /**
      * Sets quality for gif and jpg files.
      *
      * @param int $quality A value from 0 (zero quality) to 100 (max quality).
@@ -212,6 +334,11 @@ class Image
         $this->compression = $compression;
 
         return $this;
+    }
+
+    public function getMetadata()
+    {
+        return $this->metadata;
     }
 
     /**
