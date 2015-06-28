@@ -2,20 +2,14 @@
 namespace Elboletaire\Watimage\Test\TestCase;
 
 use Elboletaire\Watimage\Watimage;
-use PHPUnit_Framework_TestCase;
-use ReflectionClass;
 
-class WatimageTest extends PHPUnit_Framework_TestCase
+class WatimageTest extends TestCaseBase
 {
-    private $files_path;
-
     public function setUp()
     {
-        $this->watimage   = new Watimage;
-        $this->reflection = new ReflectionClass($this->watimage);
+        $this->testClass   = new Watimage;
 
-        $this->files_path = realpath(dirname(__FILE__) . '/../visual/files');
-        $this->files_path .= DIRECTORY_SEPARATOR;
+        parent::setUp();
     }
 
     public function testSetWatermark()
@@ -23,7 +17,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $watermark = "{$this->files_path}/watermark.png";
 
         // Checking default values passing a string
-        $this->watimage->setWatermark($watermark);
+        $this->testClass->setWatermark($watermark);
 
         $watermark_resource = $this->getProperty('watermark');
         $metadata = $watermark_resource['metadata'];
@@ -45,7 +39,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         ];
 
         // Using an integer (no array)
-        $this->watimage->setWatermark([
+        $this->testClass->setWatermark([
             'file'   => $watermark,
             'margin' => 23
         ]);
@@ -56,7 +50,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, $options);
 
         // Using an integer (in an array)
-        $this->watimage->setWatermark([
+        $this->testClass->setWatermark([
             'file'   => $watermark,
             'margin' => [23]
         ]);
@@ -67,7 +61,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, $options);
 
         // Using an integer (in an array)
-        $this->watimage->setWatermark([
+        $this->testClass->setWatermark([
             'file'   => $watermark,
             'margin' => [23]
         ]);
@@ -78,7 +72,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, $options);
 
         // Using a sequential array
-        $this->watimage->setWatermark([
+        $this->testClass->setWatermark([
             'file'   => $watermark,
             'margin' => [23, 23]
         ]);
@@ -89,7 +83,7 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, $options);
 
         // Using an associative array
-        $this->watimage->setWatermark([
+        $this->testClass->setWatermark([
             'file'   => $watermark,
             'margin' => ['x' => '23', 'y' => '23']
         ]);
@@ -98,20 +92,5 @@ class WatimageTest extends PHPUnit_Framework_TestCase
         $options = $watermark_resource['options'];
 
         $this->assertArraySubset($expected, $options);
-    }
-
-
-    /**
-     * Returns protected/private values from the tested class.
-     *
-     * @param  [type] $property [description]
-     * @return [type]           [description]
-     */
-    public function getProperty($property)
-    {
-        $property = $this->reflection->getProperty($property);
-        $property->setAccessible(true);
-
-        return $property->getValue($this->watimage);
     }
 }

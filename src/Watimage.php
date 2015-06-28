@@ -345,6 +345,10 @@ class Watimage
             throw new Exception('You must set the watermark file');
         }
 
+        if (!file_exists($options['file'])) {
+            throw new Exception("Watermark image file does not exist");
+        }
+
         $this->watermark = [
             'options'  => $options,
             'metadata' => $this->getMetadataFromFile($options['file']),
