@@ -293,6 +293,60 @@ class Image
     }
 
     /**
+     * Crops an image based on specified coords and size.
+     *
+     * @return [type] [description]
+     */
+    public function crop($x, $y = null, $width = null, $height = null)
+    {
+        $options = $this->normalizeCropArguments($x, $y, $width, $height);
+    }
+
+    /**
+     * Normalizes crop arguments returning an array with them.
+     *
+     * You can pass arguments one by one or an array passing arguments
+     * however you like.
+     *
+     * @param  int $x      X position where start to crop.
+     * @param  int $y      Y position where start to crop.
+     * @param  int $width  New width of the image.
+     * @param  int $height New height of the image.
+     * @return array       Array with keys x, y, width & height
+     * @throws InvalidArgumentException
+     */
+    protected function normalizeCropArguments($x, $y = null, $width = null, $height = null)
+    {
+        if (!isset($y, $width, $height) && is_array($x)) {
+            $values = $x;
+            $allowed_keys = [
+                'associative' => ['x', 'y', 'width', 'height'],
+                'reduced'     => ['x', 'y', 'w', 'h'],
+                'numeric'     => [0, 1, 2, 3]
+            ];
+
+            foreach ($allowed_keys as $keys) {
+                list($x, $y, $width, $height) = $keys;
+                if (isset($values[$x], $values[$y], $values[$width], $values[$height])) {
+                    $x = $values[$x];
+                    $y = $values[$y];
+                    $width = $values[$width];
+                    $height = $values[$height];
+                    break;
+                }
+                unset($x, $y, $width, $height);
+            }
+        }
+
+        if (!isset($x, $y, $width, $height)) {
+            $options = json_encode(compact('x', 'y', 'width', 'height'));
+            throw new InvalidArgumentException("Invalid options for crop $options", 1);
+        }
+
+        return compact('x', 'y', 'width', 'height');
+    }
+
+    /**
      * Blurs the image.
      *
      * @param  mixed   $type   Type of blur to be used between: gaussian, selective.

@@ -67,6 +67,71 @@ class ImageTest extends TestCaseBase
         $this->assertGreaterThan(0, filesize($output));
     }
 
+    public function testNormalizeCropArguments()
+    {
+        $expected = [
+            'x'      => 23,
+            'y'      => 32,
+            'width'  => 200,
+            'height' => 150
+        ];
+
+        $parseCropOptions = $this->getMethod('normalizeCropArguments');
+        // Passing multiple arguments
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass,
+                // x, y, width, height
+                23, 32, 200, 150
+            )
+        );
+        // Passing an array
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    // x, y, width, height
+                    23, 32, 200, 150
+                ]
+            )
+        );
+        // Passing an associative array
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    'x'      => 23,
+                    'y'      => 32,
+                    'width'  => 200,
+                    'height' => 150
+                ]
+            )
+        );
+        // Passing a simplified associative array
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    'x' => 23,
+                    'y' => 32,
+                    'w' => 200,
+                    'h' => 150
+                ]
+            )
+        );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFailNormalizeCropArguments()
+    {
+        $parseCropOptions = $this->getMethod('normalizeCropArguments');
+
+        $parseCropOptions->invoke($this->testClass, 23);
+    }
+
     public function testRotate()
     {
         // We know this image has portrait orientation
