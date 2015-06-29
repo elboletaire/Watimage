@@ -204,7 +204,6 @@ class Image
      *
      * @param  string $type Type of flip, can be any of: horizontal, vertical, both
      * @return Image
-     * @throws Exception    If invalid flip $type
      */
     public function flip($type = 'horizontal')
     {
@@ -212,17 +211,7 @@ class Image
             return $this->convenienceFlip($type);
         }
 
-        $types = [
-            'horizontal' => IMG_FLIP_HORIZONTAL,
-            'vertical'   => IMG_FLIP_VERTICAL,
-            'both'       => IMG_FLIP_BOTH
-        ];
-
-        if (!array_key_exists($type, $types)) {
-            throw new Exception("Incorrect flip type \"{$type}\"");
-        }
-
-        imageflip($this->image, $types[$type]);
+        imageflip($this->image, $this->normalizeFlipType($type));
 
         return $this;
     }
@@ -232,13 +221,12 @@ class Image
      *
      * @param  string $type Type of flip, can be any of: horizontal, vertical, both
      * @return Image
-     * @throws Exception    If invalid flip $type
      */
     public function convenienceFlip($type = 'horizontal')
     {
-        $type = strtolower($type);
+        $type = $this->normalizeFlipType($type);
 
-        if ($type == 'both') {
+        if ($type == IMG_FLIP_BOTH) {
             return $this->rotate(180);
         }
 
@@ -247,24 +235,61 @@ class Image
         imagesavealpha($resampled, true);
 
         switch ($type) {
-            case 'vertical':
+            case IMG_FLIP_VERTICAL:
                 for ($y = 0; $y < $this->height; $y++) {
                     imagecopy($resampled, $this->image, 0, $y, 0, $this->height - $y - 1, $this->width, 1);
                 }
                 break;
-            case 'horizontal':
+            case IMG_FLIP_HORIZONTAL:
                 for ($x = 0; $x < $this->width; $x++) {
                     imagecopy($resampled, $this->image, $x, 0, $this->width - $x - 1, 0, 1, $this->height);
                 }
                 break;
-            default:
-                imagedestroy($resampled);
-                throw new Exception("Incorrect flip type \"{$type}\"");
         }
 
         $this->image = $resampled;
 
         return $this;
+    }
+
+    /**
+     * Normalizes flip type from any of the allowed values.
+     *
+     * @param  mixed $type  Can be either:
+     *                      v, y, vertical or IMG_FLIP_VERTICAL
+     *                      h, x, horizontal or IMG_FLIP_HORIZONTAL
+     *                      b, xy, yx, both or IMG_FLIP_BOTH
+     * @return int
+     * @throws InvalidArgumentException
+     */
+    protected function normalizeFlipType($type)
+    {
+        switch (strtolower($type)) {
+            case 'x':
+            case 'h':
+            case 'horizontal':
+            case IMG_FLIP_HORIZONTAL:
+                return IMG_FLIP_HORIZONTAL;
+                break;
+
+            case 'y':
+            case 'v':
+            case 'vertical':
+            case IMG_FLIP_VERTICAL:
+                return IMG_FLIP_VERTICAL;
+                break;
+
+            case 'y':
+            case 'v':
+            case 'vertical':
+            case IMG_FLIP_VERTICAL:
+                return IMG_FLIP_BOTH;
+                break;
+
+            default:
+                throw new InvalidArgumentException("Incorrect flip type \"{$type}\"");
+                break;
+        }
     }
 
     /**
