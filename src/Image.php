@@ -2,6 +2,11 @@
 namespace Elboletaire\Watimage;
 
 use Exception;
+use Elboletaire\Watimage\Exception\ExtensionNotLoadedException;
+use Elboletaire\Watimage\Exception\FileNotExistException;
+use Elboletaire\Watimage\Exception\InvalidExtensionException;
+use Elboletaire\Watimage\Exception\InvalidMimeException;
+use InvalidArgumentException;
 
 class Image
 {
@@ -28,7 +33,7 @@ class Image
     public function __construct($file = null)
     {
         if (!extension_loaded('gd')) {
-            throw new Exception("PHP GD extension is required by Watimage but it's not loaded");
+            throw new ExtensionNotLoadedException("GD");
         }
 
         if (!empty($file)) {
@@ -52,7 +57,7 @@ class Image
      * @param  string $filename Image file path/name.
      * @param  string $format   Image format (gif, png or jpeg).
      * @return resource
-     * @throws Exception If mime type is not allowed or recognised.
+     * @throws InvalidMimeException
      */
     public function createResourceImage($filename, $format)
     {
@@ -67,7 +72,7 @@ class Image
                 return imagecreatefromjpeg($filename);
 
             default:
-                throw new Exception("Mime type \"{$this->metadata['mime']}\" not allowed or not recognised");
+                throw new InvalidMimeException($this->metadata['mime']);
         }
     }
 
@@ -91,7 +96,7 @@ class Image
      * @param  string $filename Filename to be saved. Empty to directly print on screen.
      * @param string $output Use it to overwrite the output format when no $filename is passed.
      * @return void
-     * @throws Exception If output format is not recognised.
+     * @throws InvalidArgumentException If output format is not recognised.
      */
     public function generate($filename = null, $output = null)
     {
@@ -114,7 +119,7 @@ class Image
                 imagejpeg($this->image, $filename, $this->quality);
                 break;
             default:
-                throw new Exception("Invalid output format \"{$output}\"");
+                throw new InvalidArgumentException("Invalid output format \"{$output}\"");
         }
 
         return $this;
@@ -139,7 +144,8 @@ class Image
      *
      *  @param mixed $filename Filename string or array containing both filename and quality
      *  @return Watimage
-     *  @throws Exception
+     *  @throws FileNotExistException
+     *  @throws InvalidArgumentException
      */
     public function load($filename)
     {
@@ -151,11 +157,11 @@ class Image
         }
 
         if (empty($filename)) {
-            throw new Exception("Image file has not been set");
+            throw new InvalidArgumentException("Image file has not been set.");
         }
 
         if (!file_exists($filename)) {
-            throw new Exception("Image file \"$filename\" does not exist");
+            throw new FileNotExistException($filename);
         }
 
         $this->destroy();
@@ -267,6 +273,7 @@ class Image
      * @param  mixed   $type   Type of blur to be used between: gaussian, selective.
      * @param  integer $passes Number of times to apply the filter.
      * @return Image
+     * @throws InvalidArgumentException
      */
     public function blur($type = null, $passes = 1)
     {
@@ -276,14 +283,14 @@ class Image
                 $type = IMG_FILTER_GAUSSIAN_BLUR;
                 break;
 
-            case null:
+            case null: // gaussian by default (just because I like it more)
             case 'gaussian':
             case IMG_FILTER_SELECTIVE_BLUR:
                 $type = IMG_FILTER_SELECTIVE_BLUR;
                 break;
 
             default:
-                throw new Exception("Incorrect blur type \"{$type}\"");
+                throw new InvalidArgumentException("Incorrect blur type \"{$type}\"");
         }
 
         for ($i = 0; $i < $this->fitInRange($passes, 1); $i++) {
@@ -524,7 +531,8 @@ class Image
      *
      * This is intented for use it in conjuntion with getImage.
      *
-     * @param [type] $image [description]
+     * @param resource $image Image resource to be set.
+     * @throws Exception      If given image is not a GD resource.
      */
     public function setImage($image)
     {
@@ -565,6 +573,7 @@ class Image
      *                       hexadecimal. In hexadecimal allows 3 and 6 characters
      *                       for rgb and 4 or 8 characters for rgba.
      * @return array         Containing all 4 color channels.
+     * @throws InvalidArgumentException
      */
     public static function getColorArray($color)
     {
@@ -599,7 +608,7 @@ class Image
             }
 
             $encoded = json_encode($color);
-            throw new Exception("Invalid array color value $encoded");
+            throw new InvalidArgumentException("Invalid array color value $encoded");
         }
 
         if (is_string($color)) {
@@ -631,7 +640,7 @@ class Image
                     $color[3].$color[3]
                 ];
             } else {
-                throw new Exception("Invalid hexadecimal color value \"$color\"");
+                throw new InvalidArgumentException("Invalid hexadecimal color value \"$color\"");
             }
 
             return [
@@ -642,7 +651,7 @@ class Image
             ];
         }
 
-        throw new Exception("Invalid color value \"$color\"");
+        throw new InvalidArgumentException("Invalid color value \"$color\"");
     }
 
     /**
@@ -688,12 +697,13 @@ class Image
      *
      * @param  string $filename Filename to be checked.
      * @return string           Mime for the filename given.
-     * @throws Exception        If extension is not recognised.
+     * @throws InvalidExtensionException
      */
     protected function getMimeFromExtension($filename)
     {
-        $info = pathinfo($filename);
-        switch ($info['extension']) {
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+        switch ($extension) {
             case 'jpg':
             case 'jpeg':
                 return 'image/jpeg';
@@ -702,7 +712,7 @@ class Image
             case 'gif':
                 return 'image/gif';
             default:
-                throw new Exception("Extension \"{$info['extension']}\" not allowed");
+                throw new InvalidExtensionException($extension);
         }
     }
 

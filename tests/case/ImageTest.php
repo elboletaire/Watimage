@@ -29,6 +29,22 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testLoadArgumentsFail()
+    {
+        $this->testClass->load(null);
+    }
+
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\FileNotExistException
+     */
+    public function testLoadFileNotExistFail()
+    {
+        $this->testClass->load('a-non-existant-file.png');
+    }
+
+    /**
      * @runInSeparateProcess
      */
     public function testGenerate()
@@ -59,13 +75,18 @@ class ImageTest extends TestCaseBase
         @unlink($output);
 
         // Check rotation image size
-        $this->testClass->load($image)->rotate(90)->generate($output);
+        $image = $this->testClass->load($image);
+        // Get current width and height
+        $old_width = $this->getProperty('width');
+        $old_height = $this->getProperty('height');
+        // Rotate it
+        $image->rotate(90)->generate($output);
         list($width, $height) = getimagesize($output);
         // Knowing rotation, check width according to it
-        $this->assertLessThanOrEqual($this->getProperty('width'), $height);
-        $this->assertGreaterThan($this->getProperty('width'), $width);
+        $this->assertLessThanOrEqual($old_width, $height);
+        $this->assertGreaterThan($old_width, $width);
         // Knowing rotation, check height according to it
-        $this->assertLessThanOrEqual($this->getProperty('height'), $width);
-        $this->assertLessThan($this->getProperty('height'), $height);
+        $this->assertLessThanOrEqual($old_height, $width);
+        $this->assertLessThan($old_height, $height);
     }
 }
