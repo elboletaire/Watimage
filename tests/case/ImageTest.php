@@ -44,6 +44,27 @@ class ImageTest extends TestCaseBase
         $this->testClass->load('a-non-existant-file.png');
     }
 
+    public function testCreate()
+    {
+        $output = "{$this->output_path}/test-watimage-create.png";
+        $this->testClass->create(250, 400);
+
+        $this->assertEquals(250, $this->getProperty('width'));
+        $this->assertEquals(400, $this->getProperty('height'));
+
+        // Check that height is set to width when no height specified
+        $this->testClass->create(350);
+        $this->assertEquals(350, $this->getProperty('height'));
+    }
+
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     */
+    public function testCreateArgumentsFail()
+    {
+        $this->testClass->create(null);
+    }
+
     /**
      * @runInSeparateProcess
      */

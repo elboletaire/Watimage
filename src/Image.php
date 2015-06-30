@@ -310,6 +310,38 @@ class Image
     /**
      * Creates an empty canvas.
      *
+     * If no arguments are passed and we have previously created an
+     * image it will create a new canvas with the previous canvas size.
+     * Due to this, you can use this method to "empty" the current canvas.
+     *
+     * @param  int $width  Canvas width.
+     * @param  int $height Canvas height.
+     * @return Image
+     */
+    public function create($width = null, $height = null)
+    {
+        if (!isset($width)) {
+            if (!isset($this->width, $this->height)) {
+                throw new InvalidArgumentException("You must set the canvas size.");
+            }
+            $width = $this->width;
+            $height = $this->height;
+        }
+
+        if (!isset($height)) {
+            $height = $width;
+        }
+
+        $this->image = $this->imagecreate($width, $height);
+        $this->metadata['exif'] = null;
+        $this->updateSize();
+
+        return $this;
+    }
+
+    /**
+     * Creates an empty canvas.
+     *
      * @param  int $width  Canvas width.
      * @param  int $height Canvas height.
      * @return resource    Image resource with the canvas.
@@ -324,6 +356,24 @@ class Image
         imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
 
         return $image;
+    }
+
+    /**
+     * Fills current canvas with specified color.
+     *
+     * It works with newly created canvas. If you want to overwrite the current
+     * canvas you must first call `create` method to empty current canvas.
+     *
+     * @param  mixed $color The color. Check out getColorArray for allowed formats.
+     * @return Image
+     */
+    public function fill($color = '#fff')
+    {
+        $color = $this->getColorArray($color);
+        $color = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
+        imagefill($this->image, 0, 0, $color);
+
+        return $this;
     }
 
     /**
