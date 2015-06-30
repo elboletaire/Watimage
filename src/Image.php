@@ -65,17 +65,26 @@ class Image
     {
         switch ($format) {
             case 'gif':
-                return imagecreatefromgif($filename);
+                $image = imagecreatefromgif($filename);
+                break;
 
             case 'png':
-                return imagecreatefrompng($filename);
+                $image = imagecreatefrompng($filename);
+                break;
 
             case 'jpeg':
-                return imagecreatefromjpeg($filename);
+                $image =  imagecreatefromjpeg($filename);
+                break;
 
             default:
                 throw new InvalidMimeException($this->metadata['mime']);
         }
+
+        // Handle transparencies
+        imagesavealpha($image, true);
+        imagealphablending($image, true);
+
+        return $image;
     }
 
     /**
@@ -171,7 +180,6 @@ class Image
         $this->filename = $filename;
         $this->getMetadataForImage();
         $this->image = $this->createResourceImage($filename, $this->metadata['format']);
-        $this->handleTransparency($this->image);
 
         return $this;
     }
@@ -817,17 +825,6 @@ class Image
         }
 
         return $value;
-    }
-
-    /**
-     *  Applies some values to image for handling transparency
-     *
-     * @return void
-     */
-    protected function handleTransparency(&$image)
-    {
-        imagesavealpha($image, true);
-        imagealphablending($image, true);
     }
 
     /**
