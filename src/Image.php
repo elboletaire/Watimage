@@ -191,12 +191,8 @@ class Image
      * @param  mixed  $bgcolor [description]
      * @return Image
      */
-    public function rotate($degrees, $bgcolor = null)
+    public function rotate($degrees, $bgcolor = self::COLOR_TRANSPARENT)
     {
-        if (is_null($bgcolor)) {
-            $bgcolor = self::COLOR_TRANSPARENT;
-        }
-
         $color = $this->getColorArray($bgcolor);
         $bgcolor = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
 
