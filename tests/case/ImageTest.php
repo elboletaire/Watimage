@@ -29,7 +29,7 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
      */
     public function testLoadArgumentsFail()
     {
@@ -123,7 +123,7 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
      */
     public function testFailNormalizeCropArguments()
     {
