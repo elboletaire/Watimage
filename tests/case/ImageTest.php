@@ -148,6 +148,76 @@ class ImageTest extends TestCaseBase
         $parseCropOptions->invoke($this->testClass, 23);
     }
 
+    public function testNormalizeResizeArguments()
+    {
+        $expected = [250, 320];
+
+        $parseCropOptions = $this->getMethod('normalizeResizeArguments');
+        // Passing multiple arguments
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass,
+                // width, height
+                250, 320
+            )
+        );
+        // Passing an array
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    // width, height
+                    250, 320
+                ]
+            )
+        );
+        // Passing an associative array
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    'width'  => 250,
+                    'height' => 320
+                ]
+            )
+        );
+        // Passing simplified associative arrays
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    'w' => 250,
+                    'h' => 320
+                ]
+            )
+        );
+        $this->assertArraySubset(
+            $expected,
+            $parseCropOptions->invoke(
+                $this->testClass, [
+                    'x' => 250,
+                    'y' => 320
+                ]
+            )
+        );
+        // Passing just width (should return same height)
+        $this->assertArraySubset(
+            [250, 250],
+            $parseCropOptions->invoke(
+                $this->testClass,
+                250
+            )
+        );
+        $this->assertArraySubset(
+            [250, 250],
+            $parseCropOptions->invoke(
+                $this->testClass,
+                ['width' => 250]
+            )
+        );
+    }
+
     public function testRotate()
     {
         // We know this image has portrait orientation

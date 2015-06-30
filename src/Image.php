@@ -208,6 +208,92 @@ class Image
     }
 
     /**
+     * All in one method for all resize methods.
+     *
+     * @param  string $type   Type of resize: resize, resizemin, reduce,
+     * @param  [type] $width  [description]
+     * @param  [type] $height [description]
+     * @return [type]         [description]
+     */
+    public function resize($type, $width, $height = null)
+    {
+        $types = [
+            'classic' => 'classicResize',
+            'resize' => 'classicResize',
+            'reduce' => 'reduce'
+        ];
+
+        if (!array_key_exists($type, $types)) {
+            throw new InvalidArgumentException("Invalid resize type %s.", $type);
+        }
+
+        return $this->$types[$type]($width, $height);
+    }
+
+    /**
+     * Resizes maintaining aspect ratio.
+     *
+     * Maintains the aspect ratio of the image and makes sure that it fits
+     * within the max width and max height (thus some side will be smaller).
+     *
+     * TODO: Needs to be checked.
+     *
+     * @param  mixed $width  Can be just max width or an array containing both params.
+     * @param  int   $height Max height.
+     * @return Image
+     */
+    public function classicResize($width, $height = null)
+    {
+        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+
+        if ($this->width == $width && $this->height == $width) {
+            return $this;
+        }
+
+        if ($this->width > $this->height) {
+            $height = ($this->height * $width) / $this->width;
+        } elseif ($this->width < $this->height) {
+            $height = $this->height;
+            $width = ($this->width * $height) / $this->height;
+        } elseif ($this->width == $this->height) {
+            $width = $height = $width;
+        }
+
+        $this->image = $this->imagecopy($width, $height);
+
+        return $this;
+    }
+
+    /**
+     * Resizes maintaining aspect ratio but not exceeding width / height.
+     *
+     * @param  mixed $width  Can be just max width or an array containing both params.
+     * @param  int   $height Max height.
+     * @return Image
+     */
+    public function reduce($width, $height = null)
+    {
+        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+
+        if ($this->width < $width && $this->height < $height) {
+            return $this;
+        }
+
+        $ratio_x = $this->width / $width;
+        $ratio_y = $this->height / $height;
+
+        $ratio = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+
+        // Getting the new image size
+        $width = (int)($this->width / $ratio);
+        $height = (int)($this->height / $ratio);
+
+        $this->image = $this->imagecopy($width, $height);
+
+        return $this;
+    }
+
+    /**
      * Flips an image. If PHP version is 5.5.0 or greater will use
      * proper php gd imageflip method. Otherwise will fallback to
      * convenienceflip.
@@ -356,6 +442,28 @@ class Image
         imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
 
         return $image;
+    }
+
+    /**
+     * Helper method for all resize methods.
+     *
+     * @param  int  $dst_w New width.
+     * @param  int  $dst_h New height.
+     * @param  int  $src_x Starting source point X.
+     * @param  int  $src_y Starting source point Y.
+     * @return resource    GD image resource containing the resized image.
+     */
+    protected function imagecopy($dst_w, $dst_h, $src_x = 0, $src_y = 0)
+    {
+        $dest_image = $this->imagecreate($dst_w, $dst_h);
+
+        imagecopyresampled(
+            $dest_image, $this->image,
+            0, 0, $src_x, $src_y,
+            $dst_w, $dst_h, $this->width, $this->height
+        );
+
+        return $dest_image;
     }
 
     /**
@@ -933,6 +1041,43 @@ class Image
     {
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
+    }
+
+    public function normalizeResizeArguments($width, $height = null)
+    {
+        if (!isset($height) && is_array($width)) {
+            $allowed_keys = [
+                [0, 1],
+                ['x', 'y'],
+                ['w', 'h'],
+                ['width', 'height'],
+            ];
+
+            foreach ($allowed_keys as $keys) {
+                list($x, $y) = $keys;
+
+                if (isset($width[$x])) {
+                    if (isset($width[$y])) {
+                        $height = $width[$y];
+                    }
+                    $width = $width[$x];
+                    break;
+                }
+            }
+        }
+
+        if (isset($width) && !isset($height)) {
+            $height = $width;
+        }
+
+        if (!isset($width, $height)) {
+            throw new InvalidArgumentException(
+                "Invalid options for resize %s",
+                compact('width', 'height')
+            );
+        }
+
+        return array($width, $height);
     }
 
     /**
