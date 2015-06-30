@@ -4,9 +4,9 @@ namespace Elboletaire\Watimage;
 use Exception;
 use Elboletaire\Watimage\Exception\ExtensionNotLoadedException;
 use Elboletaire\Watimage\Exception\FileNotExistException;
+use Elboletaire\Watimage\Exception\InvalidArgumentException;
 use Elboletaire\Watimage\Exception\InvalidExtensionException;
 use Elboletaire\Watimage\Exception\InvalidMimeException;
-use InvalidArgumentException;
 
 class Image
 {
@@ -119,7 +119,7 @@ class Image
                 imagejpeg($this->image, $filename, $this->quality);
                 break;
             default:
-                throw new InvalidArgumentException("Invalid output format \"{$output}\"");
+                throw new InvalidArgumentException("Invalid output format \"%s\"", $output);
         }
 
         return $this;
@@ -287,7 +287,7 @@ class Image
                 break;
 
             default:
-                throw new InvalidArgumentException("Incorrect flip type \"{$type}\"");
+                throw new InvalidArgumentException("Incorrect flip type \"%s\"", $type);
                 break;
         }
     }
@@ -338,12 +338,12 @@ class Image
             }
         }
 
+        $options = compact('x', 'y', 'width', 'height');
         if (!isset($x, $y, $width, $height)) {
-            $options = json_encode(compact('x', 'y', 'width', 'height'));
-            throw new InvalidArgumentException("Invalid options for crop $options", 1);
+            throw new InvalidArgumentException("Invalid options for crop %s.", $options);
         }
 
-        return compact('x', 'y', 'width', 'height');
+        return $options;
     }
 
     /**
@@ -369,7 +369,7 @@ class Image
                 break;
 
             default:
-                throw new InvalidArgumentException("Incorrect blur type \"{$type}\"");
+                throw new InvalidArgumentException("Incorrect blur type \"%s\"", $type);
         }
 
         for ($i = 0; $i < $this->fitInRange($passes, 1); $i++) {
@@ -686,8 +686,7 @@ class Image
                 ];
             }
 
-            $encoded = json_encode($color);
-            throw new InvalidArgumentException("Invalid array color value $encoded");
+            throw new InvalidArgumentException("Invalid array color value %s.", $color);
         }
 
         if (is_string($color)) {
@@ -719,7 +718,7 @@ class Image
                     $color[3].$color[3]
                 ];
             } else {
-                throw new InvalidArgumentException("Invalid hexadecimal color value \"$color\"");
+                throw new InvalidArgumentException("Invalid hexadecimal color value \"%s\"", $color);
             }
 
             return [
@@ -730,7 +729,7 @@ class Image
             ];
         }
 
-        throw new InvalidArgumentException("Invalid color value \"$color\"");
+        throw new InvalidArgumentException("Invalid color value \"%s\"", $color);
     }
 
     /**
