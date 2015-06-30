@@ -10,6 +10,8 @@ use Elboletaire\Watimage\Exception\InvalidMimeException;
 
 class Image
 {
+    const COLOR_TRANSPARENT = -1;
+
     protected $filename, $image, $metadata = [], $width, $height;
 
     /**
@@ -184,7 +186,7 @@ class Image
     public function rotate($degrees, $bgcolor = null)
     {
         if (is_null($bgcolor)) {
-            $bgcolor = -1;
+            $bgcolor = self::COLOR_TRANSPARENT;
         }
 
         $color = $this->getColorArray($bgcolor);
@@ -656,7 +658,7 @@ class Image
      */
     public static function getColorArray($color)
     {
-        if ($color === -1) {
+        if ($color === self::COLOR_TRANSPARENT) {
             return [
                 'r' => 0,
                 'g' => 0,
