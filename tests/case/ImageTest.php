@@ -90,12 +90,7 @@ class ImageTest extends TestCaseBase
 
     public function testNormalizeCropArguments()
     {
-        $expected = [
-            'x'      => 23,
-            'y'      => 32,
-            'width'  => 200,
-            'height' => 150
-        ];
+        $expected = [23, 32, 200, 150];
 
         $parseCropOptions = $this->getMethod('normalizeCropArguments');
         // Passing multiple arguments

@@ -379,11 +379,32 @@ class Image
     /**
      * Crops an image based on specified coords and size.
      *
-     * @return [type] [description]
+     * You can pass arguments one by one or an array passing arguments
+     * however you like.
+     *
+     * @param  int $x      X position where start to crop.
+     * @param  int $y      Y position where start to crop.
+     * @param  int $width  New width of the image.
+     * @param  int $height New height of the image.
+     * @return Image
      */
     public function crop($x, $y = null, $width = null, $height = null)
     {
-        $options = $this->normalizeCropArguments($x, $y, $width, $height);
+        list($x, $y, $width, $height) = $this->normalizeCropArguments($x, $y, $width, $height);
+
+        $crop = $this->imagecreate($width, $height);
+
+        imagecopyresampled(
+            $crop, $this->image,
+            0, 0, $x, $y,
+            $width, $height, $width, $height
+        );
+
+        $this->image = $crop;
+
+        $this->updateSize();
+
+        return $this;
     }
 
     /**
@@ -412,22 +433,24 @@ class Image
             foreach ($allowed_keys as $keys) {
                 list($x, $y, $width, $height) = $keys;
                 if (isset($values[$x], $values[$y], $values[$width], $values[$height])) {
-                    $x = $values[$x];
-                    $y = $values[$y];
-                    $width = $values[$width];
-                    $height = $values[$height];
-                    break;
+                    return [
+                        $values[$x],
+                        $values[$y],
+                        $values[$width],
+                        $values[$height]
+                    ];
                 }
-                unset($x, $y, $width, $height);
             }
         }
 
-        $options = compact('x', 'y', 'width', 'height');
         if (!isset($x, $y, $width, $height)) {
-            throw new InvalidArgumentException("Invalid options for crop %s.", $options);
+            throw new InvalidArgumentException(
+                "Invalid options for crop %s.",
+                compact('x', 'y', 'width', 'height')
+            );
         }
 
-        return $options;
+        return [$x, $y, $width, $height];
     }
 
     /**
