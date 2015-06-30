@@ -236,24 +236,30 @@ class Image
     {
         $type = $this->normalizeFlipType($type);
 
-        if ($type == IMG_FLIP_BOTH) {
-            return $this->rotate(180);
-        }
-
-        $resampled = imagecreatetruecolor($this->width, $this->height);
-        imagealphablending($resampled, false);
-        imagesavealpha($resampled, true);
+        $resampled = $this->imagecreate($this->width, $this->height);
 
         switch ($type) {
             case IMG_FLIP_VERTICAL:
-                for ($y = 0; $y < $this->height; $y++) {
-                    imagecopy($resampled, $this->image, 0, $y, 0, $this->height - $y - 1, $this->width, 1);
-                }
+                imagecopyresampled(
+                    $resampled, $this->image,
+                    0, 0, 0, ($this->height - 1),
+                    $this->width, $this->height, $this->width, 0 - $this->height
+                );
                 break;
             case IMG_FLIP_HORIZONTAL:
-                for ($x = 0; $x < $this->width; $x++) {
-                    imagecopy($resampled, $this->image, $x, 0, $this->width - $x - 1, 0, 1, $this->height);
-                }
+                imagecopyresampled(
+                    $resampled, $this->image,
+                    0, 0, ($this->width - 1), 0,
+                    $this->width, $this->height, 0 - $this->width, $this->height
+                );
+                break;
+            // same as $this->rotate(180)
+            case IMG_FLIP_BOTH:
+                imagecopyresampled(
+                    $resampled, $this->image,
+                    0, 0, ($this->width - 1), ($this->height - 1),
+                    $this->width, $this->height, 0 - $this->width, 0 - $this->height
+                );
                 break;
         }
 
@@ -289,10 +295,9 @@ class Image
                 return IMG_FLIP_VERTICAL;
                 break;
 
-            case 'y':
-            case 'v':
-            case 'vertical':
-            case IMG_FLIP_VERTICAL:
+            case 'b':
+            case 'both':
+            case IMG_FLIP_BOTH:
                 return IMG_FLIP_BOTH;
                 break;
 
@@ -300,6 +305,25 @@ class Image
                 throw new InvalidArgumentException("Incorrect flip type \"%s\"", $type);
                 break;
         }
+    }
+
+    /**
+     * Creates an empty canvas.
+     *
+     * @param  int $width  Canvas width.
+     * @param  int $height Canvas height.
+     * @return resource    Image resource with the canvas.
+     */
+    protected function imagecreate($width, $height)
+    {
+        $image = imagecreatetruecolor($width, $height);
+        // Required for transparencies in png and gif files
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        // Required for transparencies while cropping gif images
+        imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
+
+        return $image;
     }
 
     /**
