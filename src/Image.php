@@ -206,10 +206,10 @@ class Image
     /**
      * All in one method for all resize methods.
      *
-     * @param  string $type   Type of resize: resize, resizemin, reduce,
-     * @param  [type] $width  [description]
-     * @param  [type] $height [description]
-     * @return [type]         [description]
+     * @param  string $type   Type of resize: resize, resizemin, reduce, crop & resizecrop.
+     * @param  mixed  $width  Can be just max width or an array containing both params.
+     * @param  int    $height Max height.
+     * @return Image
      */
     public function resize($type, $width, $height = null)
     {
@@ -224,7 +224,6 @@ class Image
         ];
 
         $lowertype = strtolower($type);
-
 
         if (!array_key_exists($lowertype, $types)) {
             throw new InvalidArgumentException("Invalid resize type %s.", $type);
