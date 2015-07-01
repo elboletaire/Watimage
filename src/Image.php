@@ -214,16 +214,23 @@ class Image
     public function resize($type, $width, $height = null)
     {
         $types = [
-            'classic' => 'classicResize',
-            'resize' => 'classicResize',
-            'reduce' => 'reduce'
+            'classic'    => 'classicResize',
+            'resize'     => 'classicResize',
+            'reduce'     => 'reduce',
+            'resizemin'  => 'resizeMin',
+            'min'        => 'resizeMin',
+            'crop'       => 'classicCrop',
+            'resizecrop' => 'resizeCrop'
         ];
 
-        if (!array_key_exists($type, $types)) {
+        $lowertype = strtolower($type);
+
+
+        if (!array_key_exists($lowertype, $types)) {
             throw new InvalidArgumentException("Invalid resize type %s.", $type);
         }
 
-        return $this->$types[$type]($width, $height);
+        return $this->$types[$lowertype]($width, $height);
     }
 
     /**
@@ -256,6 +263,106 @@ class Image
         }
 
         $this->image = $this->imagecopy($width, $height);
+
+        $this->updateSize();
+
+        return $this;
+    }
+
+    /**
+     * Generates an image which do not exceed the specified boundaries
+     * ($width and $height) under any circumstances, while maintaining the
+     * original aspect ratio.
+     *
+     * TODO: Check differences with resize.
+     *
+     * @param  mixed $width  Can be just max width or an array containing both params.
+     * @param  int   $height Max height.
+     * @return Image
+     */
+    public function resizeMin($width, $height = null)
+    {
+        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+
+        // image will be left "as is", unless it is eligible for resizing
+        $ratio_resize = 1;
+
+        // `true` when source image is smaller than both the requested boundaries
+        $needs_resize = !($this->width < $width && $this->height < $height);
+
+        if ($needs_resize) {
+            $ratio_x = $this->width / $width;
+            $ratio_y = $this->height / $height;
+
+            // we need to choose one of the most convenient ratios (among
+            // these two) for our resize. The biggest one, it is.
+            $ratio_resize = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+        }
+
+        if ($ratio_resize === 1) {
+            return $this;
+        }
+
+        $width  = $this->width / $ratio_resize;
+        $height = $this->height / $ratio_resize;
+
+        $this->image = $this->imagecopy($width, $height);
+
+        $this->updateSize();
+
+        return $this;
+    }
+
+    /**
+     * A straight centered crop.
+     *
+     * @param  mixed $width  Can be just max width or an array containing both params.
+     * @param  int   $height Max height.
+     * @return Image
+     */
+    public function classicCrop($width, $height = null)
+    {
+        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+
+        $start_y = ($this->height - $height) / 2;
+        $start_x = ($this->width - $width) / 2;
+
+        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $width, $height);
+
+        $this->updateSize();
+
+        return $this;
+    }
+
+    /**
+     * Resizes to max, then crops to center.
+     *
+     * @param  mixed $width  Can be just max width or an array containing both params.
+     * @param  int   $height Max height.
+     * @return Image
+     */
+    public function resizeCrop($width, $height = null)
+    {
+        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+
+        $ratio_x = $width / $this->width;
+        $ratio_y = $height / $this->height;
+        $src_w = $this->width;
+        $src_h = $this->height;
+
+        if ($ratio_x < $ratio_y) {
+            $start_x = round(($this->width - ($width / $ratio_y)) / 2);
+            $start_y = 0;
+            $src_w = round($width / $ratio_y);
+        } else {
+            $start_x = 0;
+            $start_y = round(($this->height - ($height / $ratio_x)) / 2);
+            $src_h = round($height / $ratio_x);
+        }
+
+        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $src_w, $src_h);
+
+        $this->updateSize();
 
         return $this;
     }
@@ -449,14 +556,22 @@ class Image
      * @param  int  $src_y Starting source point Y.
      * @return resource    GD image resource containing the resized image.
      */
-    protected function imagecopy($dst_w, $dst_h, $src_x = 0, $src_y = 0)
+    protected function imagecopy($dst_w, $dst_h, $src_x = 0, $src_y = 0, $src_w = false, $src_h = false)
     {
         $dest_image = $this->imagecreate($dst_w, $dst_h);
+
+        if ($src_w === false) {
+            $src_w = $this->width;
+        }
+
+        if ($src_h === false) {
+            $src_h = $this->height;
+        }
 
         imagecopyresampled(
             $dest_image, $this->image,
             0, 0, $src_x, $src_y,
-            $dst_w, $dst_h, $this->width, $this->height
+            $dst_w, $dst_h, $src_w, $src_h
         );
 
         return $dest_image;
