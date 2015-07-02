@@ -5,9 +5,18 @@ class Watermark extends Image
 {
     protected $resource_image, $size, $margin, $position;
 
-    public function __construct(Image &$image, $file = null)
+    public function __construct($file = null, $options = [])
     {
-        $this->resource_image = $image;
+        if (!empty($options)) {
+            foreach ($options as $option => $values) {
+                $method = 'set' . ucfirst($option);
+                if (!method_exists($this, $method)) {
+                    continue;
+                }
+
+                $this->$method($values);
+            }
+        }
 
         return parent::__construct($file);
     }
