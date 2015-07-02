@@ -547,7 +547,8 @@ class Image
     }
 
     /**
-     * Helper method for all resize methods.
+     * Helper method for all resize methods and others that require
+     * imagecopyresampled method.
      *
      * @param  int  $dst_w New width.
      * @param  int  $dst_h New height.
