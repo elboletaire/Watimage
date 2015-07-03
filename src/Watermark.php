@@ -3,7 +3,11 @@ namespace Elboletaire\Watimage;
 
 class Watermark extends Image
 {
-    protected $size, $margin = [0, 0], $position;
+    protected $size;
+
+    protected $margin = [0, 0];
+
+    protected $position;
 
     /**
      * {@inheritdoc}
@@ -99,11 +103,13 @@ class Watermark extends Image
         list($x, $y) = $this->calculatePosition($metadata);
         $resource = $image->getImage();
 
+        // @codingStandardsIgnoreStart
         imagecopy(
             $resource, $this->image,
             $x, $y, 0, 0,
             $this->width, $this->height
         );
+        // @codingStandardsIgnoreEnd
 
         $image->setImage($resource);
 

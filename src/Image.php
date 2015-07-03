@@ -12,7 +12,15 @@ class Image
 {
     const COLOR_TRANSPARENT = -1;
 
-    protected $filename, $image, $metadata = [], $width, $height;
+    protected $filename;
+
+    protected $image;
+
+    protected $metadata = [];
+
+    protected $width;
+
+    protected $height;
 
     /**
      * Image export quality for gif and jpg files.
@@ -437,6 +445,7 @@ class Image
 
         $resampled = $this->imagecreate($this->width, $this->height);
 
+        // @codingStandardsIgnoreStart
         switch ($type) {
             case IMG_FLIP_VERTICAL:
                 imagecopyresampled(
@@ -461,6 +470,7 @@ class Image
                 );
                 break;
         }
+        // @codingStandardsIgnoreEnd
 
         $this->image = $resampled;
 
@@ -540,11 +550,13 @@ class Image
             $src_h = $this->height;
         }
 
+        // @codingStandardsIgnoreStart
         imagecopyresampled(
             $dest_image, $this->image,
             0, 0, $src_x, $src_y,
             $dst_w, $dst_h, $src_w, $src_h
         );
+        // @codingStandardsIgnoreEnd
 
         return $dest_image;
     }
@@ -585,11 +597,13 @@ class Image
 
         $crop = $this->imagecreate($width, $height);
 
+        // @codingStandardsIgnoreStart
         imagecopyresampled(
             $crop, $this->image,
             0, 0, $x, $y,
             $width, $height, $width, $height
         );
+        // @codingStandardsIgnoreEnd
 
         $this->image = $crop;
 
@@ -614,7 +628,8 @@ class Image
                 $type = IMG_FILTER_GAUSSIAN_BLUR;
                 break;
 
-            case null: // gaussian by default (just because I like it more)
+            // gaussian by default (just because I like it more)
+            case null:
             case 'gaussian':
             case IMG_FILTER_SELECTIVE_BLUR:
                 $type = IMG_FILTER_SELECTIVE_BLUR;
@@ -785,8 +800,8 @@ class Image
                 'g' => 70,
                 'b' => 50,
                 'a' => $this->fitInRange($alpha, 0, 100)
-            ]
-        );
+            ])
+        ;
     }
 
     /**
@@ -1001,10 +1016,10 @@ class Image
      * @param  array  &$rgb  Current pixel olor information.
      * @return void
      */
-    protected function vignetteEffect($size , $level, $x, $y, &$rgb)
+    protected function vignetteEffect($size, $level, $x, $y, &$rgb)
     {
         $l = sin(M_PI / $this->width * $x) * sin(M_PI / $this->height * $y);
-        $l = pow($l, $this->fitInRange($size , 0, 10));
+        $l = pow($l, $this->fitInRange($size, 0, 10));
 
         $l = 1 - $this->fitInRange($level, 0, 1) * (1 - $l);
 

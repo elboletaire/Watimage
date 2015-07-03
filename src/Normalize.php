@@ -3,7 +3,6 @@ namespace Elboletaire\Watimage;
 
 use Elboletaire\Watimage\Exception\InvalidArgumentException;
 
-
 class Normalize
 {
     /**
@@ -62,7 +61,7 @@ class Normalize
         $color = ltrim($color, '#');
         if (in_array(strlen($color), [3, 4])) {
             $color = str_split($color);
-            $color = array_map(function($item) {
+            $color = array_map(function ($item) {
                 return str_repeat($item, 2);
             }, $color);
             $color = implode($color);
@@ -334,7 +333,6 @@ class Normalize
         try {
             $width = self::size($width, $height);
         } catch (InvalidArgumentException $e) {
-
             if (!is_string($width) || !preg_match('/([0-9]{1,3}%|full)$/', $width)) {
                 throw new InvalidArgumentException(
                     "Invalid size arguments %s",
