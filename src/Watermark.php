@@ -80,7 +80,7 @@ class Watermark extends Image
      */
     public function setMargin($x, $y = null)
     {
-        $this->margin = Normalize::position($x, $y);
+        $this->margin = Normalize::margin($x, $y);
 
         return $this;
     }

@@ -182,9 +182,9 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
     {
         // Test string
         $expected = 'center center';
+
         $this->assertEquals($expected, Normalize::watermarkPosition('center'));
         $this->assertEquals($expected, Normalize::watermarkPosition('centered'));
-
         // Many of the possibilities are tested in testPosition
     }
 
@@ -193,6 +193,6 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
      */
     public function testWatermarkPositionFail()
     {
-        Normalize::watermarkPosition(null);
+        Normalize::watermarkPosition('not valid');
     }
 }

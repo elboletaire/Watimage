@@ -177,11 +177,33 @@ class Normalize
         }
     }
 
+    /**
+     * An alias of self::position but returning a customized message for Watermark.
+     *
+     * @param  mixed  $x Can be just x or an array containing both params.
+     * @param  int    $y Can only be y.
+     * @return array     With x and y in a sequential array.
+     * @throws InvalidArgumentException
+     */
     public static function margin($x, $y = null)
     {
+        try {
+            list($x, $y) = self::position($x, $y);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidArgumentException("Invalid margin %s.", compact('x', 'y'));
+        }
 
+        return [$x, $y];
     }
 
+    /**
+     * Normalizes position (x and y).
+     *
+     * @param  mixed  $x Can be just x or an array containing both params.
+     * @param  int    $y Can only be y.
+     * @return array     With x and y in a sequential array.
+     * @throws InvalidArgumentException
+     */
     public static function position($x, $y = null)
     {
         if (is_array($x)) {
@@ -290,6 +312,10 @@ class Normalize
 
             if (in_array($position, ['center', 'centered'])) {
                 $position = 'center center';
+            }
+
+            if (!preg_match('/((center|top|bottom|right|left) ?){2}/', $position)) {
+                throw new InvalidArgumentException("Invalid watermark position %s.", $position);
             }
         }
 
