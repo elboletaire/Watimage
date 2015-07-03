@@ -3,10 +3,25 @@ namespace Elboletaire\Watimage;
 
 class Watermark extends Image
 {
+    /**
+     * Size param, used to resize the watermark.
+     *
+     * @var mixed Can either be string (`full` or a %) or the exact size (as integer or array)
+     */
     protected $size;
 
+    /**
+     * Watermark margin.
+     *
+     * @var array
+     */
     protected $margin = [0, 0];
 
+    /**
+     * Position for the watermark.
+     *
+     * @var mixed Can either be a string ala CSS or the exact position (as integer or array)
+     */
     protected $position;
 
     /**

@@ -10,16 +10,44 @@ use Elboletaire\Watimage\Exception\InvalidMimeException;
 
 class Image
 {
+    /**
+     * Constant for the (deprecated) transparent color
+     */
     const COLOR_TRANSPARENT = -1;
 
+    /**
+     * Current image location.
+     *
+     * @var string
+     */
     protected $filename;
 
+    /**
+     * Image GD resource.
+     *
+     * @var resource
+     */
     protected $image;
 
+    /**
+     * Image metadata.
+     *
+     * @var array
+     */
     protected $metadata = [];
 
+    /**
+     * Current image width
+     *
+     * @var float
+     */
     protected $width;
 
+    /**
+     * Current image height
+     *
+     * @var float
+     */
     protected $height;
 
     /**
