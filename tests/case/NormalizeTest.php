@@ -72,6 +72,25 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         Normalize::crop(23);
     }
 
+    public function testFitInRange()
+    {
+        // Value between range
+        $this->assertEquals(5, Normalize::fitInRange(5, 0, 23));
+        $this->assertEquals(23, Normalize::fitInRange(23, 0, 23));
+
+        // Value out of range
+        $this->assertEquals(23, Normalize::fitInRange(121, 0, 23));
+        $this->assertEquals(0, Normalize::fitInRange(-121, 0, 23));
+
+        // Just force min value
+        $this->assertEquals(121, Normalize::fitInRange(121, 0));
+        $this->assertEquals(0, Normalize::fitInRange(-121, 0));
+
+        // Just force max value
+        $this->assertEquals(0, Normalize::fitInRange(121, false, 0));
+        $this->assertEquals(-121, Normalize::fitInRange(-121, false, 0));
+    }
+
     public function testFlip()
     {
         $this->assertEquals(IMG_FLIP_HORIZONTAL, Normalize::flip('x'));
