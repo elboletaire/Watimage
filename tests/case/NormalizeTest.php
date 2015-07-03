@@ -116,14 +116,14 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         Normalize::position(23, 'fail');
     }
 
-    public function testResize()
+    public function testSize()
     {
         $expected = [250, 320];
 
         // Passing multiple arguments
         $this->assertArraySubset(
             $expected,
-            Normalize::resize(
+            Normalize::size(
                 // width, height
                 250, 320
             )
@@ -131,7 +131,7 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         // Passing an array
         $this->assertArraySubset(
             $expected,
-            Normalize::resize([
+            Normalize::size([
                 // width, height
                 250, 320
             ])
@@ -139,7 +139,7 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         // Passing an associative array
         $this->assertArraySubset(
             $expected,
-            Normalize::resize([
+            Normalize::size([
                 'width'  => 250,
                 'height' => 320
             ])
@@ -147,14 +147,14 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         // Passing simplified associative arrays
         $this->assertArraySubset(
             $expected,
-            Normalize::resize([
+            Normalize::size([
                 'w' => 250,
                 'h' => 320
             ])
         );
         $this->assertArraySubset(
             $expected,
-            Normalize::resize([
+            Normalize::size([
                 'x' => 250,
                 'y' => 320
             ])
@@ -162,20 +162,20 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         // Passing just width (should return same height)
         $this->assertArraySubset(
             [250, 250],
-            Normalize::resize(250)
+            Normalize::size(250)
         );
         $this->assertArraySubset(
             [250, 250],
-            Normalize::resize(['width' => 250])
+            Normalize::size(['width' => 250])
         );
     }
 
     /**
      * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
      */
-    public function testResizeFail()
+    public function testSizeFail()
     {
-        Normalize::resize(null);
+        Normalize::size(null);
     }
 
     public function testWatermarkPosition()

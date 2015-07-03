@@ -257,7 +257,7 @@ class Image
      */
     public function classicResize($width, $height = null)
     {
-        list($width, $height) = Normalize::resize($width, $height);
+        list($width, $height) = Normalize::size($width, $height);
 
         if ($this->width == $width && $this->height == $width) {
             return $this;
@@ -292,7 +292,7 @@ class Image
      */
     public function resizeMin($width, $height = null)
     {
-        list($width, $height) = Normalize::resize($width, $height);
+        list($width, $height) = Normalize::size($width, $height);
 
         // image will be left "as is", unless it is eligible for resizing
         $ratio_resize = 1;
@@ -332,7 +332,7 @@ class Image
      */
     public function classicCrop($width, $height = null)
     {
-        list($width, $height) = Normalize::resize($width, $height);
+        list($width, $height) = Normalize::size($width, $height);
 
         $start_y = ($this->height - $height) / 2;
         $start_x = ($this->width - $width) / 2;
@@ -353,7 +353,7 @@ class Image
      */
     public function resizeCrop($width, $height = null)
     {
-        list($width, $height) = Normalize::resize($width, $height);
+        list($width, $height) = Normalize::size($width, $height);
 
         $ratio_x = $width / $this->width;
         $ratio_y = $height / $this->height;
@@ -386,7 +386,7 @@ class Image
      */
     public function reduce($width, $height = null)
     {
-        list($width, $height) = Normalize::resize($width, $height);
+        list($width, $height) = Normalize::size($width, $height);
 
         if ($this->width < $width && $this->height < $height) {
             return $this;

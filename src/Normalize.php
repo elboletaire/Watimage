@@ -204,14 +204,14 @@ class Normalize
     }
 
     /**
-     * Normalizes resize width and height.
+     * Normalizes size (width and height).
      *
      * @param  mixed  $width  Can be just width or an array containing both params.
      * @param  int    $height Can only be height.
      * @return array          With width and height in a sequential array.
      * @throws InvalidArgumentException
      */
-    public static function resize($width, $height = null)
+    public static function size($width, $height = null)
     {
         if (!isset($height) && is_array($width)) {
             $allowed_keys = [
@@ -306,7 +306,7 @@ class Normalize
     public static function watermarkSize($width, $height = null)
     {
         try {
-            $width = self::resize($width, $height);
+            $width = self::size($width, $height);
         } catch (InvalidArgumentException $e) {
 
             if (!is_string($width) || !preg_match('/([0-9]{1,3}%|full)$/', $width)) {
