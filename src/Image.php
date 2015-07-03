@@ -57,7 +57,7 @@ class Image
      *
      * @var integer
      */
-    private $quality = 80;
+    protected $quality = 80;
 
     /**
      * Image compression value for png files.
@@ -66,7 +66,7 @@ class Image
      *
      * @var integer
      */
-    private $compression = 9;
+    protected $compression = 9;
 
     /**
      * Constructor method. You can pass a filename to be loaded by default
