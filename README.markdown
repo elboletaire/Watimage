@@ -1,6 +1,8 @@
 Watimage: Watermark and Image PHP Class
 =======================================
 
+[![Join the chat at https://gitter.im/elboletaire/Watimage](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/elboletaire/Watimage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Watimage is a PHP class to resize, rotate and apply watermark to images.
 
 It was initially thought as a CakePHP Component, but now is a standalone class,
