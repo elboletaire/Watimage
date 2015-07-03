@@ -3,8 +3,15 @@ namespace Elboletaire\Watimage;
 
 class Watermark extends Image
 {
-    protected $size, $margin = ['x' => 0, 'y' => 0], $position;
+    protected $size, $margin = [0, 0], $position;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @param string $file    Filepath of the watermark to be loaded.
+     * @param array  $options Array of options to be set, with keys: size,
+     *                        position and/or margin.
+     */
     public function __construct($file = null, $options = [])
     {
         if (!empty($options)) {
@@ -21,22 +28,43 @@ class Watermark extends Image
         return parent::__construct($file);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return Watermark
+     */
     public function destroy()
     {
         $this->size = null;
-        $this->margin = ['x' => 0, 'y' => 0];
+        $this->margin = [0, 0];
         $this->position = null;
 
         return parent::destroy();
     }
 
-    public function setPosition($position = null)
+    /**
+     * Sets the position of the watermark.
+     *
+     * @param  mixed  $x  Can be a position ala CSS, just position X or an array
+     *                    containing both params.
+     * @param  int    $y  Position Y.
+     */
+    public function setPosition($x, $y = null)
     {
-        $this->position = Normalize::watermarkPosition($position);
+        $this->position = Normalize::watermarkPosition($x, $y);
 
         return $this;
     }
 
+    /**
+     * Sets the position of the watermark.
+     *
+     * This method has been added for backwards compatibility. If you wanna resize
+     * the watermark you can directly call ->resize from Watermark object.
+     *
+     * @param  mixed  $width  Can be just width or an array containing both params.
+     * @param  int    $height Height.
+     */
     public function setSize($width, $height = null)
     {
         $this->size = Normalize::watermarkSize($width, $height);
@@ -44,9 +72,15 @@ class Watermark extends Image
         return $this;
     }
 
-    public function setMargin($margin)
+    /**
+     * Sets a margin for the watermark. Useful if you're using positioning ala CSS.
+     *
+     * @param  mixed  $x  Can be just x position or an array containing both params.
+     * @param  int    $y  Y position.
+     */
+    public function setMargin($x, $y = null)
     {
-        $this->margin = $margin;
+        $this->margin = Normalize::position($x, $y);
 
         return $this;
     }
@@ -61,13 +95,13 @@ class Watermark extends Image
     public function apply(Image $image)
     {
         $metadata = $image->getMetadata();
-        $this->calculatePosition($metadata);
         $this->calculateSize($metadata);
+        list($x, $y) = $this->calculatePosition($metadata);
         $resource = $image->getImage();
 
         imagecopy(
             $resource, $this->image,
-            $this->position['x'], $this->position['y'], 0, 0,
+            $x, $y, 0, 0,
             $this->width, $this->height
         );
 
@@ -76,6 +110,12 @@ class Watermark extends Image
         return $image;
     }
 
+    /**
+     * Calculates the position of the watermark.
+     *
+     * @param  array $metadata Image to be watermarked metadata.
+     * @return array           Position in array x,y
+     */
     protected function calculatePosition($metadata)
     {
         // Force center alignement if 'full' size has been set
@@ -95,25 +135,31 @@ class Watermark extends Image
 
         // Horizontal
         if (preg_match('/right/', $this->position)) {
-            $x = $metadata['width'] - $this->width + $this->margin['x'];
+            $x = $metadata['width'] - $this->width + $this->margin[0];
         } elseif (preg_match('/left/', $this->position)) {
-            $x = 0  + $this->margin['x'];
+            $x = 0  + $this->margin[0];
         } elseif (preg_match('/center/', $this->position)) {
-            $x = $metadata['width'] / 2 - $this->width / 2  + $this->margin['x'];
+            $x = $metadata['width'] / 2 - $this->width / 2  + $this->margin[0];
         }
 
         // Vertical
         if (preg_match('/bottom/', $this->position)) {
-            $y = $metadata['height'] - $this->height  + $this->margin['y'];
+            $y = $metadata['height'] - $this->height  + $this->margin[1];
         } elseif (preg_match('/top/', $this->position)) {
-            $y = 0  + $this->margin['y'];
+            $y = 0  + $this->margin[1];
         } elseif (preg_match('/center/', $this->position)) {
-            $y = $metadata['height'] / 2 - $this->height / 2  + $this->margin['y'];
+            $y = $metadata['height'] / 2 - $this->height / 2  + $this->margin[1];
         }
 
-        $this->position = compact('x', 'y');
+        return [$x, $y];
     }
 
+    /**
+     * Calculates the required size for the watermark from $this->size.
+     *
+     * @param  array $metadata Image metadata
+     * @return void
+     */
     protected function calculateSize($metadata)
     {
         if (!isset($this->size)) {
@@ -162,6 +208,8 @@ class Watermark extends Image
             }
         }
 
+        // Això s'ha de repensar tu, que sinó cada cop que s'aplica la marca
+        // d'aigua es va fent més petita, i no interessa...!
         $this->classicResize($width, $height);
     }
 }

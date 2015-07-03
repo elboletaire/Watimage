@@ -192,11 +192,11 @@ class Normalize
             }
         }
 
-        if (is_int($x) && !isset($y)) {
+        if (is_numeric($x) && !isset($y)) {
             $y = $x;
         }
 
-        if (!isset($x, $y) || !(is_int($x) && is_int($y))) {
+        if (!isset($x, $y) || !(is_numeric($x) && is_numeric($y))) {
             throw new InvalidArgumentException("Invalid position %s.", compact('x', 'y'));
         }
 
@@ -239,7 +239,7 @@ class Normalize
             $height = $width;
         }
 
-        if (!isset($width, $height)) {
+        if (!isset($width, $height) || !(is_numeric($width) && is_numeric($height))) {
             throw new InvalidArgumentException(
                 "Invalid resize arguments %s",
                 compact('width', 'height')
@@ -309,13 +309,14 @@ class Normalize
             $width = self::resize($width, $height);
         } catch (InvalidArgumentException $e) {
 
-            if (!is_string($width) || !preg_match('/[0-9]{1,3}%$/', $width)) {
+            if (!is_string($width) || !preg_match('/([0-9]{1,3}%|full)$/', $width)) {
                 throw new InvalidArgumentException(
                     "Invalid size arguments %s",
                     compact('width', 'height')
                 );
             }
         }
+
         return $width;
     }
 }

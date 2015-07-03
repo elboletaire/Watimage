@@ -32,6 +32,12 @@ class Image
      */
     private $compression = 9;
 
+    /**
+     * Constructor method. You can pass a filename to be loaded by default
+     * or load it later with load('filename.ext')
+     *
+     * @param string $file Filepath of the image to be loaded.
+     */
     public function __construct($file = null)
     {
         if (!extension_loaded('gd')) {
@@ -45,6 +51,9 @@ class Image
         return $this;
     }
 
+    /**
+     * Ensure everything gets emptied on object destruction.
+     */
     public function __destruct()
     {
         $this->destroy();
