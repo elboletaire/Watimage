@@ -195,7 +195,7 @@ class Image
      */
     public function rotate($degrees, $bgcolor = self::COLOR_TRANSPARENT)
     {
-        $color = $this->getColorArray($bgcolor);
+        $color = Normalize::color($bgcolor);
         $bgcolor = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
 
         $this->image = imagerotate($this->image, $degrees * -1, $bgcolor);
@@ -248,7 +248,7 @@ class Image
      */
     public function classicResize($width, $height = null)
     {
-        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+        list($width, $height) = Normalize::resize($width, $height);
 
         if ($this->width == $width && $this->height == $width) {
             return $this;
@@ -283,7 +283,7 @@ class Image
      */
     public function resizeMin($width, $height = null)
     {
-        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+        list($width, $height) = Normalize::resize($width, $height);
 
         // image will be left "as is", unless it is eligible for resizing
         $ratio_resize = 1;
@@ -323,7 +323,7 @@ class Image
      */
     public function classicCrop($width, $height = null)
     {
-        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+        list($width, $height) = Normalize::resize($width, $height);
 
         $start_y = ($this->height - $height) / 2;
         $start_x = ($this->width - $width) / 2;
@@ -344,7 +344,7 @@ class Image
      */
     public function resizeCrop($width, $height = null)
     {
-        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+        list($width, $height) = Normalize::resize($width, $height);
 
         $ratio_x = $width / $this->width;
         $ratio_y = $height / $this->height;
@@ -377,7 +377,7 @@ class Image
      */
     public function reduce($width, $height = null)
     {
-        list($width, $height) = $this->normalizeResizeArguments($width, $height);
+        list($width, $height) = Normalize::resize($width, $height);
 
         if ($this->width < $width && $this->height < $height) {
             return $this;
@@ -411,7 +411,7 @@ class Image
             return $this->convenienceFlip($type);
         }
 
-        imageflip($this->image, $this->normalizeFlipType($type));
+        imageflip($this->image, Normalize::flip($type));
 
         return $this;
     }
@@ -424,7 +424,7 @@ class Image
      */
     public function convenienceFlip($type = 'horizontal')
     {
-        $type = $this->normalizeFlipType($type);
+        $type = Normalize::flip($type);
 
         $resampled = $this->imagecreate($this->width, $this->height);
 
@@ -456,45 +456,6 @@ class Image
         $this->image = $resampled;
 
         return $this;
-    }
-
-    /**
-     * Normalizes flip type from any of the allowed values.
-     *
-     * @param  mixed $type  Can be either:
-     *                      v, y, vertical or IMG_FLIP_VERTICAL
-     *                      h, x, horizontal or IMG_FLIP_HORIZONTAL
-     *                      b, xy, yx, both or IMG_FLIP_BOTH
-     * @return int
-     * @throws InvalidArgumentException
-     */
-    protected function normalizeFlipType($type)
-    {
-        switch (strtolower($type)) {
-            case 'x':
-            case 'h':
-            case 'horizontal':
-            case IMG_FLIP_HORIZONTAL:
-                return IMG_FLIP_HORIZONTAL;
-                break;
-
-            case 'y':
-            case 'v':
-            case 'vertical':
-            case IMG_FLIP_VERTICAL:
-                return IMG_FLIP_VERTICAL;
-                break;
-
-            case 'b':
-            case 'both':
-            case IMG_FLIP_BOTH:
-                return IMG_FLIP_BOTH;
-                break;
-
-            default:
-                throw new InvalidArgumentException("Incorrect flip type \"%s\"", $type);
-                break;
-        }
     }
 
     /**
@@ -590,7 +551,7 @@ class Image
      */
     public function fill($color = '#fff')
     {
-        $color = $this->getColorArray($color);
+        $color = Normalize::color($color);
         $color = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
         imagefill($this->image, 0, 0, $color);
 
@@ -611,7 +572,7 @@ class Image
      */
     public function crop($x, $y = null, $width = null, $height = null)
     {
-        list($x, $y, $width, $height) = $this->normalizeCropArguments($x, $y, $width, $height);
+        list($x, $y, $width, $height) = Normalize::crop($x, $y, $width, $height);
 
         $crop = $this->imagecreate($width, $height);
 
@@ -626,52 +587,6 @@ class Image
         $this->updateSize();
 
         return $this;
-    }
-
-    /**
-     * Normalizes crop arguments returning an array with them.
-     *
-     * You can pass arguments one by one or an array passing arguments
-     * however you like.
-     *
-     * @param  int $x      X position where start to crop.
-     * @param  int $y      Y position where start to crop.
-     * @param  int $width  New width of the image.
-     * @param  int $height New height of the image.
-     * @return array       Array with keys x, y, width & height
-     * @throws InvalidArgumentException
-     */
-    protected function normalizeCropArguments($x, $y = null, $width = null, $height = null)
-    {
-        if (!isset($y, $width, $height) && is_array($x)) {
-            $values = $x;
-            $allowed_keys = [
-                'associative' => ['x', 'y', 'width', 'height'],
-                'reduced'     => ['x', 'y', 'w', 'h'],
-                'numeric'     => [0, 1, 2, 3]
-            ];
-
-            foreach ($allowed_keys as $keys) {
-                list($x, $y, $width, $height) = $keys;
-                if (isset($values[$x], $values[$y], $values[$width], $values[$height])) {
-                    return [
-                        $values[$x],
-                        $values[$y],
-                        $values[$width],
-                        $values[$height]
-                    ];
-                }
-            }
-        }
-
-        if (!isset($x, $y, $width, $height)) {
-            throw new InvalidArgumentException(
-                "Invalid options for crop %s.",
-                compact('x', 'y', 'width', 'height')
-            );
-        }
-
-        return [$x, $y, $width, $height];
     }
 
     /**
@@ -727,12 +642,12 @@ class Image
     /**
      * Like grayscale, except you can specify the color.
      *
-     * @param  mixed  $color Color in any format accepted by getColorArray
+     * @param  mixed  $color Color in any format accepted by Normalize::color
      * @return Image
      */
     public function colorize($color)
     {
-        $color = $this->getColorArray($color);
+        $color = Normalize::color($color);
 
         imagefilter(
             $this->image,
@@ -972,95 +887,6 @@ class Image
     }
 
     /**
-     * Returns the proper color array for the given color.
-     *
-     * It accepts any (or almost any) imaginable type.
-     *
-     * @param  mixed  $color Can be an array (sequential or associative) or
-     *                       hexadecimal. In hexadecimal allows 3 and 6 characters
-     *                       for rgb and 4 or 8 characters for rgba.
-     * @return array         Containing all 4 color channels.
-     * @throws InvalidArgumentException
-     */
-    public static function getColorArray($color)
-    {
-        if ($color === self::COLOR_TRANSPARENT) {
-            return [
-                'r' => 0,
-                'g' => 0,
-                'b' => 0,
-                'a' => 127
-            ];
-        }
-        if (is_array($color) && in_array(count($color), [3,4])) {
-            $allowed_keys = [
-                'associative' => ['red', 'green', 'blue', 'alpha'],
-                'reduced'     => ['r', 'g', 'b', 'a'],
-                'numeric'     => [0, 1, 2, 3]
-            ];
-
-            foreach ($allowed_keys as $keys) {
-                list($r, $g, $b, $a) = $keys;
-
-                if (!isset($color[$r], $color[$g], $color[$b])) {
-                    continue;
-                }
-
-                return [
-                    'r' => self::fitInRange($color[$r], 0, 255),
-                    'g' => self::fitInRange($color[$g], 0, 255),
-                    'b' => self::fitInRange($color[$b], 0, 255),
-                    'a' => self::fitInRange(isset($color[$a]) ? $color[$a] : 0, 0, 127),
-                ];
-            }
-
-            throw new InvalidArgumentException("Invalid array color value %s.", $color);
-        }
-
-        if (is_string($color)) {
-            $color = ltrim($color, '#');
-            if (strlen($color) == 6) {
-                list($r, $g, $b) = [
-                    $color[0].$color[1],
-                    $color[2].$color[3],
-                    $color[4].$color[5]
-                ];
-            } elseif (strlen($color) == 3) {
-                list($r, $g, $b) = array(
-                    $color[0].$color[0],
-                    $color[1].$color[1],
-                    $color[2].$color[2]
-                );
-            } elseif (strlen($color) == 8) {
-                list($r, $g, $b, $a) = [
-                    $color[0].$color[1],
-                    $color[2].$color[3],
-                    $color[4].$color[5],
-                    $color[6].$color[7]
-                ];
-            } elseif (strlen($color) == 4) {
-                list($r, $g, $b, $a) = [
-                    $color[0].$color[0],
-                    $color[1].$color[1],
-                    $color[2].$color[2],
-                    $color[3].$color[3]
-                ];
-            } else {
-                throw new InvalidArgumentException("Invalid hexadecimal color value \"%s\"", $color);
-            }
-
-            return [
-                'r' => hexdec($r),
-                'g' => hexdec($g),
-                'b' => hexdec($b),
-                'a' => isset($a) ? hexdec($a) : 0
-            ];
-        }
-
-        throw new InvalidArgumentException("Invalid color value \"%s\"", $color);
-    }
-
-    /**
      * Gets metadata information from given $filename.
      *
      * @param  string $filename File path
@@ -1154,43 +980,6 @@ class Image
     {
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
-    }
-
-    public function normalizeResizeArguments($width, $height = null)
-    {
-        if (!isset($height) && is_array($width)) {
-            $allowed_keys = [
-                [0, 1],
-                ['x', 'y'],
-                ['w', 'h'],
-                ['width', 'height'],
-            ];
-
-            foreach ($allowed_keys as $keys) {
-                list($x, $y) = $keys;
-
-                if (isset($width[$x])) {
-                    if (isset($width[$y])) {
-                        $height = $width[$y];
-                    }
-                    $width = $width[$x];
-                    break;
-                }
-            }
-        }
-
-        if (isset($width) && !isset($height)) {
-            $height = $width;
-        }
-
-        if (!isset($width, $height)) {
-            throw new InvalidArgumentException(
-                "Invalid options for resize %s",
-                compact('width', 'height')
-            );
-        }
-
-        return array($width, $height);
     }
 
     /**
