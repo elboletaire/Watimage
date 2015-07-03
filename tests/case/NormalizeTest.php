@@ -195,4 +195,19 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
     {
         Normalize::watermarkPosition('not valid');
     }
+
+    public function testWatermarkSize()
+    {
+        $this->assertEquals('50%', Normalize::watermarkSize('50%'));
+        $this->assertEquals('full', Normalize::watermarkSize('full'));
+        $this->assertArraySubset([23, 42], Normalize::watermarkSize(23, 42));
+    }
+
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     */
+    public function testWatermarkSizeFail()
+    {
+        Normalize::watermarkSize('not valid');
+    }
 }
