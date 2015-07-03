@@ -24,5 +24,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^4.7"
+    },
+    "suggest": {
+        "thephpleague/color-extractor": "Extract colors from an image like a human would do."
     }
 }
