@@ -90,7 +90,7 @@ class Image
     /**
      * Cleans up everything to start again.
      *
-     * @return void
+     * @return Image
      */
     public function destroy()
     {
@@ -99,6 +99,8 @@ class Image
         }
         $this->metadata = [];
         $this->filename = $this->width = $this->height = null;
+
+        return $this;
     }
 
     /**
@@ -188,7 +190,7 @@ class Image
      * Rotates an image clockwise.
      *
      * @param  int    $degrees Rotation angle in degrees.
-     * @param  mixed  $bgcolor [description]
+     * @param  mixed  $bgcolor Background to be used for the background, transparent by default.
      * @return Image
      */
     public function rotate($degrees, $bgcolor = self::COLOR_TRANSPARENT)
