@@ -243,7 +243,7 @@ class Image
         $color = Normalize::color($bgcolor);
         $bgcolor = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
 
-        $this->image = imagerotate($this->image, $degrees * -1, $bgcolor);
+        $this->image = imagerotate($this->image, $degrees, $bgcolor);
 
         $this->updateSize();
 
