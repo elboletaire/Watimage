@@ -74,7 +74,7 @@ class Image
      *
      * @param string $file Filepath of the image to be loaded.
      */
-    public function __construct($file = null)
+    public function __construct($file = null, $autoOrientate = true)
     {
         if (!extension_loaded('gd')) {
             throw new ExtensionNotLoadedException("GD");
@@ -82,6 +82,10 @@ class Image
 
         if (!empty($file)) {
             $this->load($file);
+
+            if ($autoOrientate) {
+                $this->autoOrientate();
+            }
         }
 
         return $this;
@@ -229,6 +233,39 @@ class Image
         $this->image = $this->createResourceImage($filename, $this->metadata['format']);
 
         return $this;
+    }
+
+    /**
+     * Auto-orients an image based on its exif Orientation information.
+     *
+     * @return Image
+     */
+    public function autoOrientate()
+    {
+        if (empty($this->metadata['exif']['Orientation'])) {
+            return $this;
+        }
+
+        switch ((int)$this->metadata['exif']['Orientation']) {
+            case 2:
+                return $this->flip('horizontal');
+            case 3:
+                return $this->flip('both');
+            case 4:
+                return $this->flip('vertical');
+            case 5:
+                $this->flip('horizontal');
+                return $this->rotate(-90);
+            case 6:
+                return $this->rotate(-90);
+            case 7:
+                $this->flip('horizontal');
+                return $this->rotate(90);
+            case 8:
+                return $this->rotate(90);
+            default:
+                return $this;
+        }
     }
 
     /**
