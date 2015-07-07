@@ -1,12 +1,13 @@
 <?php
 namespace Elboletaire\Watimage;
 
-use Exception;
-
 /**
+ * This is a backwards compatibility class. It just has the old Watimage methods
+ * and workflow so you can upgrade any project to the new Watimage without
+ * changing your code.
  *
  * @author Òscar Casajuana Alonso <elboletaire@underave.net>
- * @version 1.0
+ * @version 2.0
  * @link https://github.com/elboletaire/Watimage
  *
  * This program is free software; you can redistribute it and/or modify
@@ -49,7 +50,11 @@ class Watimage
     public function __construct($file = null, $watermark = null)
     {
         $this->image = new Image($file);
-        $this->watermark = new Watermark($watermark);
+        if (!is_null($watermark)) {
+            $this->watermark = new Watermark();
+            // This setWatermark method is backwards compatible!
+            $this->setWatermark($watermark);
+        }
     }
 
     /**
@@ -111,22 +116,34 @@ class Watimage
     /**
      * Set watermark and (optionally) its options.
      *
-     * @param mixed $options [optional] you can set the watermark without options
-     *              or you can set an array of options like:
-     *              $options = array(
-     *                  'file'     => 'watermark.png',
-     *                  'position' => 'bottom right', // default
-     *                  'margin'   => array('20', '10') // 0 by default
-     *              );
+     * @param mixed $options You can set the watermark without options or you can
+     *                       set an array with any of these $options = [
+     *                           'file'     => 'watermark.png',
+     *                           'position' => 'bottom right', // default
+     *                           'margin'   => ['20', '10'] // 0 by default,
+     *                           'size'     => 'full' // 100% by default
+     *                       ];
      * @return true on success; false on failure
      */
-    public function setWatermark($options = array())
+    public function setWatermark($options = [])
     {
         try {
             if (is_array($options)) {
-                $file = $options['file'];
+                extract($options);
 
-                $this->watermark->load($file, $options);
+                $this->watermark->load($file);
+
+                if (isset($position)) {
+                    $this->watermark->setPosition($position);
+                }
+
+                if (isset($margin)) {
+                    $this->watermark->setMargin($position);
+                }
+
+                if (isset($size)) {
+                    $this->watermark->setMargin($position);
+                }
             } else {
                 $this->watermark->load($options);
             }
@@ -140,15 +157,16 @@ class Watimage
     }
 
     /**
-     *  Resizes the image
-     *  @param array $options = array(
+     *  Resizes the image.
+     *
+     *  @param array $options = [
      *                  'type' => 'resizemin|resizecrop|resize|crop',
-     *                  'size' => array('x' => 2000, 'y' => 500)
-     *              )
-     *          You can also set the size without specifying x and y: array(2000, 500). Or directly 'size' => 2000 (takes 2000x2000)
+     *                  'size' => ['x' => 2000, 'y' => 500]
+     *               ]
+     *          You can also set the size without specifying x and y: [2000, 500]. Or directly 'size' => 2000 (takes 2000x2000)
      *  @return bool true on success; otherwise false
      */
-    public function resize($options = array())
+    public function resize($options = [])
     {
         try {
             $this->image->resize($options['type'], $options['size']);
@@ -162,11 +180,12 @@ class Watimage
     }
 
     /**
-     * Crops an image based on specified coords and size
-     * @param mixed $options = array('x' => 23, 'y' => 23, 'width' => 230, 'height' => 230)
+     * Crops an image based on specified coords and size.
+     *
+     * @param mixed $options = ['x' => 23, 'y' => 23, 'width' => 230, 'height' => 230]
      * @return bool success
      */
-    public function crop($options = array())
+    public function crop($options = [])
     {
         try {
             $this->image->crop($options);
@@ -180,11 +199,20 @@ class Watimage
     }
 
     /**
-     *  Rotates an image
-     *  @param mixed $options = array('bgcolor' => 230, 'degrees' => -90); or $options = -90; // takes bgcolor = -1 by default
-     *  @return true on success; false on failure
+     *  Rotates an image.
+     *
+     *  @param mixed $options Can either be an integer with the degrees or an array with
+     *                        keys `bgcolor` for the rotation bgcolor and `degrees` for
+     *                        the angle.
+     *  @return bool
      */
-    public function rotateImage($options = array())
+
+    /**
+     * [rotateImage description]
+     * @param  array  $options [description]
+     * @return [type]          [description]
+     */
+    public function rotateImage($options = [])
     {
         try {
             if (is_array($options)) {
@@ -207,13 +235,14 @@ class Watimage
     /**
      *  rotateImage alias
      */
-    public function rotate($options = array())
+    public function rotate($options = [])
     {
         return $this->rotateImage($options);
     }
 
     /**
      *  Applies a watermark to the image. Needs to be initialized with $this->setWatermark()
+     *
      *  @return true on success, otherwise false
      */
     public function applyWatermark()
@@ -231,7 +260,8 @@ class Watimage
 
     /**
      *  Flips an image.
-     *  @param string $type [optional] type of flip: horizontal / vertical / both
+     *
+     *  @param string $type type of flip: horizontal / vertical / both
      *  @return true on success. Otherwise false
      */
     public function flip($type = 'horizontal')
@@ -249,8 +279,9 @@ class Watimage
 
     /**
      *  Generates the image file.
-     *  @param string $path [optional] if not specified image will be printed on screen
-     *  @param string $output [optional] mime type for output image (image/png, image/gif, image/jpeg)
+     *
+     *  @param string $path if not specified image will be printed on screen
+     *  @param string $output mime type for output image (image/png, image/gif, image/jpeg)
      *  @return true on success. Otherwise false
      */
     public function generate($path = null, $output = null)

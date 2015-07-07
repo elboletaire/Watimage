@@ -134,6 +134,8 @@ class Watermark extends Image
     /**
      * Calculates the position of the watermark.
      *
+     * TODO: Doesn't work as expected!!
+     *
      * @param  array $metadata Image to be watermarked metadata.
      * @return array           Position in array x,y
      */
