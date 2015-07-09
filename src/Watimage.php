@@ -1,6 +1,8 @@
 <?php
 namespace Elboletaire\Watimage;
 
+use Elboletaire\Watimage\Exception\InvalidArgumentException;
+
 /**
  * This is a backwards compatibility class. It just has the old Watimage methods
  * and workflow so you can upgrade any project to the new Watimage without
@@ -128,24 +130,25 @@ class Watimage
     public function setWatermark($options = [])
     {
         try {
-            if (is_array($options)) {
-                extract($options);
-
-                $this->watermark->load($file);
-
-                if (isset($position)) {
-                    $this->watermark->setPosition($position);
-                }
-
-                if (isset($margin)) {
-                    $this->watermark->setMargin($position);
-                }
-
-                if (isset($size)) {
-                    $this->watermark->setMargin($position);
-                }
-            } else {
+            if (!is_array($options)) {
                 $this->watermark->load($options);
+
+                return true;
+            }
+
+            if (!isset($options['file'])) {
+                throw new InvalidArgumentException("Watermark \"file\" param not specified");
+            }
+
+            $this->watermark->load($options['file']);
+
+            foreach (['position', 'margin', 'size'] as $option) {
+                if (!array_key_exists($option, $options)) {
+                    continue;
+                }
+
+                $method = 'set' . ucfirst($option);
+                $this->watermark->$method($options[$option]);
             }
 
             return true;
