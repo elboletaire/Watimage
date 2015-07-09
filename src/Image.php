@@ -577,18 +577,26 @@ class Image
     /**
      * Creates an empty canvas.
      *
-     * @param  int $width  Canvas width.
-     * @param  int $height Canvas height.
-     * @return resource    Image resource with the canvas.
+     * @param  int  $width         Canvas width.
+     * @param  int  $height        Canvas height.
+     * @param  bool $transparency  Whether or not to set transparency values.
+     * @return resource Image resource with the canvas.
      */
-    protected function imagecreate($width, $height)
+    protected function imagecreate($width, $height, $transparency = true)
     {
         $image = imagecreatetruecolor($width, $height);
-        // Required for transparencies in png and gif files
-        imagealphablending($image, false);
-        imagesavealpha($image, true);
-        // Required for transparencies while cropping gif images
-        imagecolortransparent($image, imagecolorallocatealpha($image, 0, 0, 0, 127));
+
+        if ($transparency) {
+            // Required for transparencies
+            $bgcolor = imagecolortransparent(
+                $image,
+                // imagecolorallocatealpha($image, 0, 0, 0, 127)
+                imagecolorallocatealpha($image, 255, 255, 255, 127)
+            );
+            imagefill($image, 0, 0, $bgcolor);
+            imagesavealpha($image, true);
+            imagealphablending($image, false);
+        }
 
         return $image;
     }
