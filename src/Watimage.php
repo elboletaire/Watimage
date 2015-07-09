@@ -163,7 +163,7 @@ class Watimage
      *  Resizes the image.
      *
      *  @param array $options = [
-     *                  'type' => 'resizemin|resizecrop|resize|crop',
+     *                  'type' => 'resizemin|resizecrop|resize|crop|reduce',
      *                  'size' => ['x' => 2000, 'y' => 500]
      *               ]
      *          You can also set the size without specifying x and y: [2000, 500]. Or directly 'size' => 2000 (takes 2000x2000)
@@ -185,7 +185,13 @@ class Watimage
     /**
      * Crops an image based on specified coords and size.
      *
-     * @param mixed $options = ['x' => 23, 'y' => 23, 'width' => 230, 'height' => 230]
+     * @param mixed $options Specifying x & y position and width & height, like
+     *                       so [
+     *                           'x'      => 23,
+     *                           'y'      => 23,
+     *                           'width'  => 230,
+     *                           'height' => 230
+     *                        ]
      * @return bool success
      */
     public function crop($options = [])
@@ -209,12 +215,6 @@ class Watimage
      *                        the angle.
      *  @return bool
      */
-
-    /**
-     * [rotateImage description]
-     * @param  array  $options [description]
-     * @return [type]          [description]
-     */
     public function rotateImage($options = [])
     {
         try {
@@ -236,7 +236,9 @@ class Watimage
     }
 
     /**
-     *  rotateImage alias
+     *  rotateImage alias.
+     *
+     * @see self::rotateImage()
      */
     public function rotate($options = [])
     {
