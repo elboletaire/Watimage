@@ -1061,6 +1061,17 @@ class Image
     }
 
     /**
+     * Updates current image metadata.
+     *
+     * @return void
+     */
+    protected function updateMetadata()
+    {
+        $this->metadata['width'] = $this->width;
+        $this->metadata['height'] = $this->height;
+    }
+
+    /**
      * Resets width and height of the current image.
      *
      * @return void
@@ -1069,6 +1080,8 @@ class Image
     {
         $this->width  = imagesx($this->image);
         $this->height = imagesy($this->image);
+
+        $this->updateMetadata();
     }
 
     /**
