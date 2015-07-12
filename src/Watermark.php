@@ -116,7 +116,31 @@ class Watermark extends Image
         $metadata = $image->getMetadata();
         $this->calculateSize($metadata);
         list($x, $y) = $this->calculatePosition($metadata);
-        $resource = $image->getImage();
+
+        $resource = $this->imagecreate($metadata['width'], $metadata['height']);
+
+        if ($this->metadata['format'] == 'gif' || $metadata['format'] == 'gif') {
+            // @codingStandardsIgnoreStart
+            imagecopyresized(
+                $resource, $image->getImage(),
+                0, 0, 0, 0,
+                $metadata['width'], $metadata['height'],
+                $metadata['width'], $metadata['height']
+            );
+            // @codingStandardsIgnoreEnd
+        } else {
+            // @codingStandardsIgnoreStart
+            imagecopyresampled(
+                $resource, $image->getImage(),
+                0, 0, 0, 0,
+                $metadata['width'], $metadata['height'],
+                $metadata['width'], $metadata['height']
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
+        imagealphablending($resource, true);
+        imagesavealpha($resource, false);
 
         // @codingStandardsIgnoreStart
         imagecopy(
