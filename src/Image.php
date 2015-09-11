@@ -174,6 +174,7 @@ class Image
                 imagegif($this->image, $filename, $this->quality);
                 break;
             case 'image/png':
+                imagesavealpha($this->image, true);
                 imagepng($this->image, $filename, $this->compression);
                 break;
             case 'image/jpeg':
