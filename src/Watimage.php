@@ -49,6 +49,15 @@ class Watimage
      */
     public $errors = [];
 
+    /**
+     * Construct method. Accepts file and watermark as parameters so you
+     * can avoid the setImage and setWatermark methods.
+     *
+     * @param mixed $file       Image details if is an array, image file
+     *                          location otherwise
+     * @param mixed $watermark  Watermark details if is an array, watermark file
+     *                          location otherwise.
+     */
     public function __construct($file = null, $watermark = null)
     {
         $this->image = new Image($file);

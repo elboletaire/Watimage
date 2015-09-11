@@ -270,7 +270,9 @@ class Image
     }
 
     /**
-     * Rotates an image clockwise.
+     * Rotates an image.
+     *
+     * Will rotate clockwise when using positive degrees.
      *
      * @param  int    $degrees Rotation angle in degrees.
      * @param  mixed  $bgcolor Background to be used for the background, transparent by default.
