@@ -593,7 +593,6 @@ class Image
             // Required for transparencies
             $bgcolor = imagecolortransparent(
                 $image,
-                // imagecolorallocatealpha($image, 0, 0, 0, 127)
                 imagecolorallocatealpha($image, 255, 255, 255, 127)
             );
             imagefill($image, 0, 0, $bgcolor);
