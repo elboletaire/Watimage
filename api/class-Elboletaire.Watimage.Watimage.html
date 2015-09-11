@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Elboletaire\Watimage\Watimage</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?49f43d3208c5d7e33fa16d36107a345bf11cc00d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Overview</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Elboletaire.Watimage.html" title="Summary of Elboletaire\Watimage"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Elboletaire.html">
+							Elboletaire<span></span>
+						</a>
+							<ul>
+					<li class="active">
+						<a href="namespace-Elboletaire.Watimage.html">
+							Watimage<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Elboletaire.Watimage.Exception.html">
+							Exception						</a>
+							</li>
+								</ul></li></ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Elboletaire.Watimage.Image.html">Image</a></li>
+				<li><a href="class-Elboletaire.Watimage.Normalize.html">Normalize</a></li>
+				<li><a href="class-Elboletaire.Watimage.Watermark.html">Watermark</a></li>
+				<li class="active"><a href="class-Elboletaire.Watimage.Watimage.html">Watimage</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class Watimage</h1>
+
+
+	<div class="description">
+	<p>This is a backwards compatibility class. It just has the old Watimage methods
+and workflow so you can upgrade any project to the new Watimage without
+changing your code.</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Elboletaire.html">Elboletaire</a>\<a href="namespace-Elboletaire.Watimage.html">Watimage</a><br>
+		
+
+				<b>Copyright:</b>
+				2015 Òscar Casajuana <elboletaire at underave dot net><br>
+				<b>License:</b>
+				<a href="https://opensource.org/licenses/MIT">MIT</a><br>
+				<b>Author:</b>
+				Òscar Casajuana Alonso <a href="&#109;a&#x69;&#108;&#x74;&#111;&#x3a;&#101;&#x6c;&#98;&#x6f;&#108;&#x65;&#116;&#x61;&#105;r&#101;&#64;&#x75;&#110;&#x64;&#101;&#x72;&#97;&#x76;&#101;&#x2e;&#110;&#x65;&#116;">&#101;&#x6c;&#98;&#x6f;&#108;&#x65;&#116;&#x61;&#105;r&#101;&#64;&#x75;&#110;&#x64;&#101;&#x72;&#97;&#x76;&#101;&#x2e;&#110;&#x65;&#116;</a><br>
+				<b>Link:</b>
+				<a href="https://github.com/elboletaire/Watimage">https://github.com/elboletaire/Watimage</a><br>
+			<b>Located at</b> <a href="source-class-Elboletaire.Watimage.Watimage.html#6-304" title="Go to source code">Watimage.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#38-56" title="Go to source code">__construct</a>( <span>mixed <var>$file</var> = <span class="php-keyword1">null</span></span>, <span>mixed <var>$watermark</var> = <span class="php-keyword1">null</span></span> )</code>
+
+			<div class="description short">
+				<p>Construct method. Accepts file and watermark as parameters so you
+can avoid the setImage and setWatermark methods.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Construct method. Accepts file and watermark as parameters so you
+can avoid the setImage and setWatermark methods.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$file</var></dt>
+						<dd><p>Image details if is an array, image file
+                         location otherwise</p></dd>
+						<dt><var>$watermark</var></dt>
+						<dd><p>Watermark details if is an array, watermark file
+                         location otherwise.</p></dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setImage" id="_setImage">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Elboletaire.Watimage.Watimage.html">Elboletaire\Watimage\Watimage</a></code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setImage">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#58-76" title="Go to source code">setImage</a>( <span>mixed <var>$filename</var></span> )</code>
+
+			<div class="description short">
+				<p>Sets image and (optionally) its options</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets image and (optionally) its options</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$filename</var></dt>
+						<dd>Filename string or array containing both filename and quality</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Elboletaire.Watimage.Watimage.html">Elboletaire\Watimage\Watimage</a></code>
+					</div>
+
+					<h4>Throws</h4>
+					<div class="list">
+						Exception
+					</div>
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setQuality" id="_setQuality">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setQuality">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#78-94" title="Go to source code">setQuality</a>( <span>integer <var>$quality</var></span> )</code>
+
+			<div class="description short">
+				<p>Sets quality for gif and jpg files.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets quality for gif and jpg files.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$quality</var></dt>
+						<dd>A value from 0 (zero quality) to 100 (max quality).</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setCompression" id="_setCompression">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setCompression">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#96-112" title="Go to source code">setCompression</a>( <span>integer <var>$compression</var></span> )</code>
+
+			<div class="description short">
+				<p>Sets compression for png files.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets compression for png files.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$compression</var></dt>
+						<dd>A value from 0 (no compression, not recommended) to 9.</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setWatermark" id="_setWatermark">
+
+			<td class="attributes"><code>
+				 public 
+				true
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setWatermark">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#114-160" title="Go to source code">setWatermark</a>( <span>mixed <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Set watermark and (optionally) its options.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Set watermark and (optionally) its options.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$options</var></dt>
+						<dd><p>You can set the watermark without options or you can
+                      set an array with any of these $options = [
+                          'file'     => 'watermark.png',
+                          'position' => 'bottom right', // default
+                          'margin'   => ['20', '10'] // 0 by default,
+                          'size'     => 'full' // 100% by default
+                      ];</p></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						true<br>on success; false on failure
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="resize" id="_resize">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_resize">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#162-183" title="Go to source code">resize</a>( <span>array <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Resizes the image.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Resizes the image.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$options</var></dt>
+						<dd><p>= [
+                 'type' => 'resizemin|resizecrop|resize|crop|reduce',
+                 'size' => ['x' => 2000, 'y' => 500]
+              ]
+         You can also set the size without specifying x and y: [2000, 500]. Or directly 'size' => 2000 (takes 2000x2000)</p></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean<br>true on success; otherwise false
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="crop" id="_crop">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_crop">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#185-208" title="Go to source code">crop</a>( <span>mixed <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Crops an image based on specified coords and size.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Crops an image based on specified coords and size.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$options</var></dt>
+						<dd><p>Specifying x &amp; y position and width &amp; height, like
+                      so [
+                          'x'      => 23,
+                          'y'      => 23,
+                          'width'  => 230,
+                          'height' => 230
+                       ]</p></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean<br>success
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="rotateImage" id="_rotateImage">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_rotateImage">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#210-236" title="Go to source code">rotateImage</a>( <span>mixed <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Rotates an image.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Rotates an image.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$options</var></dt>
+						<dd><p>Can either be an integer with the degrees or an array with
+                       keys <code>bgcolor</code> for the rotation bgcolor and <code>degrees</code> for
+                       the angle.</p></dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="rotate" id="_rotate">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_rotate">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#238-246" title="Go to source code">rotate</a>( <span> <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>rotateImage alias.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>rotateImage alias.</p>
+
+
+
+
+
+					<h4>See</h4>
+					<div class="list">
+							<code><a href="class-Elboletaire.Watimage.Watimage.html#_rotateImage">Elboletaire\Watimage\Watimage::rotateImage()</a></code><br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="applyWatermark" id="_applyWatermark">
+
+			<td class="attributes"><code>
+				 public 
+				true
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_applyWatermark">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#248-264" title="Go to source code">applyWatermark</a>( )</code>
+
+			<div class="description short">
+				<p>Applies a watermark to the image. Needs to be initialized with $this->setWatermark()</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Applies a watermark to the image. Needs to be initialized with $this->setWatermark()</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						true<br>on success, otherwise false
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="flip" id="_flip">
+
+			<td class="attributes"><code>
+				 public 
+				true
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_flip">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#266-283" title="Go to source code">flip</a>( <span>string <var>$type</var> = <span class="php-quote">'horizontal'</span></span> )</code>
+
+			<div class="description short">
+				<p>Flips an image.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Flips an image.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$type</var></dt>
+						<dd>type of flip: horizontal / vertical / both</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						true<br>on success. Otherwise false
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="generate" id="_generate">
+
+			<td class="attributes"><code>
+				 public 
+				true
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_generate">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watimage.html#285-303" title="Go to source code">generate</a>( <span>string <var>$path</var> = <span class="php-keyword1">null</span></span>, <span>string <var>$output</var> = <span class="php-keyword1">null</span></span> )</code>
+
+			<div class="description short">
+				<p>Generates the image file.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Generates the image file.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$path</var></dt>
+						<dd>if not specified image will be printed on screen</dd>
+						<dt><var>$output</var></dt>
+						<dd>mime type for output image (image/png, image/gif, image/jpeg)</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						true<br>on success. Otherwise false
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Properties summary</h2></div>
+			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="image" id="$image">
+			<td class="attributes"><code>
+				protected  
+				<code><a href="class-Elboletaire.Watimage.Image.html">Elboletaire\Watimage\Image</a></code>
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watimage.html#18-23" title="Go to source code"><var>$image</var></a>
+
+				<div class="description short">
+					<p>Image handler.</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Image handler.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$image" class="anchor">#</a>
+					<code></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="watermark" id="$watermark">
+			<td class="attributes"><code>
+				protected  
+				<code><a href="class-Elboletaire.Watimage.Watermark.html">Elboletaire\Watimage\Watermark</a></code>
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watimage.html#25-30" title="Go to source code"><var>$watermark</var></a>
+
+				<div class="description short">
+					<p>Watermark handler.</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Watermark handler.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$watermark" class="anchor">#</a>
+					<code><span class="php-keyword1">false</span></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="errors" id="$errors">
+			<td class="attributes"><code>
+				public  
+				array
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watimage.html#32-36" title="Go to source code"><var>$errors</var></a>
+
+				<div class="description short">
+					<p>Any error returned by the class will be stored here</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Any error returned by the class will be stored here</p>
+
+						<h4>Public</h4>
+						<div class="list">
+								array $errors<br>
+						</div>
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$errors" class="anchor">#</a>
+					<code>[]</code>
+				</div>
+			</td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

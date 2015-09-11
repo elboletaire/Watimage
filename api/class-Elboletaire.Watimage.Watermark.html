@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class Elboletaire\Watimage\Watermark</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?49f43d3208c5d7e33fa16d36107a345bf11cc00d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">Overview</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-Elboletaire.Watimage.html" title="Summary of Elboletaire\Watimage"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+
+
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-Elboletaire.html">
+							Elboletaire<span></span>
+						</a>
+							<ul>
+					<li class="active">
+						<a href="namespace-Elboletaire.Watimage.html">
+							Watimage<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-Elboletaire.Watimage.Exception.html">
+							Exception						</a>
+							</li>
+								</ul></li></ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li><a href="class-Elboletaire.Watimage.Image.html">Image</a></li>
+				<li><a href="class-Elboletaire.Watimage.Normalize.html">Normalize</a></li>
+				<li class="active"><a href="class-Elboletaire.Watimage.Watermark.html">Watermark</a></li>
+				<li><a href="class-Elboletaire.Watimage.Watimage.html">Watimage</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class Watermark</h1>
+
+
+	<div class="description">
+	<p>The Watermark class. It extends Image class so you can do anything you can
+do for images to your watermarks.</p>
+	</div>
+
+	<dl class="tree well">
+		<dd style="padding-left:0px">
+			<a href="class-Elboletaire.Watimage.Image.html"><span>Elboletaire\Watimage\Image</span></a>
+			
+			
+			
+		</dd>
+		<dd style="padding-left:30px">
+			<img src="resources/inherit.png" alt="Extended by">
+<b><span>Elboletaire\Watimage\Watermark</span></b>			
+			
+			
+		</dd>
+	</dl>
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-Elboletaire.html">Elboletaire</a>\<a href="namespace-Elboletaire.Watimage.html">Watimage</a><br>
+		
+
+				<b>Copyright:</b>
+				2015 Òscar Casajuana <elboletaire at underave dot net><br>
+				<b>License:</b>
+				<a href="https://opensource.org/licenses/MIT">MIT</a><br>
+				<b>Author:</b>
+				Òscar Casajuana Alonso <a href="&#109;a&#x69;&#108;&#x74;&#111;&#x3a;&#101;&#x6c;&#98;&#x6f;&#108;&#x65;&#116;&#x61;&#105;r&#101;&#64;&#x75;&#110;&#x64;&#101;&#x72;&#97;&#x76;&#101;&#x2e;&#110;&#x65;&#116;">&#101;&#x6c;&#98;&#x6f;&#108;&#x65;&#116;&#x61;&#105;r&#101;&#64;&#x75;&#110;&#x64;&#101;&#x72;&#97;&#x76;&#101;&#x2e;&#110;&#x65;&#116;</a><br>
+				<b>Link:</b>
+				<a href="https://github.com/elboletaire/Watimage">https://github.com/elboletaire/Watimage</a><br>
+			<b>Located at</b> <a href="source-class-Elboletaire.Watimage.Watermark.html#4-269" title="Go to source code">Watermark.php</a>
+		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#36-57" title="Go to source code">__construct</a>( <span>string <var>$file</var> = <span class="php-keyword1">null</span></span>, <span>array <var>$options</var> = []</span> )</code>
+
+			<div class="description short">
+				<p>Constructor method. You can pass a filename to be loaded by default
+or load it later with load('filename.ext')</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Constructor method. You can pass a filename to be loaded by default
+or load it later with load('filename.ext')</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$file</var></dt>
+						<dd>Filepath of the watermark to be loaded.</dd>
+						<dt><var>$options</var></dt>
+						<dd><p>Array of options to be set, with keys: size,
+                       position and/or margin.</p></dd>
+					</dl></div>
+
+
+
+
+					<h4>Overrides</h4>
+					<div class="list"><code><a href="class-Elboletaire.Watimage.Image.html#___construct">Elboletaire\Watimage\Image::__construct</a></code></div>
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="destroy" id="_destroy">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Elboletaire.Watimage.Watermark.html">Elboletaire\Watimage\Watermark</a></code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_destroy">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#59-71" title="Go to source code">destroy</a>( )</code>
+
+			<div class="description short">
+				<p>Cleans up everything to start again.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Cleans up everything to start again.</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Elboletaire.Watimage.Watermark.html">Elboletaire\Watimage\Watermark</a></code>
+					</div>
+
+
+
+					<h4>Overrides</h4>
+					<div class="list"><code><a href="class-Elboletaire.Watimage.Image.html#_destroy">Elboletaire\Watimage\Image::destroy</a></code></div>
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setPosition" id="_setPosition">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setPosition">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#73-85" title="Go to source code">setPosition</a>( <span>mixed <var>$x</var></span>, <span>integer <var>$y</var> = <span class="php-keyword1">null</span></span> )</code>
+
+			<div class="description short">
+				<p>Sets the position of the watermark.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets the position of the watermark.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$x</var></dt>
+						<dd><p>Can be a position ala CSS, just position X or an array
+                   containing both params.</p></dd>
+						<dt><var>$y</var></dt>
+						<dd>Position Y.</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setSize" id="_setSize">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setSize">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#87-101" title="Go to source code">setSize</a>( <span>mixed <var>$width</var></span>, <span>integer <var>$height</var> = <span class="php-keyword1">null</span></span> )</code>
+
+			<div class="description short">
+				<p>Sets the position of the watermark.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets the position of the watermark.</p>
+
+<p>This method has been added for backwards compatibility. If you wanna resize
+the watermark you can directly call ->resize from Watermark object.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$width</var></dt>
+						<dd>Can be just width or an array containing both params.</dd>
+						<dt><var>$height</var></dt>
+						<dd>Height.</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="setMargin" id="_setMargin">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_setMargin">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#103-114" title="Go to source code">setMargin</a>( <span>mixed <var>$x</var></span>, <span>integer <var>$y</var> = <span class="php-keyword1">null</span></span> )</code>
+
+			<div class="description short">
+				<p>Sets a margin for the watermark. Useful if you're using positioning ala CSS.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets a margin for the watermark. Useful if you're using positioning ala CSS.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$x</var></dt>
+						<dd>Can be just x position or an array containing both params.</dd>
+						<dt><var>$y</var></dt>
+						<dd>Y position.</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="apply" id="_apply">
+
+			<td class="attributes"><code>
+				 public 
+				<code><a href="class-Elboletaire.Watimage.Image.html">Elboletaire\Watimage\Image</a></code>
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_apply">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#116-165" title="Go to source code">apply</a>( <span><code><a href="class-Elboletaire.Watimage.Image.html">Elboletaire\Watimage\Image</a></code> <var>$image</var></span> )</code>
+
+			<div class="description short">
+				<p>Applies the watermark to the given image.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Applies the watermark to the given image.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$image</var></dt>
+						<dd>The image where apply the watermark.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						<code><a href="class-Elboletaire.Watimage.Image.html">Elboletaire\Watimage\Image</a></code><br><p>The resulting watermarked Image, so you can
+                      do $watermark->apply($image)->generate().</p>
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="calculatePosition" id="_calculatePosition">
+
+			<td class="attributes"><code>
+				 protected 
+				array
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_calculatePosition">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#167-209" title="Go to source code">calculatePosition</a>( <span>array <var>$metadata</var></span> )</code>
+
+			<div class="description short">
+				<p>Calculates the position of the watermark.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Calculates the position of the watermark.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$metadata</var></dt>
+						<dd>Image to be watermarked metadata.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						array<br>Position in array x,y
+					</div>
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="calculateSize" id="_calculateSize">
+
+			<td class="attributes"><code>
+				 protected 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_calculateSize">#</a>
+			<code><a href="source-class-Elboletaire.Watimage.Watermark.html#211-268" title="Go to source code">calculateSize</a>( <span>array <var>$metadata</var></span> )</code>
+
+			<div class="description short">
+				<p>Calculates the required size for the watermark from $this->size.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Calculates the required size for the watermark from $this->size.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$metadata</var></dt>
+						<dd>Image metadata</dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+		<div class="panel panel-default">
+	        <div class="panel-heading"><h3>Methods inherited from <a href="class-Elboletaire.Watimage.Image.html#methods">Elboletaire\Watimage\Image</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Elboletaire.Watimage.Image.html#___destruct">__destruct()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_autoOrientate">autoOrientate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_blur">blur()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_brightness">brightness()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_classicCrop">classicCrop()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_classicResize">classicResize()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_colorize">colorize()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_contrast">contrast()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_convenienceFlip">convenienceFlip()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_create">create()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_createResourceImage">createResourceImage()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_crop">crop()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_edgeDetection">edgeDetection()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_emboss">emboss()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_fill">fill()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_flip">flip()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_generate">generate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_getImage">getImage()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_getMetadata">getMetadata()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_getMetadataForImage">getMetadataForImage()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_getMetadataFromFile">getMetadataFromFile()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_getMimeFromExtension">getMimeFromExtension()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_grayscale">grayscale()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_imagecopy">imagecopy()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_imagecreate">imagecreate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_load">load()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_meanRemove">meanRemove()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_negate">negate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_pixelate">pixelate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_reduce">reduce()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_resize">resize()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_resizeCrop">resizeCrop()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_resizeMin">resizeMin()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_rotate">rotate()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_save">save()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_sepia">sepia()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_setCompression">setCompression()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_setImage">setImage()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_setQuality">setQuality()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_smooth">smooth()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_updateMetadata">updateMetadata()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_updateSize">updateSize()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_vignette">vignette()</a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#_vignetteEffect">vignetteEffect()</a></code>
+			</p>
+		</div>
+
+
+
+
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Constants summary</h2></div>
+		</div>
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h3>Constants inherited from <a href="class-Elboletaire.Watimage.Image.html#constants">Elboletaire\Watimage\Image</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Elboletaire.Watimage.Image.html#COLOR_TRANSPARENT"><b>COLOR_TRANSPARENT</b></a></code>
+			</p>
+		</div>
+
+
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h2>Properties summary</h2></div>
+			<table class="summary table table-bordered table-striped properties" id="properties">
+		<tr data-order="size" id="$size">
+			<td class="attributes"><code>
+				protected  
+				mixed
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watermark.html#15-20" title="Go to source code"><var>$size</var></a>
+
+				<div class="description short">
+					<p>Size param, used to resize the watermark.</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Size param, used to resize the watermark.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$size" class="anchor">#</a>
+					<code></code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="margin" id="$margin">
+			<td class="attributes"><code>
+				protected  
+				array
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watermark.html#22-27" title="Go to source code"><var>$margin</var></a>
+
+				<div class="description short">
+					<p>Watermark margin.</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Watermark margin.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$margin" class="anchor">#</a>
+					<code>[<span class="php-num">0</span>, <span class="php-num">0</span>]</code>
+				</div>
+			</td>
+		</tr>
+		<tr data-order="position" id="$position">
+			<td class="attributes"><code>
+				protected  
+				mixed
+			</code></td>
+
+			<td class="name">
+					<a href="source-class-Elboletaire.Watimage.Watermark.html#29-34" title="Go to source code"><var>$position</var></a>
+
+				<div class="description short">
+					<p>Position for the watermark.</p>
+				</div>
+
+				<div class="description detailed hidden">
+					<p>Position for the watermark.</p>
+
+				</div>
+			</td>
+			<td class="value">
+				<div>
+					<a href="#$position" class="anchor">#</a>
+					<code></code>
+				</div>
+			</td>
+		</tr>
+			</table>
+		</div>
+
+		<div class="panel panel-default">
+            <div class="panel-heading"><h3>Properties inherited from <a href="class-Elboletaire.Watimage.Image.html#properties">Elboletaire\Watimage\Image</a></h3></div>
+			<p class="elementList">
+				<code><a href="class-Elboletaire.Watimage.Image.html#$compression"><var>$compression</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$filename"><var>$filename</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$height"><var>$height</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$image"><var>$image</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$metadata"><var>$metadata</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$quality"><var>$quality</var></a></code>, 
+				<code><a href="class-Elboletaire.Watimage.Image.html#$width"><var>$width</var></a></code>
+			</p>
+		</div>
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>
