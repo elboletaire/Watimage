@@ -49,7 +49,7 @@ $image = new Image('test.png');
 ```
 
 After loading the image you can start modifying it as you want (check the
-[api section](#user-content-api) for a full list of methods):
+[api section](https://elboletaire.github.io/Watimage/api/) for a full list of methods):
 
 ```php
 // [...]
@@ -185,7 +185,7 @@ if ( !$wm->generate('result.png') ) {
 API
 ---
 
-[working on it..]
+Check out the API at https://elboletaire.github.io/Watimage/api/
 
 ### Exceptions
 
@@ -267,7 +267,7 @@ Changelog
           different ways.
         - Watimage: backward compatible class. If you upgrade Watimage to this
           version from 1.0.2 you won't need to carry about the migration.
-    * Added a lot of new methods to deal with images (see the [api in readme](../readme.md#user-content-api)).
+    * Added a lot of new methods to deal with images ([see the api](https://elboletaire.github.io/Watimage/api/)).
     * Reads exif information for jpeg files by default.
     * Autoorientate method based on exif information.
 
