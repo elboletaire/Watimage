@@ -61,6 +61,7 @@ class Watimage
     public function __construct($file = null, $watermark = null)
     {
         $this->image = new Image($file);
+
         if (!is_null($watermark)) {
             $this->watermark = new Watermark();
             // This setWatermark method is backwards compatible!
@@ -139,6 +140,10 @@ class Watimage
     public function setWatermark($options = [])
     {
         try {
+            if (!$this->watermark) {
+                $this->watermark = new Watermark();
+            }
+
             if (!is_array($options)) {
                 $this->watermark->load($options);
 
