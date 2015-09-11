@@ -122,6 +122,6 @@ if ( !$wm->generate($output_path . 'test7.png') ) {
 	print_r($wm->errors);
 }
 
-// END OF FILE
 
 echo "All examples are now available under the 'output' folder\n";
+// END OF FILE

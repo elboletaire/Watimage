@@ -7,7 +7,6 @@ $current_path = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $files_path = $current_path . 'files' . DIRECTORY_SEPARATOR;
 $output_path = $current_path . 'output' . DIRECTORY_SEPARATOR;
 $image_file = $files_path . 'test.png';
-$watermark_file = $files_path . 'watermark.png';
 
 require realpath($current_path . '../vendor/autoload.php');
 
@@ -79,6 +78,5 @@ $image
     ->vignette()
     ->generate($output_path . 'image6-effects.png');
 
-// END OF FILE
-
 echo "All examples are now available under the 'output' folder\n";
+// END OF FILE
