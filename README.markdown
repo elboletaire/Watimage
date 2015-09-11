@@ -189,6 +189,15 @@ Check out the API at https://elboletaire.github.io/Watimage/api/
 
 ### Exceptions
 
+All Watimage exceptions extend from PHP's default Exception class. In Watimage
+there are 5 custom exception classes:
+
+- ExtensionNotLoadedException
+- FileNotExistException
+- InvalidArgumentException
+- InvalidExtensionException
+- InvalidMimeException
+
 Examples
 --------
 
@@ -270,6 +279,7 @@ Changelog
     * Added a lot of new methods to deal with images ([see the api](https://elboletaire.github.io/Watimage/api/)).
     * Reads exif information for jpeg files by default.
     * Autoorientate method based on exif information.
+    * Added custom exceptions.
 
 * **1.0.2** [2015/06/27]
     * Minor coding style changes.
