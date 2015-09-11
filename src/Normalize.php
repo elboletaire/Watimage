@@ -3,6 +3,15 @@ namespace Elboletaire\Watimage;
 
 use Elboletaire\Watimage\Exception\InvalidArgumentException;
 
+/**
+ * The Normalize class. It takes params in a lot of different ways, but it
+ * always return our expected params :D
+ *
+ * @author Òscar Casajuana <elboletaire at underave dot net>
+ * @copyright 2015 Òscar Casajuana <elboletaire at underave dot net>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link https://github.com/elboletaire/Watimage
+ */
 class Normalize
 {
     /**

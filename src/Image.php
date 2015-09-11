@@ -8,6 +8,14 @@ use Elboletaire\Watimage\Exception\InvalidArgumentException;
 use Elboletaire\Watimage\Exception\InvalidExtensionException;
 use Elboletaire\Watimage\Exception\InvalidMimeException;
 
+/**
+ * The Image class. The main code of Watimage.
+ *
+ * @author Òscar Casajuana <elboletaire at underave dot net>
+ * @copyright 2015 Òscar Casajuana <elboletaire at underave dot net>
+ * @license https://opensource.org/licenses/MIT MIT
+ * @link https://github.com/elboletaire/Watimage
+ */
 class Image
 {
     /**

@@ -1,6 +1,15 @@
 <?php
 namespace Elboletaire\Watimage;
 
+/**
+ * The Watermark class. It extends Image class so you can do anything you can
+ * do for images to your watermarks.
+ *
+ * @author Òscar Casajuana Alonso <elboletaire@underave.net>
+ * @copyright 2015 Òscar Casajuana <elboletaire at underave dot net>
+ * @link https://github.com/elboletaire/Watimage
+ * @license https://opensource.org/licenses/MIT MIT
+ */
 class Watermark extends Image
 {
     /**
