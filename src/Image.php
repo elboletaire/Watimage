@@ -722,7 +722,7 @@ class Image
                 throw new InvalidArgumentException("Incorrect blur type \"%s\"", $type);
         }
 
-        for ($i = 0; $i < $this->fitInRange($passes, 1); $i++) {
+        for ($i = 0; $i < Normalize::fitInRange($passes, 1); $i++) {
             imagefilter($this->image, $type);
         }
 
@@ -740,7 +740,7 @@ class Image
         imagefilter(
             $this->image,
             IMG_FILTER_BRIGHTNESS,
-            $this->fitInRange($level, -255, 255)
+            Normalize::fitInRange($level, -255, 255)
         );
 
         return $this;
@@ -779,7 +779,7 @@ class Image
         imagefilter(
             $this->image,
             IMG_FILTER_CONTRAST,
-            $this->fitInRange($level, -100, 100)
+            Normalize::fitInRange($level, -100, 100)
         );
 
         return $this;
@@ -857,7 +857,7 @@ class Image
         imagefilter(
             $this->image,
             IMG_FILTER_PIXELATE,
-            $this->fitInRange($block_size, 1),
+            Normalize::fitInRange($block_size, 1),
             $advanced
         );
 
@@ -882,7 +882,7 @@ class Image
                 'r' => 100,
                 'g' => 70,
                 'b' => 50,
-                'a' => $this->fitInRange($alpha, 0, 100)
+                'a' => Normalize::fitInRange($alpha, 0, 100)
             ])
         ;
     }
@@ -898,7 +898,7 @@ class Image
         imagefilter(
             $this->image,
             IMG_FILTER_SMOOTH,
-            $this->fitInRange($level, -15, 15)
+            Normalize::fitInRange($level, -15, 15)
         );
 
         return $this;
@@ -1056,29 +1056,6 @@ class Image
     }
 
     /**
-     * Checks that the given value is between our defined range.
-     *
-     * Can check just for min or max if setting the other value to false.
-     *
-     * @param  int  $value Value to be checked,
-     * @param  bool $min   Minimum value. False to just use max.
-     * @param  bool $max   Maximum value. False to just use min.
-     * @return int         The value itself.
-     */
-    protected static function fitInRange($value, $min = false, $max = false)
-    {
-        if ($min !== false && $value < $min) {
-            $value = $min;
-        }
-
-        if ($max !== false && $value > $max) {
-            $value = $max;
-        }
-
-        return $value;
-    }
-
-    /**
      * Updates current image metadata.
      *
      * @return void
@@ -1115,9 +1092,9 @@ class Image
     protected function vignetteEffect($size, $level, $x, $y, &$rgb)
     {
         $l = sin(M_PI / $this->width * $x) * sin(M_PI / $this->height * $y);
-        $l = pow($l, $this->fitInRange($size, 0, 10));
+        $l = pow($l, Normalize::fitInRange($size, 0, 10));
 
-        $l = 1 - $this->fitInRange($level, 0, 1) * (1 - $l);
+        $l = 1 - Normalize::fitInRange($level, 0, 1) * (1 - $l);
 
         $rgb['red'] *= $l;
         $rgb['green'] *= $l;
