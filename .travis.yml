@@ -30,6 +30,6 @@ before_script:
 
 script:
   - sh -c "if [ '$DEFAULT' = '1' ]; then phpunit; fi"
-  - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs -p --extensions=php --ignore=tests/bootstrap.php --standard=psr1,psr2 ./src ./tests; fi"
+  - sh -c "if [ '$PHPCS' = '1' ]; then ./vendor/bin/phpcs -p --extensions=php --ignore=tests/bootstrap.php --standard=psr1,psr2 ./src ./tests/TestCase; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then phpunit --coverage-clover build/logs/clover.xml; fi"
   - sh -c "if [ '$COVERALLS' = '1' ]; then vendor/bin/coveralls -c .coveralls.yml -v; fi"
