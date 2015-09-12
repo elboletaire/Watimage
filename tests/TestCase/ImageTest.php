@@ -630,6 +630,24 @@ class ImageTest extends TestCaseBase
         $this->testClass->setImage("{$this->files_path}/peke.jpg");
     }
 
+    public function testGetMetadataFromFile()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $expected = [
+            'width' => 1944,
+            'height' => 1296,
+            'mime' => 'image/jpeg',
+            'format' => 'jpeg',
+            'exif' => null // we're not testing exif functions
+        ];
+
+        $metadata = $this->testClass->getMetadataFromFile($image);
+        // unset exif
+        $metadata['exif'] = null;
+        $this->assertArraySubset($expected, $metadata);
+    }
+
     public function testDestroy()
     {
         $image = "{$this->files_path}/peke.jpg";
