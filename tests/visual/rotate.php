@@ -8,7 +8,7 @@ ini_set('display_errors', '1');
 
 date_default_timezone_set('UTC');
 
-require_once '../../src/watimage.php';
+require_once '../../vendor/autoload.php';
 use Elboletaire\Watimage\Watimage;
 
 function rotateImage($image, $deg, $output_image)
@@ -34,7 +34,7 @@ rotateImage('image.jpg', 270, 'rotate_jpg_270.jpg');
 // Rotate png 45 deg
 rotateImage('image.png', 45, 'rotate_png_45.png');
 
-// Rotate gif 45 deg
+// Rotate gif 45 deg [currently failing]
 rotateImage('image.gif', 45, 'rotate_gif_45.gif');
 rotateImage('image.gif', 90, 'rotate_gif_90.gif');
 

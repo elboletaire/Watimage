@@ -7,7 +7,7 @@ watermarks and a lot more of things to your images using the PHP's GD library.
 It was initially a CakePHP component, later became a simple Vendor class and now
 is a powerful set of classes to alter images.
 
-And it maintains the transparencies in almost every scenario :sunglasses:.
+And it maintains the transparencies in almost every scenario* :sunglasses:.
 
 Installing
 ----------
@@ -223,9 +223,12 @@ Testing
 
 ### Unit tests
 
-To run phpunit tests just run phpunit from `Watimage` root path:
+To run phpunit tests just run phpunit from `Watimage` root path. But first
+ensure you have installed composer dependencies; tests need the composer
+`autoload.php` file in order to work properly:
 
 ```bash
+composer install
 phpunit
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
 # ...........................
@@ -257,6 +260,7 @@ are generate properly.
 To run them just cd into the visual tests folders and run the `run_them_all.php` script:
 
 ```bash
+composer install
 cd tests/visual
 php run_them_all.php
 ```
@@ -273,6 +277,10 @@ TODO
   that new class.
 - Add an `InstalikeEffect` class with a bunch more of image effects.
 - Any new features are welcome!
+- Fix transparency issues with gif images*
+
+>\* Current transparency failing scenarios:
+    - rotate and resize gif images.
 
 Changelog
 ---------

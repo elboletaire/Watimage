@@ -8,9 +8,8 @@ ini_set('display_errors', '1');
 
 date_default_timezone_set('UTC');
 
-require_once '../../src/watimage.php';
+require_once '../../vendor/autoload.php';
 use Elboletaire\Watimage\Watimage;
-
 function flipImage($image, $mode, $output_image)
 {
     $wm = new Watimage();
@@ -35,8 +34,7 @@ flipImage('image.jpg', 'both', 'flip_jpg_both.jpg');
 
 // Flip a png image
 flipImage('image.png', 'horizontal', 'flip_png_horizontally.png');
-// Flip a gif image. This does not maintain transparent background
-// due to a php.net bug. See https://github.com/elboletaire/Watimage/issues/16
+// Flip a gif image.
 flipImage('image.gif', 'horizontal', 'flip_gif_horizontally.gif');
 
 echo "All images have been flipped.\n";

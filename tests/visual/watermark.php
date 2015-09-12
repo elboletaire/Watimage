@@ -8,7 +8,7 @@ ini_set('display_errors', '1');
 
 date_default_timezone_set('UTC');
 
-require_once '../../src/watimage.php';
+require_once '../../vendor/autoload.php';
 use Elboletaire\Watimage\Watimage;
 
 function applyWatermark($image, $watermark, $output_image)

@@ -8,7 +8,7 @@ ini_set('display_errors', '1');
 
 date_default_timezone_set('UTC');
 
-require_once '../../src/watimage.php';
+require_once '../../vendor/autoload.php';
 use Elboletaire\Watimage\Watimage;
 
 function resizeImage($image, $crop_type, $output_image)
@@ -48,14 +48,14 @@ resizeImage('image.jpg', 'crop', 'resize_jpg_with_crop.jpg');
 
 // Resizing a png file
 resizeImage('image.png', 'resizemin', 'resize_png.png');
-// Resizing a gif file
+// Resizing a gif file [currently failing]
 resizeImage('image.gif', 'resizemin', 'resize_gif.gif');
 
 echo "Images have been rotated.\n";
 
 // Resize a png image and apply watermark
 resizeAndWatermarkImage('image.png', 'resize_and_watermark_png.png');
-// Resize a gif image and apply watermark
+// Resize a gif image and apply watermark [currently failing due to resize issue]
 resizeAndWatermarkImage('image.gif', 'resize_and_watermark_gif.gif');
 
 echo "Resizing and applying watermarks ended as well.\n";
