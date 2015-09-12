@@ -14,7 +14,7 @@ class ImageTest extends TestCaseBase
 
     public function testLoad()
     {
-        $image = "{$this->files_path}/image.jpg";
+        $image = "{$this->files_path}/peke.jpg";
 
         $this->testClass->load($image);
 
@@ -70,7 +70,7 @@ class ImageTest extends TestCaseBase
      */
     public function testGenerate()
     {
-        $image = "{$this->files_path}/image.png";
+        $image = "{$this->files_path}/test.png";
         $output = "{$this->output_path}/test-watimage-generate.png";
         @unlink($output);
 
@@ -91,7 +91,7 @@ class ImageTest extends TestCaseBase
     public function testRotate()
     {
         // We know this image has portrait orientation
-        $image = "{$this->files_path}/image.png";
+        $image = "{$this->files_path}/test.png";
         $output = "{$this->output_path}/test-watimage-rotate.png";
         @unlink($output);
 

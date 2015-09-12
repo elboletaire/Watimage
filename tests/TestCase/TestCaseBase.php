@@ -16,7 +16,7 @@ abstract class TestCaseBase extends PHPUnit_Framework_TestCase
     {
         $this->reflection = new ReflectionClass($this->testClass);
 
-        $this->files_path = realpath(dirname(__FILE__) . '/../visual/files');
+        $this->files_path = realpath(dirname(__FILE__) . '/../../examples/files');
         $this->files_path .= DIRECTORY_SEPARATOR;
 
         $this->output_path = sys_get_temp_dir();
