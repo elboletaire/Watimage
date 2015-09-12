@@ -46,7 +46,6 @@ class ImageTest extends TestCaseBase
 
     public function testCreate()
     {
-        $output = "{$this->output_path}/test-watimage-create.png";
         $this->testClass->create(250, 400);
 
         $this->assertEquals(250, $this->getProperty('width'));
@@ -55,6 +54,8 @@ class ImageTest extends TestCaseBase
         // Check that height is set to width when no height specified
         $this->testClass->create(350);
         $this->assertEquals(350, $this->getProperty('height'));
+
+        $this->assertEquals('gd', get_resource_type($this->testClass->getImage()));
     }
 
     /**
@@ -71,7 +72,7 @@ class ImageTest extends TestCaseBase
     public function testGenerate()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/test-watimage-generate.png";
+        $output = "{$this->output_path}/image-generate.png";
         @unlink($output);
 
         // Check that image can be generated and printed to screen
@@ -88,11 +89,49 @@ class ImageTest extends TestCaseBase
         $this->assertGreaterThan(0, filesize($output));
     }
 
+    public function testSave()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-save.png";
+        @unlink($output);
+
+        $this->assertFileNotExists($output);
+        $this->testClass->load($image)->flip()->save($output);
+        $this->assertFileExists($output);
+        $this->assertGreaterThan(0, filesize($output));
+        // Check that it overrides original file
+        $original_size = filesize($output);
+        $this->testClass->load($output)->resize('min', 50)->save();
+        // We need to clear file status cache to get correct sizes
+        clearstatcache();
+        $this->assertFileExists($output);
+        $this->assertGreaterThan(0, filesize($output));
+        $this->assertNotEquals($original_size, filesize($output));
+    }
+
+    public function testAutoOrientate()
+    {
+        $image = "{$this->files_path}/tripi.jpg";
+        $output = "{$this->output_path}/image-auto-orientate.jpg";
+        @unlink($output);
+
+        // I know that image must be rotated, so...
+        // disable auto orientate to manually do it..
+        $this->testClass->load($image, false);
+        $original_metadata = $this->testClass->getMetadata();
+        // auto orientate and save
+        $this->testClass->autoOrientate()->save($output);
+        // get new image size
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($original_metadata['width'], $height);
+        $this->assertEquals($original_metadata['height'], $width);
+    }
+
     public function testRotate()
     {
         // We know this image has portrait orientation
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/test-watimage-rotate.png";
+        $output = "{$this->output_path}/image-rotate.png";
         @unlink($output);
 
         // Check rotation image size
@@ -111,6 +150,44 @@ class ImageTest extends TestCaseBase
         $this->assertLessThan($old_height, $height);
     }
 
+    public function testResize()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-resize.png";
+        @unlink($output);
+
+        $types = [
+            'classic',
+            'resize',
+            'reduce',
+            'resizemin',
+            'min',
+            'crop',
+            'resizecrop'
+        ];
+
+        // Test types fallback
+        $this->testClass->load($image);
+
+        // We're just gonna check that it does not crash.
+        // Every method is tested in its proper test method.
+        foreach ($types as $type) {
+            $this->testClass->resize($type, 200);
+        }
+
+        $this->testClass->generate($output);
+    }
+
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     */
+    public function testResizeFail()
+    {
+        $image = "{$this->files_path}/test.png";
+
+        $this->testClass->load($image)->resize('fail', 'fail');
+    }
+
     public function testClassicResize()
     {
         $image = "{$this->files_path}/test.png";
@@ -125,5 +202,22 @@ class ImageTest extends TestCaseBase
 
         $this->assertEquals(182, $width);
         $this->assertEquals(300, $height);
+    }
+
+    public function testClassicCrop()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-classic-crop.png";
+        @unlink($output);
+
+        // Test types fallback
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $this->testClass->classicCrop(200, 200)->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertNotEquals($metadata['width'], $width);
+        $this->assertNotEquals($metadata['height'], $height);
+        $this->assertEquals(200, $width);
+        $this->assertEquals(200, $height);
     }
 }
