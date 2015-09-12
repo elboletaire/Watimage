@@ -143,16 +143,18 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         $this->assertArraySubset(
             $expected,
             Normalize::size(
-                // width, height
-                250, 320
+                // width & height
+                250,
+                320
             )
         );
         // Passing an array
         $this->assertArraySubset(
             $expected,
             Normalize::size([
-                // width, height
-                250, 320
+                // width & height
+                250,
+                320
             ])
         );
         // Passing an associative array
