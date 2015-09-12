@@ -1,5 +1,6 @@
 Watimage: GD Image Helper PHP Class
 ===================================
+[![Travis](https://img.shields.io/travis/elboletaire/Watimage.svg?style=flat-square)](https://travis-ci.org/elboletaire/Watimage) [![Coveralls](https://img.shields.io/coveralls/elboletaire/Watimage.svg?style=flat-square)](https://coveralls.io/github/elboletaire/Watimage)
 
 Watimage is a group of PHP classes to help you resize, rotate, apply filters,
 watermarks and a lot more of things to your images using the PHP's GD library.
