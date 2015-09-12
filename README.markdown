@@ -354,10 +354,10 @@ Changelog
 LICENSE
 -------
 
-Images given under examples and test folders have a Creative Commons by-nc-sa
-4.0 License.
+All the images given in this repository (for examples and testing) have a
+Creative Commons by-nc-sa 4.0 License.
 
-Since version 2.0 all the other files are licensed under a MIT license.
+Since version 2.0 all the other non-image-files are licensed under a MIT license.
 
     The MIT License (MIT)
 
