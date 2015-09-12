@@ -286,71 +286,9 @@ TODO
 Changelog
 ---------
 
-* **2.0.0** [2015/09/XX] MAJOR UPGRADE
-    * Split all logic into different classes
-        - Image: Generate images and deals with them.
-        - Watermark: Logic for applying watermarks
-        - Normalizer: Used by functions to allow user pass arguments in a lot of
-          different ways.
-        - Watimage: backward compatible class. If you upgrade Watimage to this
-          version from 1.0.2 you won't need to carry about the migration.
-    * Added a lot of new methods to deal with images ([see the api](https://elboletaire.github.io/Watimage/api/)).
-    * Reads exif information for jpeg files by default.
-    * Autoorientate method based on exif information.
-    * Added custom exceptions.
-
-* **1.0.2** [2015/06/27]
-    * Minor coding style changes.
-    * Fixed applying watermarks to gif files will make its background black.
-    * Images are allways rotated clockwise (imagerotate was rotating them reversely).
-    * Fixed imagerotate crashing when receiving a bgcolor of -1.
-    * Added different compression value for png files.
-    * Added visual tests.
-
-* **1.0.1** [2015/06/25]
-    * Fixed example to use namespaces.
-    * Fixed issue with imagerotate.
-
-* **1.0.0** [2014/12/08]
-    * Added to packagist (composer)
-    * Changed everything to work as a vendor class
-
-* **0.8** [2014/10/02]
-    * Fixed `resizemin` resizing method (thanks to @albertboada).
-    * Fixed "indirect modification of overloaded property"
-
-* **0.8** [2012/09/05]
-    * Version for CakePHP 2.X (thanks to Pyo [pexiweb.be])
-
-* **0.7** [2012/07/12]
-    * Added new resizing method 'reduce' to resize images ONLY if they are bigger than the specified size.
-
-* **0.6** [2012/04/18]
-    * Added new method 'crop' for using it with cropping tools like jcrop
-    * Minor bugfixes
-
-* **0.5** [2012/01/14]
-    * Resolved all transparency issues
-
-* **0.2.3** [2012/01/12]
-    * Resolved transparency issues on rotate (by https://github.com/fcjurado)
-
-* **0.2.2** [2011/05/14]
-    * Fix exponential reduction of image quality when inside a loop
-
-* **0.2.1** [2011/05/11]
-    * Added 'setQuality' method.
-    * Solved png exportation issue (bad quality calc)
-    * Also added 'initialize' method for CakePHP, allowing to set the quality when component loads
-
-* **0.2** [2011/04/16]
-    * Now works with Exceptions.
-    * mime_content_type function has been removed (as it was deprecated).
-    * Added flip function.
-    * Minor bugfixes
-
-* **0.1** [2010/06/10]
-    * First version
+Check out the [releases on github](https://github.com/elboletaire/Watimage/releases).
+They have different order than expected because I've created tags recently to
+not loose them and to have the whole changelog there.
 
 LICENSE
 -------
