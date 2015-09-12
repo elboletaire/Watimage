@@ -333,8 +333,6 @@ class Image
      * Maintains the aspect ratio of the image and makes sure that it fits
      * within the max width and max height (thus some side will be smaller).
      *
-     * TODO: Needs to be checked.
-     *
      * @param  mixed $width  Can be just max width or an array containing both params.
      * @param  int   $height Max height.
      * @return Image
@@ -350,10 +348,9 @@ class Image
         if ($this->width > $this->height) {
             $height = ($this->height * $width) / $this->width;
         } elseif ($this->width < $this->height) {
-            $height = $this->height;
             $width = ($this->width * $height) / $this->height;
         } elseif ($this->width == $this->height) {
-            $width = $height = $width;
+            $width = $height;
         }
 
         $this->image = $this->imagecopy($width, $height);

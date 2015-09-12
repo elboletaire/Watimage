@@ -110,4 +110,20 @@ class ImageTest extends TestCaseBase
         $this->assertLessThanOrEqual($old_height, $width);
         $this->assertLessThan($old_height, $height);
     }
+
+    public function testClassicResize()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-classic-resize.png";
+        @unlink($output);
+
+        // Test types fallback
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $this->testClass->classicResize(200, 300)->generate($output);
+        list($width, $height) = getimagesize($output);
+
+        $this->assertEquals(182, $width);
+        $this->assertEquals(300, $height);
+    }
 }
