@@ -204,6 +204,22 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(300, $height);
     }
 
+    public function testReduce()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-resizemin.png";
+        @unlink($output);
+
+        // Test types fallback
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $this->testClass->resizeMin(200, 300)->generate($output);
+        list($width, $height) = getimagesize($output);
+
+        $this->assertEquals(182, $width);
+        $this->assertEquals(300, $height);
+    }
+
     public function testClassicCrop()
     {
         $image = "{$this->files_path}/test.png";

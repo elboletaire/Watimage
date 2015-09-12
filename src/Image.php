@@ -361,11 +361,7 @@ class Image
     }
 
     /**
-     * Generates an image which do not exceed the specified boundaries
-     * ($width and $height) under any circumstances, while maintaining the
-     * original aspect ratio.
-     *
-     * TODO: Check differences with resize.
+     * Backwards compatibility alias for reduce (which has the same logic).
      *
      * @param  mixed $width  Can be just max width or an array containing both params.
      * @param  int   $height Max height.
@@ -373,35 +369,7 @@ class Image
      */
     public function resizeMin($width, $height = null)
     {
-        list($width, $height) = Normalize::size($width, $height);
-
-        // image will be left "as is", unless it is eligible for resizing
-        $ratio_resize = 1;
-
-        // `true` when source image is smaller than both the requested boundaries
-        $needs_resize = !($this->width < $width && $this->height < $height);
-
-        if ($needs_resize) {
-            $ratio_x = $this->width / $width;
-            $ratio_y = $this->height / $height;
-
-            // we need to choose one of the most convenient ratios (among
-            // these two) for our resize. The biggest one, it is.
-            $ratio_resize = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
-        }
-
-        if ($ratio_resize === 1) {
-            return $this;
-        }
-
-        $width  = $this->width / $ratio_resize;
-        $height = $this->height / $ratio_resize;
-
-        $this->image = $this->imagecopy($width, $height);
-
-        $this->updateSize();
-
-        return $this;
+        return $this->reduce($width, $height);
     }
 
     /**
@@ -477,6 +445,10 @@ class Image
         $ratio_y = $this->height / $height;
 
         $ratio = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+
+        if ($ratio === 1) {
+            return $this;
+        }
 
         // Getting the new image size
         $width = (int)($this->width / $ratio);
