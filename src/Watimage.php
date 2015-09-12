@@ -166,7 +166,8 @@ class Watimage
      *                  'type' => 'resizemin|resizecrop|resize|crop|reduce',
      *                  'size' => ['x' => 2000, 'y' => 500]
      *               ]
-     *          You can also set the size without specifying x and y: [2000, 500]. Or directly 'size' => 2000 (takes 2000x2000)
+     *               You can also set the size without specifying x and y:
+     *               [2000, 500]. Or directly 'size' => 2000 (takes 2000x2000)
      *  @return bool true on success; otherwise false
      */
     public function resize($options = [])
