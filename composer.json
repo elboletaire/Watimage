@@ -15,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Elboletaire\\Watimage\\": "src/"
+            "Elboletaire\\Watimage\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Elboletaire\\Watimage\\Test\\TestCase\\": "tests/case/"
+            "Elboletaire\\Watimage\\Test\\": "tests/"
         }
     },
     "require-dev": {
