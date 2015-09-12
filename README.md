@@ -10,6 +10,24 @@ is a powerful set of classes to alter images.
 
 And it maintains the transparencies in almost every scenario* :sunglasses:.
 
+Requirements
+------------
+
+You need php > 5.4 and the [php GD](http://php.net/manual/book.image.php)
+package installed.
+
+With aptitude:
+
+```bash
+sudo apt-get install php5-gd
+```
+
+With yum:
+
+```bash
+sudo yum install php-gd
+```
+
 Installing
 ----------
 
