@@ -934,12 +934,14 @@ class Image
      */
     public function setImage($image)
     {
-        if (!get_resource_type($image) == 'gd') {
+        if (!is_resource($image) || !get_resource_type($image) == 'gd') {
             throw new Exception("Given image is not a GD image resource");
         }
 
         $this->image = $image;
         $this->updateSize();
+
+        return $this;
     }
 
     /**

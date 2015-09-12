@@ -612,4 +612,21 @@ class ImageTest extends TestCaseBase
             'alpha' => 0
         ], $color);
     }
+
+    public function testSetImage()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+        $resource = imagecreatefromjpeg($image);
+
+        $instance = $this->testClass->setImage($resource);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testSetImageFail()
+    {
+        $this->testClass->setImage("{$this->files_path}/peke.jpg");
+    }
 }
