@@ -72,8 +72,7 @@ class ImageTest extends TestCaseBase
     public function testGenerate()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-generate.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-generate.png");
 
         // Check that image can be generated and printed to screen
         ob_start();
@@ -92,8 +91,7 @@ class ImageTest extends TestCaseBase
     public function testSave()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-save.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-save.png");
 
         $this->assertFileNotExists($output);
         $this->testClass->load($image)->flip()->save($output);
@@ -112,8 +110,7 @@ class ImageTest extends TestCaseBase
     public function testAutoOrientate()
     {
         $image = "{$this->files_path}/tripi.jpg";
-        $output = "{$this->output_path}/image-auto-orientate.jpg";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-auto-orientate.jpg");
 
         // I know that image must be rotated, so...
         // disable auto orientate to manually do it..
@@ -131,8 +128,7 @@ class ImageTest extends TestCaseBase
     {
         // We know this image has portrait orientation
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-rotate.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-rotate.png");
 
         // Check rotation image size
         $image = $this->testClass->load($image);
@@ -153,8 +149,7 @@ class ImageTest extends TestCaseBase
     public function testResize()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-resize.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-resize.png");
 
         $types = [
             'classic',
@@ -191,10 +186,8 @@ class ImageTest extends TestCaseBase
     public function testClassicResize()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-classic-resize.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-classic-resize.png");
 
-        // Test types fallback
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
         $this->testClass->classicResize(200, 300)->generate($output);
@@ -207,10 +200,8 @@ class ImageTest extends TestCaseBase
     public function testReduce()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-resizemin.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-resizemin.png");
 
-        // Test types fallback
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
         $this->testClass->resizeMin(200, 300)->generate($output);
@@ -223,10 +214,8 @@ class ImageTest extends TestCaseBase
     public function testClassicCrop()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-classic-crop.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-classic-crop.png");
 
-        // Test types fallback
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
         $this->testClass->classicCrop(200, 200)->generate($output);
@@ -240,10 +229,8 @@ class ImageTest extends TestCaseBase
     public function testResizeCrop()
     {
         $image = "{$this->files_path}/test.png";
-        $output = "{$this->output_path}/image-resize-crop.png";
-        @unlink($output);
+        $output = $this->getOutputFilename("image-resize-crop.png");
 
-        // Test types fallback
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
         $this->testClass->resizeCrop(250, 250)->generate($output);

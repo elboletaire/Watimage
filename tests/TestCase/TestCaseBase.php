@@ -19,7 +19,7 @@ abstract class TestCaseBase extends PHPUnit_Framework_TestCase
         $this->files_path = realpath(dirname(__FILE__) . '/../../examples/files');
         $this->files_path .= DIRECTORY_SEPARATOR;
 
-        $this->output_path = sys_get_temp_dir();
+        $this->output_path = sys_get_temp_dir() . DIRECTORY_SEPARATOR;
     }
 
     public function getMethod($method)
@@ -44,5 +44,12 @@ abstract class TestCaseBase extends PHPUnit_Framework_TestCase
         $property->setAccessible(true);
 
         return $property->setValue($this->testClass, $value);
+    }
+
+    public function getOutputFilename($filename)
+    {
+        $filename = pathinfo($filename);
+        $random = substr(md5(time()), 0, 10);
+        return "{$this->output_path}watimage-{$filename['filename']}-{$random}.{$filename['extension']}";
     }
 }
