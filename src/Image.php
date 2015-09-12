@@ -151,7 +151,10 @@ class Image
      */
     public function destroy()
     {
-        if (!is_null($this->image) && get_resource_type($this->image) == 'gd') {
+        if (!empty($this->image)
+            && is_resource($this->image)
+            && get_resource_type($this->image) == 'gd'
+        ) {
             imagedestroy($this->image);
         }
         $this->metadata = [];

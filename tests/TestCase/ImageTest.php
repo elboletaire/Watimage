@@ -629,4 +629,22 @@ class ImageTest extends TestCaseBase
     {
         $this->testClass->setImage("{$this->files_path}/peke.jpg");
     }
+
+    public function testDestroy()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+        $instance = $this->testClass->load($image);
+
+        $this->assertNotNull($this->getProperty('filename'));
+        $this->assertNotNull($this->getProperty('width'));
+        $this->assertNotNull($this->getProperty('height'));
+
+        $instance = $instance->destroy();
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+
+        $this->assertArraySubset([], $this->getProperty('metadata'));
+        $this->assertNull($this->getProperty('filename'));
+        $this->assertNull($this->getProperty('width'));
+        $this->assertNull($this->getProperty('height'));
+    }
 }
