@@ -236,4 +236,22 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(200, $width);
         $this->assertEquals(200, $height);
     }
+
+    public function testResizeCrop()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = "{$this->output_path}/image-resize-crop.png";
+        @unlink($output);
+
+        // Test types fallback
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $this->testClass->resizeCrop(250, 250)->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertNotEquals($metadata['width'], $width);
+        $this->assertNotEquals($metadata['height'], $height);
+        // Check current size
+        $this->assertEquals(250, $width);
+        $this->assertEquals(250, $height);
+    }
 }
