@@ -13,6 +13,9 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, Normalize::color([
             'red' => 0, 'green' => 0, 'blue' => 0, 'alpha' => 127
         ]));
+        $this->assertArraySubset($expected, Normalize::color([
+            'r' => 0, 'g' => 0, 'b' => 0, 'a' => 127
+        ]));
         $this->assertArraySubset($expected, Normalize::color('#0000007F'));
 
         $expected['a'] = 119;
@@ -127,6 +130,15 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, Normalize::watermarkPosition(['x' => 23, 'y' => 32]));
     }
 
+    public function testMargin()
+    {
+        try {
+            Normalize::margin('fail');
+        } catch (\Exception $e) {
+            $this->assertEquals('Invalid margin {"x":"fail","y":null}.', $e->getMessage());
+        }
+    }
+
     /**
      * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
      */
@@ -206,7 +218,12 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, Normalize::watermarkPosition('center'));
         $this->assertEquals($expected, Normalize::watermarkPosition('centered'));
-        // Many of the possibilities are tested in testPosition
+
+        try {
+            Normalize::watermarkPosition('fail');
+        } catch (\Exception $e) {
+            $this->assertEquals('Invalid watermark position fail.', $e->getMessage());
+        }
     }
 
     /**
@@ -222,6 +239,12 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('50%', Normalize::watermarkSize('50%'));
         $this->assertEquals('full', Normalize::watermarkSize('full'));
         $this->assertArraySubset([23, 42], Normalize::watermarkSize(23, 42));
+
+        try {
+            Normalize::watermarkSize('fail');
+        } catch (\Exception $e) {
+            $this->assertEquals('Invalid size arguments {"width":"fail","height":null}', $e->getMessage());
+        }
     }
 
     /**
