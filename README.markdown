@@ -223,12 +223,21 @@ Testing
 
 ### Unit tests
 
-To run phpunit tests, composer install phpunit and then run it from `vendor`
-folder:
+To run phpunit tests just run phpunit from `Watimage` root path:
+
+```bash
+phpunit
+# PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
+# ...........................
+# Time: 4.75 seconds, Memory: 12.75Mb
+# OK (27 tests, 77 assertions)
+```
+
+If you do not have phpunit installed system-wide just do:
 
 ```bash
 composer install
-vendor/bin/phpunit
+./vendor/bin/phpunit
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
 # ...........................
 # Time: 4.75 seconds, Memory: 12.75Mb
