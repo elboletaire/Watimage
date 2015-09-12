@@ -230,7 +230,7 @@ ensure you have installed composer dependencies; tests need the composer
 
 ```bash
 composer install
-phpunit
+phpunit -d memory_limit=512M
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
 # ...........................
 # Time: 4.75 seconds, Memory: 12.75Mb
@@ -241,12 +241,15 @@ If you do not have phpunit installed system-wide just do:
 
 ```bash
 composer install
-./vendor/bin/phpunit
+./vendor/bin/phpunit -d memory_limit=512M
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
 # ...........................
 # Time: 4.75 seconds, Memory: 12.75Mb
 # OK (27 tests, 77 assertions)
 ```
+
+Some filtering methods require more than the default 128MB of memory, that's
+why it's forced to 512M
 
 #### About code coverage
 

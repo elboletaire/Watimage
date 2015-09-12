@@ -16,7 +16,9 @@ class ImageTest extends TestCaseBase
     {
         $image = "{$this->files_path}/peke.jpg";
 
-        $this->testClass->load($image);
+        $instance = $this->testClass->load($image);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
 
         // Check filename has been properly loaded
         $this->assertEquals($image, $this->getProperty('filename'));
@@ -46,7 +48,9 @@ class ImageTest extends TestCaseBase
 
     public function testCreate()
     {
-        $this->testClass->create(250, 400);
+        $image = $this->testClass->create(250, 400);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
 
         $this->assertEquals(250, $this->getProperty('width'));
         $this->assertEquals(400, $this->getProperty('height'));
@@ -83,7 +87,10 @@ class ImageTest extends TestCaseBase
 
         // Check output
         $this->assertFileNotExists($output);
-        $this->testClass->load($image)->generate($output);
+
+        // Generate saving to file
+        $image = $this->testClass->load($image)->generate($output);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
         $this->assertFileExists($output);
         $this->assertGreaterThan(0, filesize($output));
     }
@@ -94,7 +101,8 @@ class ImageTest extends TestCaseBase
         $output = $this->getOutputFilename("image-save.png");
 
         $this->assertFileNotExists($output);
-        $this->testClass->load($image)->flip()->save($output);
+        $image = $this->testClass->load($image)->flip()->save($output);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
         $this->assertFileExists($output);
         $this->assertGreaterThan(0, filesize($output));
         // Check that it overrides original file
@@ -116,8 +124,11 @@ class ImageTest extends TestCaseBase
         // disable auto orientate to manually do it..
         $this->testClass->load($image, false);
         $original_metadata = $this->testClass->getMetadata();
-        // auto orientate and save
-        $this->testClass->autoOrientate()->save($output);
+        // auto orientate
+        $instance = $this->testClass->autoOrientate();
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        // and save
+        $instance->save($output);
         // get new image size
         list($width, $height) = getimagesize($output);
         $this->assertEquals($original_metadata['width'], $height);
@@ -136,7 +147,9 @@ class ImageTest extends TestCaseBase
         $old_width = $this->getProperty('width');
         $old_height = $this->getProperty('height');
         // Rotate it
-        $image->rotate(90)->generate($output);
+        $instance = $image->rotate(90);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
         list($width, $height) = getimagesize($output);
         // Knowing rotation, check width according to it
         $this->assertLessThanOrEqual($old_width, $height);
@@ -166,8 +179,10 @@ class ImageTest extends TestCaseBase
 
         // We're just gonna check that it does not crash.
         // Every method is tested in its proper test method.
+        // This will probably corrupt transparencies (many different resize types).
         foreach ($types as $type) {
-            $this->testClass->resize($type, 200);
+            $instance = $this->testClass->resize($type, 200);
+            $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         }
 
         $this->testClass->generate($output);
@@ -190,7 +205,9 @@ class ImageTest extends TestCaseBase
 
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
-        $this->testClass->classicResize(200, 300)->generate($output);
+        $instance = $this->testClass->classicResize(200, 300);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
         list($width, $height) = getimagesize($output);
 
         $this->assertEquals(182, $width);
@@ -204,7 +221,9 @@ class ImageTest extends TestCaseBase
 
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
-        $this->testClass->resizeMin(200, 300)->generate($output);
+        $instance = $this->testClass->reduce(200, 300);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
         list($width, $height) = getimagesize($output);
 
         $this->assertEquals(182, $width);
@@ -218,7 +237,9 @@ class ImageTest extends TestCaseBase
 
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
-        $this->testClass->classicCrop(200, 200)->generate($output);
+        $instance = $this->testClass->classicCrop(200, 200);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
         list($width, $height) = getimagesize($output);
         $this->assertNotEquals($metadata['width'], $width);
         $this->assertNotEquals($metadata['height'], $height);
@@ -233,12 +254,362 @@ class ImageTest extends TestCaseBase
 
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
-        $this->testClass->resizeCrop(250, 250)->generate($output);
+        $instance = $this->testClass->resizeCrop(250, 250);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
         list($width, $height) = getimagesize($output);
         $this->assertNotEquals($metadata['width'], $width);
         $this->assertNotEquals($metadata['height'], $height);
         // Check current size
         $this->assertEquals(250, $width);
         $this->assertEquals(250, $height);
+    }
+
+    public function testFlip()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = $this->getOutputFilename("image-flip.png");
+
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $instance = $this->testClass->flip('horizontal');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+
+        $instance = $this->testClass->flip('vertical');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+
+        $instance = $this->testClass->flip('both');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+    }
+
+    public function testConvenienceFlip()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = $this->getOutputFilename("image-convenience-flip.png");
+
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $instance = $this->testClass->convenienceFlip('horizontal');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+
+        $instance = $this->testClass->convenienceFlip('vertical');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+
+        $instance = $this->testClass->convenienceFlip('both');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+        list($width, $height) = getimagesize($output);
+        $this->assertEquals($metadata['width'], $width);
+        $this->assertEquals($metadata['height'], $height);
+    }
+
+    public function testFill()
+    {
+        // Create a 1px x 1px canvas
+        $image = $this->testClass->create(1, 1);
+        // Fill it with red
+        $instance = $image->fill('#f00');
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        // Get color at that unique pixel
+        $resource = $image->getImage();
+        $color = imagecolorsforindex($resource, imagecolorat($resource, 0, 0));
+        // Assert is red
+        $this->assertArraySubset([
+            'red'   => 255,
+            'green' => 0,
+            'blue'  => 0,
+            'alpha' => 0
+        ], $color);
+    }
+
+    public function testCrop()
+    {
+        $image = "{$this->files_path}/test.png";
+        $output = $this->getOutputFilename("image-crop.png");
+
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        // Crop
+        $instance = $this->testClass->crop(10, 10, 100, 150);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        $instance->generate($output);
+
+        list($width, $height) = getimagesize($output);
+        $this->assertNotEquals($metadata['width'], $width);
+        $this->assertNotEquals($metadata['height'], $height);
+        // Check current size
+        $this->assertEquals(100, $width);
+        $this->assertEquals(150, $height);
+    }
+
+    /**
+     * The blur method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testBlur()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->blur();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     */
+    public function testBlurFail()
+    {
+        $this->testClass->create(250, 250)->fill('#f00')->blur('fail');
+    }
+
+    /**
+     * The brightness method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testBrightness()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->brightness(23);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The colorize method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testColorize()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->brightness(23);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The contrast method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testContrast()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->contrast(23);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The edgeDetection method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testEdgeDetection()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->edgeDetection();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The emboss method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testEmboss()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->emboss();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The grayscale method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testGrayscale()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->grayscale();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The meanRemove method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testMeanRemove()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->meanRemove();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The negate method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testNegate()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->negate();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The pixelate method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testPixelate()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->pixelate();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The sepia method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testSepia()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->sepia();
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The smooth method test.
+     *
+     * In all effects methods I can only test for the returning value (as they're
+     * php core features).
+     *
+     * @return void
+     */
+    public function testSmooth()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+
+        $image = $this->testClass->load($image);
+        $instance = $image->smooth(5);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+    }
+
+    /**
+     * The vignette method test.
+     *
+     * @return void
+     */
+    public function testVignette()
+    {
+        $image = "{$this->files_path}/peke.jpg";
+        $output = $this->getOutputFilename("image-vignette.jpg");
+
+        $instance = $this->testClass->load($image);
+        // Let's create a very dark vignette to check if borders are black
+        $instance = $instance->vignette(10, 1);
+
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+
+        $resource = $instance->getImage();
+        $color = imagecolorsforindex($resource, imagecolorat($resource, 0, 0));
+
+        $this->assertArraySubset([
+            'red' => 0,
+            'green' => 0,
+            'blue' => 0,
+            'alpha' => 0
+        ], $color);
     }
 }
