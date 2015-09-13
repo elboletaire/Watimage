@@ -264,6 +264,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(250, $height);
     }
 
+    /**
+     * @covers Image::flip
+     * @group  effects
+     */
     public function testFlip()
     {
         $image = "{$this->files_path}/test.png";
@@ -293,6 +297,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals($metadata['height'], $height);
     }
 
+    /**
+     * @covers Image::convenienceFlip
+     * @group  effects
+     */
     public function testConvenienceFlip()
     {
         $image = "{$this->files_path}/test.png";
@@ -374,6 +382,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testBlur()
     {
@@ -387,6 +396,7 @@ class ImageTest extends TestCaseBase
 
     /**
      * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @group  effects
      */
     public function testBlurFail()
     {
@@ -400,6 +410,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testBrightness()
     {
@@ -418,6 +429,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testColorize()
     {
@@ -436,6 +448,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testContrast()
     {
@@ -454,6 +467,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testEdgeDetection()
     {
@@ -472,6 +486,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testEmboss()
     {
@@ -490,6 +505,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testGrayscale()
     {
@@ -508,6 +524,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testMeanRemove()
     {
@@ -526,6 +543,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testNegate()
     {
@@ -544,6 +562,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testPixelate()
     {
@@ -562,6 +581,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testSepia()
     {
@@ -580,6 +600,7 @@ class ImageTest extends TestCaseBase
      * php core features).
      *
      * @return void
+     * @group  effects
      */
     public function testSmooth()
     {
@@ -595,6 +616,8 @@ class ImageTest extends TestCaseBase
      * The vignette method test.
      *
      * @return void
+     * @group  effects
+     * @group  slow
      */
     public function testVignette()
     {

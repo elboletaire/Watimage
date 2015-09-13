@@ -320,26 +320,47 @@ ensure you have installed composer dependencies; tests need the composer
 
 ```bash
 composer install
-phpunit -d memory_limit=512M
+phpunit -d memory_limit=256M
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
-# ...........................
-# Time: 4.75 seconds, Memory: 12.75Mb
-# OK (27 tests, 77 assertions)
+# ...........................................................
+# Time: 1.42 minutes, Memory: 229.75Mb
+# OK (59 tests, 182 assertions)
 ```
 
 If you do not have phpunit installed system-wide just do:
 
 ```bash
 composer install
-./vendor/bin/phpunit -d memory_limit=512M
+./vendor/bin/phpunit -d memory_limit=256M
 # PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
-# ...........................
-# Time: 4.75 seconds, Memory: 12.75Mb
-# OK (27 tests, 77 assertions)
+# ...........................................................
+# Time: 1.42 minutes, Memory: 229.75Mb
+# OK (59 tests, 182 assertions)
 ```
 
 Some filtering methods require more than the default 128MB of memory, that's
-why it's forced to 512M
+why it's forced to 256M.
+
+The `testVignetteMethod` requires more than 1 minute to finish. For that reason
+I've added it to a phpunit `@group` named `slow` to easily skip it:
+
+```bash
+phpunit -d memory_limit=256M --exclude-group slow
+# PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
+# .........................................................
+# Time: 19.01 seconds, Memory: 217.75Mb
+# OK (57 tests, 180 assertions)
+```
+
+You can skip them using the whole `effects` group too:
+
+```bash
+phpunit --exclude-group effects
+# PHPUnit 4.8.6 by Sebastian Bergmann and contributors.
+# ..........................................
+# Time: 7.3 seconds, Memory: 66.25Mb
+# OK (42 tests, 149 assertions)
+```
 
 #### About code coverage
 
