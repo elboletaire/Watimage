@@ -258,7 +258,7 @@ class Watermark extends Image
                 $wdiff = $metadata['width'] - $width;
                 $hdiff = $metadata['height'] - $height;
                 if ($wdiff > $hdiff) {
-                // the width has the largest difference - get percentage
+                    // the width has the largest difference - get percentage
                     $ratio = ($wdiff / $width) + 0.05;
                 } else {
                     $ratio = ($hdiff / $height) + 0.05;
