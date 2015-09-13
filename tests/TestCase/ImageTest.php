@@ -159,6 +159,10 @@ class ImageTest extends TestCaseBase
         $this->assertLessThan($old_height, $height);
     }
 
+    /**
+     * @covers Image::resize
+     * @group  resize
+     */
     public function testResize()
     {
         $image = "{$this->files_path}/peke.jpg";
@@ -197,6 +201,10 @@ class ImageTest extends TestCaseBase
         $this->testClass->load($image)->resize('fail', 'fail');
     }
 
+    /**
+     * @covers Image::classicResize
+     * @group  resize
+     */
     public function testClassicResize()
     {
         $image = "{$this->files_path}/test.png";
@@ -213,6 +221,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(300, $height);
     }
 
+    /**
+     * @covers Image::reduce
+     * @group  resize
+     */
     public function testReduce()
     {
         $image = "{$this->files_path}/test.png";
@@ -229,6 +241,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(300, $height);
     }
 
+    /**
+     * @covers Image::classicCrop
+     * @group  resize
+     */
     public function testClassicCrop()
     {
         $image = "{$this->files_path}/test.png";
@@ -246,6 +262,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(200, $height);
     }
 
+    /**
+     * @covers Image::resizeCrop
+     * @group  resize
+     */
     public function testResizeCrop()
     {
         $image = "{$this->files_path}/test.png";
