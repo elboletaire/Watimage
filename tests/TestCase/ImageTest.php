@@ -49,17 +49,25 @@ class ImageTest extends TestCaseBase
     public function testCreate()
     {
         $image = $this->testClass->create(250, 400);
-
+        // Check instance
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
-
+        // Check size
         $this->assertEquals(250, $this->getProperty('width'));
         $this->assertEquals(400, $this->getProperty('height'));
+        // Check it again
+        $resource = $this->testClass->getImage();
+        $this->assertEquals(250, imagesx($resource));
+        $this->assertEquals(400, imagesy($resource));
 
         // Check that height is set to width when no height specified
         $this->testClass->create(350);
+        $this->assertEquals(350, $this->getProperty('width'));
         $this->assertEquals(350, $this->getProperty('height'));
 
-        $this->assertEquals('gd', get_resource_type($this->testClass->getImage()));
+        $this->assertEquals('gd', get_resource_type($resource));
+
+        $metadata = $this->testClass->getMetadata();
+        $this->assertNull($metadata['exif']);
     }
 
     /**
