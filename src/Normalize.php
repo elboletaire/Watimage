@@ -276,7 +276,10 @@ class Normalize
             );
         }
 
-        return [$width, $height];
+        return [
+            self::fitInRange($width, 0),
+            self::fitInRange($height, 0)
+        ];
     }
 
     /**

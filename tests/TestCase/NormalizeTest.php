@@ -201,6 +201,12 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
             [250, 250],
             Normalize::size(['width' => 250])
         );
+
+        // Passing negative values should return zero
+        $this->assertArraySubset(
+            [0, 0],
+            Normalize::size(-200)
+        );
     }
 
     /**
