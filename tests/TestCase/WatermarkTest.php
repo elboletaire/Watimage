@@ -15,6 +15,9 @@ class WatermarkTest extends TestCaseBase
         $this->testClass->load("{$this->files_path}/watermark.png");
     }
 
+    /**
+     * @covers Elboletaire\Watimage\Watermark::destroy
+     */
     public function testDestroy()
     {
         $instance = $this->testClass
@@ -29,6 +32,36 @@ class WatermarkTest extends TestCaseBase
         $this->assertNull($this->getProperty('position'));
         $this->assertNull($this->getProperty('size'));
         $this->assertArraySubset([0, 0], $this->getProperty('margin'));
+    }
+
+    /**
+     * @covers Elboletaire\Watimage\Watermark::setPosition
+     */
+    public function testSetPosition()
+    {
+        $instance = $this->testClass->setPosition(23);
+        $this->assertNotNull($this->getProperty('position'));
+        $this->assertInstanceOf('Elboletaire\Watimage\Watermark', $instance);
+    }
+
+    /**
+     * @covers Elboletaire\Watimage\Watermark::setSize
+     */
+    public function testSetSize()
+    {
+        $instance = $this->testClass->setSize(23);
+        $this->assertNotNull($this->getProperty('size'));
+        $this->assertInstanceOf('Elboletaire\Watimage\Watermark', $instance);
+    }
+
+    /**
+     * @covers Elboletaire\Watimage\Watermark::setSize
+     */
+    public function testSetMargin()
+    {
+        $instance = $this->testClass->setMargin(23);
+        $this->assertArraySubset([23, 23], $this->getProperty('margin'));
+        $this->assertInstanceOf('Elboletaire\Watimage\Watermark', $instance);
     }
 
     /**
