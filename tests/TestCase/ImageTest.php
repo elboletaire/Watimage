@@ -168,7 +168,7 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::resize
+     * @covers Elboletaire\Watimage\Image::resize
      * @group  resize
      */
     public function testResize()
@@ -210,7 +210,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::classicResize
      * @group  resize
      */
     public function testClassicResize()
@@ -230,7 +229,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::reduce
      * @group  resize
      */
     public function testReduce()
@@ -250,7 +248,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::classicCrop
      * @group  resize
      */
     public function testClassicCrop()
@@ -271,7 +268,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::resizeCrop
      * @group  resize
      */
     public function testResizeCrop()
@@ -293,7 +289,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::flip
      * @group  effects
      */
     public function testFlip()
@@ -326,7 +321,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Image::convenienceFlip
      * @group  effects
      */
     public function testConvenienceFlip()
@@ -646,6 +640,8 @@ class ImageTest extends TestCaseBase
      * @return void
      * @group  effects
      * @group  slow
+     * @covers Elboletaire\Watimage\Image::vignette
+     * @covers Elboletaire\Watimage\Image::vignetteEffect
      */
     public function testVignette()
     {
