@@ -369,6 +369,7 @@ class Image
      * @param  mixed $width  Can be just max width or an array containing both params.
      * @param  int   $height Max height.
      * @return Image
+     * @codeCoverageIgnore
      */
     public function resizeMin($width, $height = null)
     {
@@ -906,6 +907,7 @@ class Image
      *
      * @param int $quality A value from 0 (zero quality) to 100 (max quality).
      * @return Image
+     * @codeCoverageIgnore
      */
     public function setQuality($quality)
     {
@@ -919,6 +921,7 @@ class Image
      *
      * @param int $compression A value from 0 (no compression, not recommended) to 9.
      * @return Image
+     * @codeCoverageIgnore
      */
     public function setCompression($compression)
     {
@@ -951,6 +954,7 @@ class Image
      * Returns image resource, so you can use it however you wan.
      *
      * @return resource
+     * @codeCoverageIgnore
      */
     public function getImage()
     {
@@ -961,6 +965,7 @@ class Image
      * Returns metadata for current image.
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getMetadata()
     {
@@ -996,6 +1001,7 @@ class Image
      * Loads metadata to internal variables.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function getMetadataForImage()
     {
@@ -1033,6 +1039,7 @@ class Image
      * Updates current image metadata.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function updateMetadata()
     {
@@ -1044,6 +1051,7 @@ class Image
      * Resets width and height of the current image.
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function updateSize()
     {
@@ -1062,6 +1070,7 @@ class Image
      * @param  int    $y     Y position of the pixel.
      * @param  array  &$rgb  Current pixel olor information.
      * @return void
+     * @codeCoverageIgnore
      */
     protected function vignetteEffect($size, $level, $x, $y, &$rgb)
     {
