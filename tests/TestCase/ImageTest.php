@@ -161,7 +161,7 @@ class ImageTest extends TestCaseBase
 
     public function testResize()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}/peke.jpg";
         $output = $this->getOutputFilename("image-resize.png");
 
         $types = [
@@ -179,7 +179,6 @@ class ImageTest extends TestCaseBase
 
         // We're just gonna check that it does not crash.
         // Every method is tested in its proper test method.
-        // This will probably corrupt transparencies (many different resize types).
         foreach ($types as $type) {
             $instance = $this->testClass->resize($type, 200);
             $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
