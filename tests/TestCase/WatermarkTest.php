@@ -150,7 +150,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('top left')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([0, 0] , $position);
+        $this->assertArraySubset([0, 0], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -158,7 +158,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('top center')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([95, 0] , $position);
+        $this->assertArraySubset([95, 0], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -166,7 +166,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('top right')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([190, 0] , $position);
+        $this->assertArraySubset([190, 0], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -174,7 +174,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('bottom left')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([0, 190] , $position);
+        $this->assertArraySubset([0, 190], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -182,7 +182,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('bottom center')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([95, 190] , $position);
+        $this->assertArraySubset([95, 190], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -190,7 +190,7 @@ class WatermarkTest extends TestCaseBase
             ->setPosition('bottom right')
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([190, 190] , $position);
+        $this->assertArraySubset([190, 190], $position);
 
         // Position calculated with margin
         $this->testClass
@@ -201,7 +201,7 @@ class WatermarkTest extends TestCaseBase
             ->setMargin(10)
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([105, 105] , $position);
+        $this->assertArraySubset([105, 105], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -210,7 +210,7 @@ class WatermarkTest extends TestCaseBase
             ->setMargin(10, 0)
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([10, 95] , $position);
+        $this->assertArraySubset([10, 95], $position);
         $this->testClass
             ->destroy()
             ->create($size_watermark)
@@ -219,6 +219,6 @@ class WatermarkTest extends TestCaseBase
             ->setMargin(-10, 10)
         ;
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
-        $this->assertArraySubset([180, 105] , $position);
+        $this->assertArraySubset([180, 105], $position);
     }
 }
