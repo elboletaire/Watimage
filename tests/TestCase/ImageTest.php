@@ -698,6 +698,19 @@ class ImageTest extends TestCaseBase
         $this->assertArraySubset($expected, $metadata);
     }
 
+    public function testGetMimeFromExtension()
+    {
+        $method = $this->getMethod('getMimeFromExtension');
+
+        $this->assertEquals('image/jpeg', $method->invoke($this->testClass, 'image.jpg'));
+        $this->assertEquals('image/jpeg', $method->invoke($this->testClass, 'image.jpeg'));
+        $this->assertEquals('image/gif', $method->invoke($this->testClass, 'image.gif'));
+        $this->assertEquals('image/png', $method->invoke($this->testClass, 'image.png'));
+
+        $this->setExpectedException('Elboletaire\Watimage\Exception\InvalidExtensionException');
+        $method->invoke($this->testClass, 'image.bmp');
+    }
+
     public function testDestroy()
     {
         $image = "{$this->files_path}/peke.jpg";
