@@ -289,6 +289,40 @@ there are 5 custom exception classes:
 - InvalidExtensionException
 - InvalidMimeException
 
+Knowing that, you can catch your exceptions one by one:
+
+```php
+use Elboletaire\Watimage\Exception\ExtensionNotLoadedException;
+use Elboletaire\Watimage\Exception\FileNotExistException;
+use Elboletaire\Watimage\Exception\InvalidArgumentException;
+use Elboletaire\Watimage\Exception\InvalidExtensionException;
+use Elboletaire\Watimage\Exception\InvalidMimeException;
+use Elboletaire\Watimage\Image;
+use Elboletaire\Watimage\Watermark;
+
+try {
+
+} catch (ExtensionNotLoadedException $e) {
+} catch (FileNotExistException $e) {
+} catch (InvalidArgumentException $e) {
+} catch (InvalidExtensionException $e) {
+} catch (InvalidMimeException $e) {
+}
+```
+
+Or simply catch from `Exception`:
+
+```php
+use Elboletaire\Watimage\Image;
+use Elboletaire\Watimage\Watermark;
+use Exception;
+
+try {
+
+} catch (Exception $e) {
+}
+```
+
 Examples
 --------
 
@@ -370,7 +404,7 @@ have not been tested as it would be redundant to test core php methods.
 ### Visual tests
 
 Inside `tests/visual` you'll find a script to visually check that all images
-are generate properly.
+are generated properly.
 
 To run them just cd into the visual tests folders and run the `run_them_all.php` script:
 
