@@ -63,9 +63,8 @@ class Watermark extends Image
      */
     public function destroy()
     {
-        $this->size = null;
+        $this->size = $this->position = null;
         $this->margin = [0, 0];
-        $this->position = null;
 
         return parent::destroy();
     }
