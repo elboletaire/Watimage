@@ -315,8 +315,8 @@ class Image
             'classic'    => 'classicResize',
             'resize'     => 'classicResize',
             'reduce'     => 'reduce',
-            'resizemin'  => 'resizeMin',
-            'min'        => 'resizeMin',
+            'resizemin'  => 'reduce',
+            'min'        => 'reduce',
             'crop'       => 'classicCrop',
             'resizecrop' => 'resizeCrop'
         ];
