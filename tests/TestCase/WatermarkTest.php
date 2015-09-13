@@ -123,15 +123,102 @@ class WatermarkTest extends TestCaseBase
         $this->testClass->fill('#f00');
 
         $instance = $this->testClass->setPosition('bottom right')->apply($image);
-        $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
-        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
-
-        $image->generate($this->getOutputFilename('watermark-position.png'));
 
         $metadata_img = $image->getMetadata();
         $calculatePosition = $this->getMethod('calculatePosition');
         $position = $calculatePosition->invoke($this->testClass, $metadata_img);
 
         $this->assertArraySubset([190, 190], $position);
+        // Setting exact position should return array
+        $this->setProperty('position', [200, 200]);
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([200, 200], $position);
+        // When position is null or size is `full` should set position to `center center`
+        $this->setProperty('position', null);
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertEquals('center center', $this->getProperty('position'));
+        $this->setProperty('position', null);
+        $this->testClass->setSize('full');
+        $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertEquals('center center', $this->getProperty('position'));
+
+        // Position calculated without margin
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('top left')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([0, 0] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('top center')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([95, 0] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('top right')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([190, 0] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('bottom left')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([0, 190] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('bottom center')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([95, 190] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('bottom right')
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([190, 190] , $position);
+
+        // Position calculated with margin
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('center center')
+            ->setMargin(10)
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([105, 105] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('center left')
+            ->setMargin(10, 0)
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([10, 95] , $position);
+        $this->testClass
+            ->destroy()
+            ->create($size_watermark)
+            ->fill('#f00')
+            ->setPosition('center right')
+            ->setMargin(-10, 10)
+        ;
+        $position = $calculatePosition->invoke($this->testClass, $metadata_img);
+        $this->assertArraySubset([180, 105] , $position);
     }
 }
