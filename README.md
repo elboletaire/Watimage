@@ -28,6 +28,17 @@ With yum:
 sudo yum install php-gd
 ```
 
+### PHP 5.4
+
+If you're running PHP 5.4 you need to define the following constants in order to
+get Watimage properly working (are required by the `flip` method):
+
+```php
+define('IMG_FLIP_HORIZONTAL', 1);
+define('IMG_FLIP_VERTICAL', 2);
+define('IMG_FLIP_BOTH', 3);
+```
+
 Installing
 ----------
 
@@ -109,6 +120,21 @@ $image
     ->generate('output-image.jpg', 'image/jpeg');
 ```
 
+#### Resizing images
+
+There are different type of resizes available in the `Image` class. See their
+differences:
+
+- `classicResize`: Resizes maintaining aspect ratio. Available throurgh `resize`
+  method using `classic` or `resize` as type.
+- `reduce` (and `resizeMin`): Resizes ain image maintaining aspect ratio but ONLY
+  if the given image is bigger than the specified size. Available through `resize`
+  method using `reduce`, `resizemin` or `min` as type.
+- `crop`: A straight centered crop. Available through `resize` method using `crop`
+  type.
+- `resizeCrop`: Resizes to max, then crops to center; this is the recommended
+  crop resize type. Available through `resize` method using `resizecrop`.
+
 ### Watermark class
 
 The Watermark class extends Image so you'll be able to apply any filter or
@@ -152,7 +178,53 @@ $image->pixelate(4, true);
 $watermark->setPosition('top left')->apply($image);
 // This will generate a pixelated image with two watermarks, one of them
 // pixelated due to the pixelation of the image after applying the first watermark.
+$image->generate();
 ```
+
+Everything together:
+
+
+```php
+use Elboletaire\Watimage\Image;
+use Elboletaire\Watimage\Watermark;
+
+$image = new Image('test.png');
+$watermark = new Watermark('watermark.png');
+
+$image->flip()->negate();
+$watermark->pixelate(3, true);
+// Apply watermark to image
+$watermark->apply($image);
+// Filter image after applying the watermark (this will pixelate the first watermark too)
+$image->pixelate(4, true);
+// Apply watermark again but changing position
+$watermark->setPosition('top left')->apply($image);
+$image->generate();
+```
+
+A more advanced example, applying the same watermark in each border of the image:
+
+```php
+use Elboletaire\Watimage\Image;
+use Elboletaire\Watimage\Watermark;
+
+$image = new Image('test.png');
+$watermark = new Watermark('watermark.png');
+
+// Pixelate the image
+$image->pixelate(4, true);
+// Apply all the watermarks
+$watermark->setPosition('top left')->apply($image);
+$watermark->setPosition('top right')->apply($image);
+$watermark->setPosition('bottom right')->apply($image);
+$watermark->setPosition('bottom left')->apply($image);
+$image
+    // Add a vignette effect with watermarks included
+    ->vignette()
+    // And save to file
+    ->generate('my-saved-image.png');
+```
+
 
 These are just examples but take in mind that order really matters here.
 
