@@ -225,13 +225,16 @@ class Watermark extends Image
 
         if (is_array($this->size)) {
             list($width, $height) = $this->size;
+            if ($width == $this->width && $height == $this->height) {
+                return;
+            }
         } elseif (preg_match('/[0-9]{1,3}%$/', $this->size)) {
             $ratio = $this->size / 100;
 
             $width = $this->width * $ratio;
             $height = $this->height * $ratio;
         } else {
-            // size == 'full' or any other string
+            // size == 'full'
             $width = $this->width;
             $height = $this->height;
 
@@ -265,8 +268,8 @@ class Watermark extends Image
             }
         }
 
-        // Això s'ha de repensar tu, que sinó cada cop que s'aplica la marca
-        // d'aigua es va fent més petita, i no interessa...!
+        $this->size = [$width, $height];
+        // Resize watermark to desired size
         $this->classicResize($width, $height);
     }
 }
