@@ -1,6 +1,9 @@
 Watimage: GD Image Helper PHP Class
 ===================================
-[![Build status](https://img.shields.io/travis/elboletaire/Watimage.svg?style=flat-square)](https://travis-ci.org/elboletaire/Watimage) [![Coveralls](https://img.shields.io/coveralls/elboletaire/Watimage.svg?style=flat-square)](https://coveralls.io/github/elboletaire/Watimage) [![License](https://img.shields.io/packagist/l/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/blob/master/LICENSE.md) [![Version](https://img.shields.io/packagist/v/elboletaire/Watimage.svg?style=flat-square)](https://packagist.org/packages/elboletaire/watimage)
+[![Build status](https://img.shields.io/travis/elboletaire/Watimage.svg?style=flat-square)](https://travis-ci.org/elboletaire/Watimage)
+[![Coveralls](https://img.shields.io/coveralls/elboletaire/Watimage.svg?style=flat-square)](https://coveralls.io/github/elboletaire/Watimage)
+[![License](https://img.shields.io/packagist/l/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/blob/master/LICENSE.md)
+[![Version](https://img.shields.io/packagist/v/elboletaire/Watimage.svg?style=flat-square)](https://packagist.org/packages/elboletaire/watimage)
 
 Watimage is a group of PHP classes to help you resize, rotate, apply filters,
 watermarks and a lot more of things to your images using the PHP's GD library.
