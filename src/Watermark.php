@@ -128,7 +128,11 @@ class Watermark extends Image
 
         $resource = $this->imagecreate($metadata['width'], $metadata['height']);
 
-        if ($this->metadata['format'] == 'gif' || $metadata['format'] == 'gif') {
+        $is_gif = (isset($this->metadata['format']) && $this->metadata['format'] == 'gif')
+            || (isset($metadata['format']) && $metadata['format'] == 'gif')
+        ;
+
+        if ($is_gif) {
             // @codingStandardsIgnoreStart
             imagecopyresized(
                 $resource, $image->getImage(),

@@ -552,7 +552,9 @@ class Image
         }
 
         $this->image = $this->imagecreate($width, $height);
-        $this->metadata['exif'] = null;
+        $format = $exif = null;
+        $this->metadata = compact('width', 'height', 'format', 'exif');
+
         $this->updateSize();
 
         return $this;
