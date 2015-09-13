@@ -174,7 +174,7 @@ class ImageTest extends TestCaseBase
     public function testResize()
     {
         $image = "{$this->files_path}/peke.jpg";
-        $output = $this->getOutputFilename("image-resize.png");
+        $output = $this->getOutputFilename("image-resize.jpg");
 
         $types = [
             'classic',
@@ -386,9 +386,9 @@ class ImageTest extends TestCaseBase
         $metadata = $this->testClass->getMetadata();
         // Get color index at crop position
         $resource = $this->testClass->getImage();
-        $color = imagecolorsforindex($resource, imagecolorat($resource, 10, 10));
+        $color = imagecolorsforindex($resource, imagecolorat($resource, 500, 500));
         // Crop
-        $instance = $this->testClass->crop(10, 10, 100, 150);
+        $instance = $this->testClass->crop(500, 500, 100, 150);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
         // Get color index at cropped position and compare
@@ -650,7 +650,6 @@ class ImageTest extends TestCaseBase
     public function testVignette()
     {
         $image = "{$this->files_path}/peke.jpg";
-        $output = $this->getOutputFilename("image-vignette.jpg");
 
         $instance = $this->testClass->load($image);
         // Let's create a very dark vignette to check if borders are black
@@ -676,13 +675,8 @@ class ImageTest extends TestCaseBase
 
         $instance = $this->testClass->setImage($resource);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
-    }
 
-    /**
-     * @expectedException Exception
-     */
-    public function testSetImageFail()
-    {
+        $this->setExpectedException('Exception');
         $this->testClass->setImage("{$this->files_path}/peke.jpg");
     }
 
