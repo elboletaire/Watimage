@@ -344,20 +344,26 @@ class ImageTest extends TestCaseBase
 
     public function testCrop()
     {
-        $image = "{$this->files_path}/test.png";
-        $output = $this->getOutputFilename("image-crop.png");
+        $image = "{$this->files_path}/peke.jpg";
+        $output = $this->getOutputFilename("image-crop.jpg");
 
         $this->testClass->load($image);
         $metadata = $this->testClass->getMetadata();
+        // Get color index at crop position
+        $resource = $this->testClass->getImage();
+        $color = imagecolorsforindex($resource, imagecolorat($resource, 10, 10));
         // Crop
         $instance = $this->testClass->crop(10, 10, 100, 150);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
-
+        // Get color index at cropped position and compare
+        $resource = $this->testClass->getImage();
+        $new_color = imagecolorsforindex($resource, imagecolorat($resource, 0, 0));
+        $this->assertArraySubset($color, $new_color);
+        // Compare size
         list($width, $height) = getimagesize($output);
         $this->assertNotEquals($metadata['width'], $width);
         $this->assertNotEquals($metadata['height'], $height);
-        // Check current size
         $this->assertEquals(100, $width);
         $this->assertEquals(150, $height);
     }
