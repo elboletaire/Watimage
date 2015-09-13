@@ -75,7 +75,6 @@ class Watermark extends Image
      * @param  mixed  $x  Can be a position ala CSS, just position X or an array
      *                    containing both params.
      * @param  int    $y  Position Y.
-     * @codeCoverageIgnore
      */
     public function setPosition($x, $y = null)
     {
@@ -92,7 +91,6 @@ class Watermark extends Image
      *
      * @param  mixed  $width  Can be just width or an array containing both params.
      * @param  int    $height Height.
-     * @codeCoverageIgnore
      */
     public function setSize($width, $height = null)
     {
@@ -106,7 +104,6 @@ class Watermark extends Image
      *
      * @param  mixed  $x  Can be just x position or an array containing both params.
      * @param  int    $y  Y position.
-     * @codeCoverageIgnore
      */
     public function setMargin($x, $y = null)
     {
