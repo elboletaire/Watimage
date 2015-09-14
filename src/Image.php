@@ -327,7 +327,7 @@ class Image
             throw new InvalidArgumentException("Invalid resize type %s.", $type);
         }
 
-        return $this->$types[$lowertype]($width, $height);
+        return $this->{$types[$lowertype]}($width, $height);
     }
 
     /**
