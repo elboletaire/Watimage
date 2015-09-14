@@ -137,7 +137,7 @@ class WatermarkTest extends TestCaseBase
         $resource = $image->getImage();
         // Ensure it's still transparent
         $pixel = imagecolorsforindex($resource, imagecolorat($resource, 0, 0));
-        $this->assertArraySubset($transparent, $pixel);
+        $this->assertEquals(127, $pixel['alpha']);
     }
 
     /**
