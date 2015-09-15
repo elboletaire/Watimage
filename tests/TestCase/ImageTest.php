@@ -218,14 +218,18 @@ class ImageTest extends TestCaseBase
         $output = $this->getOutputFilename("image-classic-resize.png");
 
         $this->testClass->load($image);
-        $metadata = $this->testClass->getMetadata();
         $instance = $this->testClass->classicResize(200, 300);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
-        list($width, $height) = getimagesize($output);
 
+        // Check that the current size corresponds to the defined one
+        list($width, $height) = getimagesize($output);
         $this->assertEquals(182, $width);
         $this->assertEquals(300, $height);
+
+        // Check that the size of the image has been updated
+        $this->assertEquals(182, $this->getProperty('width'));
+        $this->assertEquals(300, $this->getProperty('height'));
     }
 
     /**
@@ -260,15 +264,18 @@ class ImageTest extends TestCaseBase
         $output = $this->getOutputFilename("image-classic-crop.png");
 
         $this->testClass->load($image);
-        $metadata = $this->testClass->getMetadata();
-        $instance = $this->testClass->classicCrop(200, 200);
+        $instance = $this->testClass->classicCrop(200, 250);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
+
+        // Check that the current size corresponds to the defined one
         list($width, $height) = getimagesize($output);
-        $this->assertNotEquals($metadata['width'], $width);
-        $this->assertNotEquals($metadata['height'], $height);
         $this->assertEquals(200, $width);
-        $this->assertEquals(200, $height);
+        $this->assertEquals(250, $height);
+
+        // Check that the size of the image has been updated
+        $this->assertEquals(200, $this->getProperty('width'));
+        $this->assertEquals(250, $this->getProperty('height'));
     }
 
     /**
@@ -280,15 +287,17 @@ class ImageTest extends TestCaseBase
         $output = $this->getOutputFilename("image-resize-crop.png");
 
         $this->testClass->load($image);
-        $metadata = $this->testClass->getMetadata();
-        $instance = $this->testClass->resizeCrop(250, 250);
+        $instance = $this->testClass->resizeCrop(200, 250);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
+
+        // Check that the current size corresponds to the defined one
         list($width, $height) = getimagesize($output);
-        $this->assertNotEquals($metadata['width'], $width);
-        $this->assertNotEquals($metadata['height'], $height);
-        // Check current size
-        $this->assertEquals(250, $width);
+        $this->assertEquals(200, $width);
+        $this->assertEquals(250, $height);
+
+        // Check that the size of the image has been updated
+        $this->assertEquals(200, $width);
         $this->assertEquals(250, $height);
     }
 
