@@ -306,13 +306,13 @@ class Normalize
     }
 
     /**
-     * Normalizes position for watermarks.
+     * Normalizes position + position ala css.
      *
      * @param  mixed $position Array with x,y or string ala CSS.
      * @return mixed           Returns what you pass (array or string).
      * @throws InvalidArgumentException
      */
-    public static function watermarkPosition($position)
+    public static function cssPosition($position)
     {
         try {
             $position = self::position($position);

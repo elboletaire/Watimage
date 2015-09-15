@@ -78,7 +78,7 @@ class Watermark extends Image
      */
     public function setPosition($x, $y = null)
     {
-        $this->position = Normalize::watermarkPosition($x, $y);
+        $this->position = Normalize::cssPosition($x, $y);
 
         return $this;
     }
