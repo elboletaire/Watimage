@@ -691,8 +691,8 @@ class ImageTest extends TestCaseBase
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
 
         // Ensure has updated the size
-        $this->assertEquals(1944, $this->getProperty('width'));
-        $this->assertEquals(1296, $this->getProperty('height'));
+        $this->assertEquals(1024, $this->getProperty('width'));
+        $this->assertEquals(682, $this->getProperty('height'));
 
         $this->setExpectedException('Exception');
         $this->testClass->setImage("{$this->files_path}/peke.jpg");
@@ -703,8 +703,8 @@ class ImageTest extends TestCaseBase
         $image = "{$this->files_path}/peke.jpg";
 
         $expected = [
-            'width' => 1944,
-            'height' => 1296,
+            'width' => 1024,
+            'height' => 682,
             'mime' => 'image/jpeg',
             'format' => 'jpeg',
             'exif' => null // we're not testing exif functions
