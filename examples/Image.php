@@ -7,6 +7,7 @@ $current_path = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 $files_path = $current_path . 'files' . DIRECTORY_SEPARATOR;
 $output_path = $current_path . 'output' . DIRECTORY_SEPARATOR;
 $image_file = $files_path . 'peke.jpg';
+$orientate = $files_path . 'tripi.jpg';
 
 require realpath($current_path . '../vendor/autoload.php');
 
@@ -28,12 +29,20 @@ $image = new Image($image_file);
 // to set colors. Angle must be specified in degrees (positive is clockwise)
 $image->rotate(90, '#fff')
     ->generate($output_path . 'image2-rotate.jpg');
+// Images are automatically orientated by default when using the constructor
+// instead of load. You can skip it and you can also auto-orientate images later:
+
+// disable auto-orientate on load
+$image = new Image($orientate, false);
+// we can later use the autoOrientate method if we not did it previously:
+$image->autoOrientate()
+    ->generate($output_path . 'image3-auto-orientate.jpg');
 
 /**********************************
  *** EXPORTING TO OTHER FORMATS ***
  **********************************/
 $image = new Image($image_file);
-$image->generate($output_path . 'image3-formats.png', 'image/png');
+$image->generate($output_path . 'image4-formats.png', 'image/png');
 
 /*******************
  *** FLIP IMAGES ***
@@ -42,7 +51,7 @@ $image = new Image($image_file);
 // vertical [or y, or v], horizontal [or x, or h]
 // check out Normalize::flip to see all the allowed possibilities
 $image->flip('vertical')
-    ->generate($output_path . 'image4-flip.jpg');
+    ->generate($output_path . 'image5-flip.jpg');
 
 /***********************
  *** CROPPING IMAGES ***
@@ -57,7 +66,7 @@ $image->crop([
         'x'      => 50,
         'y'      => 80
     ])
-    ->generate($output_path . 'image5-crop.jpg');
+    ->generate($output_path . 'image6-crop.jpg');
 
 /************************
  *** APPLYING FILTERS ***
@@ -76,7 +85,7 @@ $image
     // ->meanRemove()
     // ->negate()
     ->vignette()
-    ->generate($output_path . 'image6-effects.jpg');
+    ->generate($output_path . 'image7-effects.jpg');
 
 echo "All examples are now available under the 'output' folder\n";
 // END OF FILE

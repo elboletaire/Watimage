@@ -36,6 +36,7 @@ $watermark
     // Watermark extends Image, so we can use any method from there to
     // modify the watermark
     ->rotate(90)
+    ->negate()
     ->setPosition('bottom right')
     ->apply($image)
     ->generate($output_path . 'watermark2-rotate.png');
@@ -84,6 +85,10 @@ $watermark
     // and apply it
     ->apply($image);
 ;
+
+// Create a new Watermark object to watermark the resulting file
+$watermark = new Watermark($watermark_file);
+$watermark->setPosition('bottom right')->apply($image);
 
 // generate the resulting image
 $image->generate($output_path . 'watermark3-all-together.png');
