@@ -237,14 +237,18 @@ class ImageTest extends TestCaseBase
         $output = $this->getOutputFilename("image-resizemin.png");
 
         $this->testClass->load($image);
-        $metadata = $this->testClass->getMetadata();
         $instance = $this->testClass->reduce(200, 300);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
         $instance->generate($output);
-        list($width, $height) = getimagesize($output);
 
+        // Check that the current size corresponds to the defined one
+        list($width, $height) = getimagesize($output);
         $this->assertEquals(182, $width);
         $this->assertEquals(300, $height);
+
+        // Check that the size of the image has been updated
+        $this->assertEquals(182, $this->getProperty('width'));
+        $this->assertEquals(300, $this->getProperty('height'));
     }
 
     /**

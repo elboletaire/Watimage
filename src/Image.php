@@ -460,6 +460,8 @@ class Image
 
         $this->image = $this->imagecopy($width, $height);
 
+        $this->updateSize();
+
         return $this;
     }
 
