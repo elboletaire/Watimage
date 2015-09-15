@@ -122,12 +122,12 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
     public function testPosition()
     {
         $expected = [23, 23];
-        $this->assertArraySubset($expected, Normalize::watermarkPosition(23));
-        $this->assertArraySubset($expected, Normalize::watermarkPosition(['x' => 23]));
+        $this->assertArraySubset($expected, Normalize::cssPosition(23));
+        $this->assertArraySubset($expected, Normalize::cssPosition(['x' => 23]));
 
         $expected = [23, 32];
-        $this->assertArraySubset($expected, Normalize::watermarkPosition($expected));
-        $this->assertArraySubset($expected, Normalize::watermarkPosition(['x' => 23, 'y' => 32]));
+        $this->assertArraySubset($expected, Normalize::cssPosition($expected));
+        $this->assertArraySubset($expected, Normalize::cssPosition(['x' => 23, 'y' => 32]));
     }
 
     public function testMargin()
@@ -217,16 +217,19 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         Normalize::size(null);
     }
 
-    public function testWatermarkPosition()
+    /**
+     * @covers Elboletaire\Watimage\Normalize::cssPosition
+     */
+    public function testCssPosition()
     {
         // Test string
         $expected = 'center center';
 
-        $this->assertEquals($expected, Normalize::watermarkPosition('center'));
-        $this->assertEquals($expected, Normalize::watermarkPosition('centered'));
+        $this->assertEquals($expected, Normalize::cssPosition('center'));
+        $this->assertEquals($expected, Normalize::cssPosition('centered'));
 
         try {
-            Normalize::watermarkPosition('fail');
+            Normalize::cssPosition('fail');
         } catch (\Exception $e) {
             $this->assertEquals('Invalid watermark position fail.', $e->getMessage());
         }
@@ -235,9 +238,9 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
      */
-    public function testWatermarkPositionFail()
+    public function testCssPositionFail()
     {
-        Normalize::watermarkPosition('not valid');
+        Normalize::cssPosition('not valid');
     }
 
     public function testWatermarkSize()

@@ -291,8 +291,7 @@ class Image
      */
     public function rotate($degrees, $bgcolor = self::COLOR_TRANSPARENT)
     {
-        $color = Normalize::color($bgcolor);
-        $bgcolor = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
+        $bgcolor = $this->color($bgcolor);
 
         $this->image = imagerotate($this->image, $degrees, $bgcolor);
 
@@ -632,11 +631,29 @@ class Image
      */
     public function fill($color = '#fff')
     {
-        $color = Normalize::color($color);
-        $color = imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
-        imagefill($this->image, 0, 0, $color);
+        imagefill($this->image, 0, 0, $this->color($color));
 
         return $this;
+    }
+
+    /**
+     * Allocates a color for the current image resource and returns it.
+     *
+     * Useful for directly treating images.
+     *
+     * @param  mixed $color The color. Check out getColorArray for allowed formats.
+     * @return int
+     * @codeCoverageIgnore
+     */
+    public function color($color)
+    {
+        $color = Normalize::color($color);
+
+        if ($color['a'] !== 0) {
+            return imagecolorallocatealpha($this->image, $color['r'], $color['g'], $color['b'], $color['a']);
+        }
+
+        return imagecolorallocate($this->image, $color['r'], $color['g'], $color['b']);
     }
 
     /**
