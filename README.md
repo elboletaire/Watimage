@@ -31,17 +31,6 @@ With yum:
 sudo yum install php-gd
 ```
 
-### PHP 5.4
-
-If you're running PHP 5.4 you need to define the following constants in order to
-get Watimage properly working (are required by the `flip` method):
-
-```php
-define('IMG_FLIP_HORIZONTAL', 1);
-define('IMG_FLIP_VERTICAL', 2);
-define('IMG_FLIP_BOTH', 3);
-```
-
 Installing
 ----------
 
@@ -55,6 +44,17 @@ As a git submodule:
 
 ```bash
 git submodule add https://github.com/elboletaire/Watimage.git Vendor/Elboletaire/Watimage
+```
+
+### PHP 5.4
+
+If you're running PHP 5.4 you need to define the following constants in order to
+get Watimage properly working (are required by the `flip` method):
+
+```php
+define('IMG_FLIP_HORIZONTAL', 1);
+define('IMG_FLIP_VERTICAL', 2);
+define('IMG_FLIP_BOTH', 3);
 ```
 
 Usage
