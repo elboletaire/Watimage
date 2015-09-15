@@ -87,5 +87,20 @@ $image
     ->vignette()
     ->generate($output_path . 'image7-effects.jpg');
 
+/********************************
+ *** DIRECTLY TREATING IMAGES ***
+ ********************************/
+
+$image = new Image($image_file);
+// Get the resource image
+$resource = $image->getImage();
+// Add a string as a note in the top left side
+$color = imagecolorallocate($resource, 0, 0, 0);
+imagestring($resource, 5, 10, 10, "My cat, peke", $color);
+// Return the image resource to the Image instance
+$image->setImage($resource)
+    // and save
+    ->generate($output_path . 'image8-treating-images.jpg');
+
 echo "All examples are now available under the 'output' folder\n";
 // END OF FILE
