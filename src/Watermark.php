@@ -84,7 +84,7 @@ class Watermark extends Image
     }
 
     /**
-     * Sets the position of the watermark.
+     * Sets the size of the watermark.
      *
      * This method has been added for backwards compatibility. If you wanna resize
      * the watermark you can directly call ->resize from Watermark object.
