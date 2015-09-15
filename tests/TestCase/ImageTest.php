@@ -677,13 +677,22 @@ class ImageTest extends TestCaseBase
         ], $color);
     }
 
+    /**
+     * @covers Elboletaire\Watimage\Image::setImage
+     */
     public function testSetImage()
     {
-        $image = "{$this->files_path}/peke.jpg";
-        $resource = imagecreatefromjpeg($image);
+        $this->testClass->load("{$this->files_path}/test.png");
+
+        $rsc_image = "{$this->files_path}/peke.jpg";
+        $resource = imagecreatefromjpeg($rsc_image);
 
         $instance = $this->testClass->setImage($resource);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+
+        // Ensure has updated the size
+        $this->assertEquals(1944, $this->getProperty('width'));
+        $this->assertEquals(1296, $this->getProperty('height'));
 
         $this->setExpectedException('Exception');
         $this->testClass->setImage("{$this->files_path}/peke.jpg");
