@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Watimage Setup
-description: "Kick-starting Watimage PHP class."
+description: Kick-starting Watimage PHP class
 image:
   feature: el-carmel-viewpoint.jpg
   credit: elboletaire
@@ -41,6 +41,7 @@ require_once 'vendor/Watimage/src/Exception/FileNotExistException.php';
 require_once 'vendor/Watimage/src/Exception/InvalidArgumentException.php';
 require_once 'vendor/Watimage/src/Exception/InvalidExtensionException.php';
 require_once 'vendor/Watimage/src/Exception/InvalidMimeException.php';
+// any other required class
 ~~~
 
 Just load those needed by you (e.g. if you ain't gonna use the `Watermark` class
