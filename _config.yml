@@ -1,6 +1,6 @@
 title:            Watimage
 description:      PHP Image Manipulation Class
-# disqus_shortname: hpstrtheme
+disqus_shortname: watimage
 reading_time:     true
 words_per_minute: 200
 # Your site's domain goes here (eg: //mmistakes.github.io, http://mademistakes.com, etc)
