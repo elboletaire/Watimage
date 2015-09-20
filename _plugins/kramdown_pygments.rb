@@ -41,14 +41,6 @@ module Kramdown
         attr = el.attr.dup
         lang = extract_code_language!(attr) || @options[:kramdown_default_lang]
         code = pygmentize(el.value, lang)
-        if lang
-          attr['class'] = "highlight"
-          if attr.has_key?('class')
-            attr['class'] += " language-#{lang}"
-          else
-            attr['class'] = "language-#{lang}"
-          end
-        end
         "<code#{html_attributes(attr)}>#{code}</code>"
       end
 
