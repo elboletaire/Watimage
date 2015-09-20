@@ -6,11 +6,10 @@ image:
   feature: el-carmel-viewpoint.jpg
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
-category: configuration
 share: true
 ---
 
-Installing Watimage is pretty easy if you use composer:
+Installing Watimage is pretty easy if you use [composer](https://getcomposer.org):
 
 ~~~bash
 composer require elboletaire/watimage ~2.0
