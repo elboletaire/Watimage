@@ -12,5 +12,5 @@ trim_trailing_whitespace = true
 charset = utf-8
 indent_size = 4
 
-[*.{yml,md}]
+[*.{yml,md,rb}]
 indent_size = 2
