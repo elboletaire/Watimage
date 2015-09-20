@@ -7,6 +7,7 @@ image:
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 share: true
+modified: 2015-09-20
 ---
 
 Installing Watimage is pretty easy if you use [composer](https://getcomposer.org):
