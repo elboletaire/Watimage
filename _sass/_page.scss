@@ -109,6 +109,10 @@ body {
   height: 200%;
   min-height: 400px;
   overflow: hidden;
+
+  background-position: center center;
+  background-size: cover;
+
   &:after {
     content: '';
     position: absolute;
@@ -118,15 +122,10 @@ body {
     height: 100%;
     background-color: rgba($base-color,0.3);
   }
+
+  // We use background for the image
   img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    min-width: 50%;
-    min-height: 400px; // match .entry-image min-height
+    display: none;
   }
 }
 // Feature Image Caption
