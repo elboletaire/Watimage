@@ -72,10 +72,7 @@ define('IMG_FLIP_VERTICAL', 2);
 define('IMG_FLIP_BOTH', 3);
 ~~~
 
-About header image
-------------------
-
-For the header image the following code has been executed:
+{% include about-image-header.md %}
 
 ~~~php
 $image = new Image('el-carmel-viewpoint.jpg');
@@ -89,6 +86,4 @@ $image
 ;
 ~~~
 
-Both the image and the original used can be found under
-[`gh-pages`](https://github.com/elboletaire/watimage/tree/gh-pages) branch,
-inside [`images`](https://github.com/elboletaire/Watimage/tree/gh-pages/images) folder.
+{% include about-image-footer.md %}
