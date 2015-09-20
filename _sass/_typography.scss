@@ -79,6 +79,9 @@ blockquote {
 
 // List items
 // --------------------------------------------------
+li {
+    @include font(16);
+}
 .entry-content li {
 	margin-bottom: 7px;
 }
