@@ -32,7 +32,7 @@ What Watimage brings to the table:
 - Testing.
 
 <div markdown="0">
-  <a href="{{ site.url }}/setup/" class="btn btn-info">Watimage Setup</a>
+  <a href="{{ site.url }}/usage/setup.html" class="btn btn-info">Watimage Setup</a>
   <a href="https://github.com/elboletaire/Watimage" class="btn btn-success">Download Watimage</a>
 </div>
 

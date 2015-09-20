@@ -1,7 +1,7 @@
 # Menu navigation links
 
 - title: Watimage Setup
-  url: /setup/
+  url: /usage/setup.html
 
 - title: API
   url: /api/
