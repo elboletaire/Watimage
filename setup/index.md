@@ -24,6 +24,9 @@ After installing Watimage ensure you're loading composer's autoloader:
 require_once 'vendor/autoload.php';
 ~~~
 
+Without composer
+----------------
+
 If not using composer you can add Watimage however you want, but I recommend you
 using git submodules:
 
