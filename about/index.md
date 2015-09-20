@@ -9,7 +9,8 @@ comments: false
 modified: 2015-09-20
 ---
 
-Watimage started in 2011 as a CakePHP component that just crop and rotate images.
+Watimage started in 2011 as a CakePHP component that only was able to crop and
+rotate images.
 Currently is a vendor class with multiple image manipulation methods that you can
 add to any PHP project.
 
