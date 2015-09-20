@@ -110,7 +110,7 @@ li {
 	}
 }
 pre {
-	@include font-rem(12);
+	@include font-rem(14);
 	line-height: 1.5;
 	overflow-x: auto;
 	&::-webkit-scrollbar {
