@@ -39,6 +39,7 @@ timezone:    Europe/Madrid
 future:      true
 highlighter: pygments
 markdown:    KramdownPygments
+pygments_options: ['linenos']
 gems:
   - jekyll-sitemap
 sass:
