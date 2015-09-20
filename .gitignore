@@ -1,8 +1,10 @@
 _site
 .DS_Store
-*.sublime-project
-*.sublime-workspace
+*.sublime-*
 codekit-config.json
 node_modules
 Gemfile.lock
 .sass-cache
+
+jolici*
+vendor/*
