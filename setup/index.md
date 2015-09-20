@@ -6,6 +6,7 @@ image:
   feature: el-carmel-viewpoint.jpg
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
+category: configuration
 share: true
 ---
 
@@ -87,6 +88,6 @@ $image
 ;
 ~~~
 
-Image used can be found under
+Both the image and the original used can be found under
 [`gh-pages`](https://github.com/elboletaire/watimage/tree/gh-pages) branch,
 inside [`images`](https://github.com/elboletaire/Watimage/tree/gh-pages/images) folder.
