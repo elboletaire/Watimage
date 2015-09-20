@@ -22,6 +22,26 @@ module Kramdown
 
       begin
         require 'pygments'
+
+        $options = {}
+        $options[:encoding] = 'utf-8'
+        $options[:startinline] = true
+        @config = Jekyll.configuration({})
+
+        if @config['pygments_options']
+          @config['pygments_options'].each do |opt|
+            key, value = opt.split('=')
+            if value.nil?
+              if key == 'linenos'
+                value = 'inline'
+              else
+                value = true
+              end
+            end
+            $options[key] = value
+          end
+        end
+
       rescue LoadError
         STDERR.puts 'You are missing a library required for syntax highlighting. Please run:'
         STDERR.puts '  $ [sudo] gem install pygments'
@@ -34,13 +54,21 @@ module Kramdown
         code = pygmentize(el.value, lang)
         code_attr = {}
         code_attr['class'] = "language-#{lang}" if lang
-        "#{' '*indent}<div class=\"highlight\"><pre#{html_attributes(attr)}><code#{html_attributes(code_attr)}>#{code}</code></pre></div>\n"
+        "#{' '*indent}<pre#{html_attributes(attr)}><code#{html_attributes(code_attr)}>#{code}</code></pre>\n"
       end
 
       def convert_codespan(el, indent)
         attr = el.attr.dup
-        lang = extract_code_language!(attr) || @options[:kramdown_default_lang]
+        lang = extract_code_language!(attr)
         code = pygmentize(el.value, lang)
+        if lang
+          attr['class'] = "highlight"
+          if attr.has_key?('class')
+            attr['class'] += " language-#{lang}"
+          else
+            attr['class'] = "language-#{lang}"
+          end
+        end
         "<code#{html_attributes(attr)}>#{code}</code>"
       end
 
@@ -48,7 +76,8 @@ module Kramdown
         if lang
           Pygments.highlight(code,
             :lexer => lang,
-            :options => { :startinline => true, :encoding => 'utf-8', :nowrap => true })
+            :options => $options
+          )
         else
           escape_html(code)
         end
