@@ -38,7 +38,7 @@ bing_verify:
 timezone:    America/New_York
 future:      true
 highlighter: pygments
-markdown:    kramdown
+markdown:    KramdownPygments
 gems:
   - jekyll-sitemap
 sass:
@@ -57,6 +57,7 @@ kramdown:
   entity_output: as_char
   toc_levels: 1..6
   use_coderay: true
+  default_lang: php
 
   coderay:
     coderay_line_numbers: nil
