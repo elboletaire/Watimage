@@ -47,8 +47,8 @@ require_once 'vendor/Watimage/src/Exception/InvalidMimeException.php';
 // any other required class
 ~~~
 
-Just load those needed by you (e.g. if you ain't gonna use the `Watermark` class
-you can skip it).
+Just load those needed by you (e.g. if you are not gonna use the `Watermark`
+class you can skip it).
 
 Since you've loaded Watimage you can start using it:
 

@@ -6,13 +6,15 @@ image:
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 comments: false
-modified: 2015-09-20
+modified: 2015-12-10
 ---
 
-Watimage started in 2011 as a CakePHP component that only was able to crop and
-rotate images.
-Currently is a vendor class with multiple image manipulation methods that you can
-add to any PHP project.
+Currently Watimage is a vendor class with multiple image manipulation methods
+that you can add to any PHP project.
+
+Although it started in 2011 as a CakePHP component that was only able to crop
+and rotate images.
+
 
 What Watimage brings to the table:
 ----------------------------------
