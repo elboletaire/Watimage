@@ -1041,7 +1041,7 @@ class Image
      */
     protected function getMimeFromExtension($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         switch ($extension) {
             case 'jpg':
