@@ -9,5 +9,5 @@ comments: false
 modified: 2015-12-10
 ---
 
-- [Setup](/setup)
+- [Setup](./setup)
 - Classes usage
