@@ -5,4 +5,13 @@
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>
+    <logging>
+        <log type="coverage-html" target="build/coverage"/>
+    </logging>
+    <!-- Ignore vendor tests in code coverage reports -->
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
+    </filter>
 </phpunit>
