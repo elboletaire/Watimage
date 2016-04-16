@@ -79,9 +79,6 @@ blockquote {
 
 // List items
 // --------------------------------------------------
-li {
-    @include font(16);
-}
 .entry-content li {
 	margin-bottom: 7px;
 }
@@ -113,7 +110,7 @@ li {
 	}
 }
 pre {
-	@include font-rem(14);
+	@include font-rem(12);
 	line-height: 1.5;
 	overflow-x: auto;
 	&::-webkit-scrollbar {
@@ -126,4 +123,3 @@ pre {
 		@include rounded(4px);
 	}
 }
-

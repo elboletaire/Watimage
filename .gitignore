@@ -7,4 +7,5 @@ Gemfile.lock
 .sass-cache
 
 jolici*
-vendor/*
+vendor/
+.jekyll-metadata
