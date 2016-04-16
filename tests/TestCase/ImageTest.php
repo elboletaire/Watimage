@@ -26,6 +26,11 @@ class ImageTest extends TestCaseBase
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
     }
 
+    /**
+     * @covers ::load
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidMimeException
+     * @return void
+     */
     public function testLoad()
     {
         $image = "{$this->files_path}peke.jpg";
@@ -57,12 +62,13 @@ class ImageTest extends TestCaseBase
 
         // Check InvalidMimeException
         $file = "{$this->files_path}LICENSE";
-        $this->expectException('\Elboletaire\Watimage\Exception\InvalidMimeException');
         $this->testClass->load($file);
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @covers ::load
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
      */
     public function testLoadArgumentsFail()
     {
@@ -70,13 +76,19 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\FileNotExistException
+     * @covers ::load
+     * @expectedException \Elboletaire\Watimage\Exception\FileNotExistException
+     * @return void
      */
     public function testLoadFileNotExistFail()
     {
         $this->testClass->load('a-non-existant-file.png');
     }
 
+    /**
+     * @covers ::create
+     * @return void
+     */
     public function testCreate()
     {
         $image = $this->testClass->create(250, 400);
@@ -102,7 +114,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
      */
     public function testCreateArgumentsFail()
     {
@@ -111,6 +124,7 @@ class ImageTest extends TestCaseBase
 
     /**
      * @runInSeparateProcess
+     * @return void
      */
     public function testGenerate()
     {
@@ -138,12 +152,28 @@ class ImageTest extends TestCaseBase
         $image = $this->testClass->load($input)->generate($output);
         $this->assertFileExists($output);
         $this->assertGreaterThan(0, filesize($output));
+    }
 
-        // Check InvalidArgumentException
-        $this->expectException('\Elboletaire\Watimage\Exception\InvalidArgumentException');
+    /**
+     * @runInSeparateProcess
+     * @covers ::generate
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
+     */
+    public function testGenerateThrowsInvalidArgumentException()
+    {
+        $input = "{$this->files_path}test.png";
+
+        $image = $this->testClass->load($input);
         $image->generate(null, 'invented');
     }
 
+    /**
+     * Test save
+     *
+     * @covers ::save
+     * @return void
+     */
     public function testSave()
     {
         $image = "{$this->files_path}test.png";
@@ -164,6 +194,11 @@ class ImageTest extends TestCaseBase
         $this->assertNotEquals($original_size, filesize($output));
     }
 
+    /**
+     * @covers ::autoOrientate
+     * @return void
+     * @group orientation
+     */
     public function testAutoOrientate()
     {
         $image = "{$this->files_path}tripi.jpg";
@@ -184,6 +219,11 @@ class ImageTest extends TestCaseBase
         $this->assertEquals($original_metadata['height'], $width);
     }
 
+    /**
+     * @covers ::rotate
+     * @return void
+     * @group orientation
+     */
     public function testRotate()
     {
         // We know this image has portrait orientation
@@ -209,7 +249,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Elboletaire\Watimage\Image::resize
+     * @covers ::resize
+     * @return void
      * @group  resize
      */
     public function testResize()
@@ -241,7 +282,9 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @covers ::resize
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @group  resize
      */
     public function testResizeFail()
     {
@@ -251,6 +294,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @covers ::classicResize
+     * @return void
      * @group  resize
      */
     public function testClassicResize()
@@ -281,9 +326,10 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @group  resize
      * @covers ::reduce
      * @covers ::resizeMin
+     * @return void
+     * @group  resize
      */
     public function testReduce()
     {
@@ -306,6 +352,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @covers ::classicCrop
+     * @return void
      * @group  resize
      */
     public function testClassicCrop()
@@ -329,6 +377,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @covers ::resizeCrop
+     * @return void
      * @group  resize
      */
     public function testResizeCrop()
@@ -352,6 +402,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @covers ::flip
+     * @return void
      * @group  effects
      */
     public function testFlip()
@@ -384,7 +436,9 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @group  effects
+     * @covers ::convenienceFlip
+     * @return void
+     * @group  orientation
      */
     public function testConvenienceFlip()
     {
@@ -415,6 +469,11 @@ class ImageTest extends TestCaseBase
         $this->assertEquals($metadata['height'], $height);
     }
 
+    /**
+     * @covers ::fill
+     * @return void
+     * @group draw
+     */
     public function testFill()
     {
         // Create a 1px x 1px canvas
@@ -434,6 +493,11 @@ class ImageTest extends TestCaseBase
         ], $color);
     }
 
+    /**
+     * @covers ::crop
+     * @return void
+     * @group resize
+     */
     public function testCrop()
     {
         $image = "{$this->files_path}peke.jpg";
@@ -479,7 +543,7 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
      * @group  effects
      */
     public function testBlurFail()
