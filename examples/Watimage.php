@@ -1,17 +1,10 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-date_default_timezone_set('UTC');
+use Elboletaire\Watimage\Watimage;
 
-$current_path = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-$files_path = $current_path . 'files' . DIRECTORY_SEPARATOR;
-$output_path = $current_path . 'output' . DIRECTORY_SEPARATOR;
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php';
+
 $image = $files_path . 'test.png';
 $watermark = $files_path . 'watermark.png';
-
-require realpath($current_path . '../vendor/autoload.php');
-
-use Elboletaire\Watimage\Watimage;
 
 /************************
  *** APPLY WATERMARKS ***
@@ -20,7 +13,7 @@ $wm = new Watimage();
 $wm->setImage(array('file' => $image, 'quality' => 70)); // file to use and export quality
 $wm->setWatermark(array('file' => $watermark, 'position' => 'top right')); // watermark to use and its position
 $wm->applyWatermark(); // apply watermark to the canvas
-if ( !$wm->generate($output_path . 'test1.png') ) {
+if ( !$wm->generate(OUTPUT . 'test1.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -31,7 +24,7 @@ if ( !$wm->generate($output_path . 'test1.png') ) {
 $wm = new Watimage($image);
 // allowed types: resize, resizecrop, resizemin, crop and reduce
 $wm->resize(array('type' => 'resizecrop', 'size' => array(400, 200)));
-if ( !$wm->generate($output_path . 'test2.png') ) {
+if ( !$wm->generate(OUTPUT . 'test2.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -42,7 +35,7 @@ if ( !$wm->generate($output_path . 'test2.png') ) {
  *********************/
 $wm = new Watimage($image);
 $wm->rotate(90);
-if ( !$wm->generate($output_path . 'test3.png') ) {
+if ( !$wm->generate(OUTPUT . 'test3.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -51,7 +44,7 @@ if ( !$wm->generate($output_path . 'test3.png') ) {
  *** EXPORTING TO OTHER FORMATS ***
  **********************************/
 $wm = new Watimage($image);
-if ( !$wm->generate($output_path . 'test4.jpg', 'image/jpeg') ) {
+if ( !$wm->generate(OUTPUT . 'test4.jpg', 'image/jpeg') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -61,7 +54,7 @@ if ( !$wm->generate($output_path . 'test4.jpg', 'image/jpeg') ) {
  *******************/
 $wm = new Watimage($image);
 $wm->flip('vertical'); // or "horizontal"
-if ( !$wm->generate($output_path . 'test5.png') ) {
+if ( !$wm->generate(OUTPUT . 'test5.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -78,7 +71,7 @@ $wm->crop(array( // values from the cropper
 	'x' => 50,
 	'y' => 80
 ));
-if ( !$wm->generate($output_path . 'test6.png') ) {
+if ( !$wm->generate(OUTPUT . 'test6.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
@@ -117,7 +110,7 @@ $wm->rotate(30);
 $wm->applyWatermark();
 
 // Export the file
-if ( !$wm->generate($output_path . 'test7.png') ) {
+if ( !$wm->generate(OUTPUT . 'test7.png') ) {
 	// handle errors...
 	print_r($wm->errors);
 }
