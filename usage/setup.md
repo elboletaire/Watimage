@@ -7,25 +7,37 @@ image:
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 share: true
-modified: 2015-09-20
+modified: 2016-04-16
 ---
 
 Installing Watimage is pretty easy if you use [composer](https://getcomposer.org):
 
 ~~~bash
-composer require elboletaire/watimage ~2.0
+composer require elboletaire/watimage:~2.0
 ~~~
 
-After installing Watimage ensure you're loading composer's autoloader:
+After installing Watimage, ensure you're loading composer's autoloader:
 
 ~~~php
-<?php
 // In your main project's file or wherever you wanna load Watimage
 require_once 'vendor/autoload.php';
 ~~~
 
+Since that moment, simply init the classes:
+
+~~~php
+use Elboletaire\Watimage\Image;
+use Elboletaire\Watimage\Watermark;
+
+$image = new Image('image.jpeg');
+$watermark = new Watermark('watermark.png');
+~~~
+
 Without composer
 ----------------
+
+Composer is the recommended and easiest way, but there are some times where
+you won't use it.
 
 If not using composer you can add Watimage however you want, but I recommend you
 using git submodules:
