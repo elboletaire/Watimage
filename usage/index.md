@@ -11,3 +11,4 @@ modified: 2015-12-10
 
 - [Setup](./setup)
 - Classes usage
+- [API](/api)
