@@ -16,7 +16,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::__construct
      * @return void
      */
     public function testConstruct()
@@ -27,7 +26,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::load
      * @expectedException \Elboletaire\Watimage\Exception\InvalidMimeException
      * @return void
      */
@@ -66,7 +64,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::load
      * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
      * @return void
      */
@@ -76,7 +73,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::load
      * @expectedException \Elboletaire\Watimage\Exception\FileNotExistException
      * @return void
      */
@@ -86,7 +82,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::create
      * @return void
      */
     public function testCreate()
@@ -156,7 +151,6 @@ class ImageTest extends TestCaseBase
 
     /**
      * @runInSeparateProcess
-     * @covers ::generate
      * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
      * @return void
      */
@@ -171,7 +165,6 @@ class ImageTest extends TestCaseBase
     /**
      * Test save
      *
-     * @covers ::save
      * @return void
      */
     public function testSave()
@@ -195,7 +188,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::autoOrientate
      * @return void
      * @group orientation
      */
@@ -220,7 +212,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::rotate
      * @return void
      * @group orientation
      */
@@ -249,7 +240,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::resize
      * @return void
      * @group  resize
      */
@@ -282,7 +272,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::resize
      * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
      * @group  resize
      */
@@ -294,7 +283,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::classicResize
      * @return void
      * @group  resize
      */
@@ -326,8 +314,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::reduce
-     * @covers ::resizeMin
      * @return void
      * @group  resize
      */
@@ -352,7 +338,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::classicCrop
      * @return void
      * @group  resize
      */
@@ -377,7 +362,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::resizeCrop
      * @return void
      * @group  resize
      */
@@ -402,7 +386,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::flip
      * @return void
      * @group  effects
      */
@@ -436,7 +419,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::convenienceFlip
      * @return void
      * @group  orientation
      */
@@ -470,7 +452,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::fill
      * @return void
      * @group draw
      */
@@ -494,7 +475,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::crop
      * @return void
      * @group resize
      */
@@ -733,8 +713,6 @@ class ImageTest extends TestCaseBase
      * @return void
      * @group  effects
      * @group  slow
-     * @covers Elboletaire\Watimage\Image::vignette
-     * @covers Elboletaire\Watimage\Image::vignetteEffect
      */
     public function testVignette()
     {
@@ -757,9 +735,6 @@ class ImageTest extends TestCaseBase
         ], $color);
     }
 
-    /**
-     * @covers Elboletaire\Watimage\Image::setImage
-     */
     public function testSetImage()
     {
         $this->testClass->load("{$this->files_path}test.png");
@@ -810,7 +785,6 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers ::destroy
      * @return void
      */
     public function testDestroy()
