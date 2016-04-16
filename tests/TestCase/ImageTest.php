@@ -1,8 +1,6 @@
 <?php
 namespace Elboletaire\Watimage\Test\TestCase;
 
-use Elboletaire\Watimage\Exception\InvalidArgumentException;
-use Elboletaire\Watimage\Exception\InvalidMimeException;
 use Elboletaire\Watimage\Image;
 
 /**
@@ -59,7 +57,7 @@ class ImageTest extends TestCaseBase
 
         // Check InvalidMimeException
         $file = "{$this->files_path}LICENSE";
-        $this->expectException(InvalidMimeException::class);
+        $this->expectException('\Elboletaire\Watimage\Exception\InvalidMimeException');
         $this->testClass->load($file);
     }
 
@@ -142,7 +140,7 @@ class ImageTest extends TestCaseBase
         $this->assertGreaterThan(0, filesize($output));
 
         // Check InvalidArgumentException
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException('\Elboletaire\Watimage\Exception\InvalidArgumentException');
         $image->generate(null, 'invented');
     }
 
