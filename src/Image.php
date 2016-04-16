@@ -248,15 +248,15 @@ class Image
      */
     public function load($filename)
     {
+        if (empty($filename)) {
+            throw new InvalidArgumentException("Image file has not been set.");
+        }
+
         if (is_array($filename)) {
             if (isset($filename['quality'])) {
                 $this->setQuality($filename['quality']);
             }
             $filename = $filename['file'];
-        }
-
-        if (empty($filename)) {
-            throw new InvalidArgumentException("Image file has not been set.");
         }
 
         if (!file_exists($filename)) {
