@@ -187,6 +187,17 @@ class ImageTest extends TestCaseBase
         $this->assertNotEquals($original_size, filesize($output));
     }
 
+    public function testToString()
+    {
+        $image = "{$this->files_path}test.png";
+        $this->testClass->load($image);
+        $string = $this->testClass->toString();
+        $this->assertTrue(is_string($string));
+
+        $string = $this->testClass->toString(true);
+        $this->assertRegExp('@^data:image/png;base64,@', $string);
+    }
+
     /**
      * @return void
      * @group orientation

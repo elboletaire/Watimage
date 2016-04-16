@@ -168,15 +168,16 @@ class Image
      *
      * @param  string $filename Filename to be saved. Empty to directly print on screen.
      * @param string $output Use it to overwrite the output format when no $filename is passed.
-     * @return void
+     * @param bool $header Wheather or not generate the output header.
+     * @return Image
      * @throws InvalidArgumentException If output format is not recognised.
      */
-    public function generate($filename = null, $output = null)
+    public function generate($filename = null, $output = null, $header = true)
     {
+        $output = $output ?: $this->metadata['mime'];
         if (!empty($filename)) {
             $output = $this->getMimeFromExtension($filename);
-        } else {
-            $output = $output ?: $this->metadata['mime'];
+        } elseif ($header) {
             header("Content-type: {$output}");
         }
 
@@ -211,6 +212,30 @@ class Image
         $filename = $filename ?: $this->filename;
 
         return $this->generate($filename);
+    }
+
+    /**
+     * Returns the base64 version for the current Image.
+     *
+     * @param  bool $prefix Whether or not prefix the string
+     *                      with `data:{mime};base64,`.
+     * @return string
+     */
+    public function toString($prefix = false)
+    {
+        ob_start();
+        $this->generate(null, null, false);
+        $image = ob_get_contents();
+        ob_end_clean();
+
+        $string = base64_encode($image);
+
+        if ($prefix) {
+            $prefix = "data:{$this->metadata['mime']};base64,";
+            $string = $prefix . $string;
+        }
+
+        return $string;
     }
 
     /**
