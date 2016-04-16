@@ -130,7 +130,7 @@ differences:
 
 - `classicResize`: Resizes maintaining aspect ratio. Available throurgh `resize`
   method using `classic` or `resize` as type.
-- `reduce` (and `resizeMin`): Resizes ain image maintaining aspect ratio but ONLY
+- `reduce` (previously `resizeMin`): Resizes an image maintaining aspect ratio but ONLY
   if the given image is bigger than the specified size. Available through `resize`
   method using `reduce`, `resizemin` or `min` as type.
 - `crop`: A straight centered crop. Available through `resize` method using `crop`
@@ -236,6 +236,8 @@ These are just examples but take in mind that order really matters here.
 The normalize class is a static helper class that normalizes all the parameters
 passed to any Watimage class.
 
+Something probably useless for you.
+
 ### Watimage backwards compatibility class
 
 A `Watimage` class has been created for backwards compatibility. If you were
@@ -243,7 +245,9 @@ using Watimage prior to its 2.0 version with composer you'll find this helpful
 if you don't want to update your code or you wanna use Watimage *the old way*.
 
 > The `Watimage` class is just a bridge between the `Image` and the `Watermark`
-class.
+class. Note that if you're not using composer you'll need to require **all** the
+required Watimage files (that means all the exceptions too) to make everything
+work as expected.
 
 ```php
 // We need to use the composer's autoloader. Otherwise we'll need to load
@@ -286,11 +290,11 @@ Check out the API at https://elboletaire.github.io/Watimage/api/
 All Watimage exceptions extend from PHP's default Exception class. In Watimage
 there are 5 custom exception classes:
 
-- ExtensionNotLoadedException
-- FileNotExistException
-- InvalidArgumentException
-- InvalidExtensionException
-- InvalidMimeException
+- `ExtensionNotLoadedException`
+- `FileNotExistException`
+- `InvalidArgumentException`
+- `InvalidExtensionException`
+- `InvalidMimeException`
 
 Knowing that, you can catch your exceptions one by one:
 
@@ -300,8 +304,6 @@ use Elboletaire\Watimage\Exception\FileNotExistException;
 use Elboletaire\Watimage\Exception\InvalidArgumentException;
 use Elboletaire\Watimage\Exception\InvalidExtensionException;
 use Elboletaire\Watimage\Exception\InvalidMimeException;
-use Elboletaire\Watimage\Image;
-use Elboletaire\Watimage\Watermark;
 
 try {
 
@@ -316,8 +318,6 @@ try {
 Or simply catch from `Exception`:
 
 ```php
-use Elboletaire\Watimage\Image;
-use Elboletaire\Watimage\Watermark;
 use Exception;
 
 try {
@@ -329,10 +329,10 @@ try {
 Examples
 --------
 
-You have a lot of examples under `examples` folder.
+There are lot of examples at the `examples` folder.
 
-Before running the examples you'll need to `composer install` from `Watimage`
-root folder in order to get composer's autoloader downloaded into `vendor` folder.
+Before running them, you need to `composer install` from `Watimage` root folder
+in order to get composer's autoloader downloaded into `vendor` folder.
 
 ```bash
 composer install
@@ -343,13 +343,13 @@ php Watermark.php
 php Watimage.php
 ```
 
-Or you could put Watimage in your local webhost webroot dir and then point there
-your browser.
+You can also put the `Watimage` folder in your local webhost webroot dir and
+[point there](http://localhost/Watimage/examples/Image.php) your browser.
 
 Testing
 -------
 
-### Unit tests
+### Unit/functional tests
 
 To run phpunit tests just run phpunit from `Watimage` root path. But first
 ensure you have installed composer dependencies; tests need the composer
@@ -386,7 +386,7 @@ phpunit --exclude-group slow
 # OK (57 tests, 180 assertions)
 ```
 
-You can skip them using the whole `effects` group too:
+You can also skip that and other effect tests using the whole `effects` group:
 
 ```bash
 phpunit --exclude-group effects
@@ -396,12 +396,7 @@ phpunit --exclude-group effects
 # OK (42 tests, 149 assertions)
 ```
 
-#### About code coverage
-
-Most of the filter methods plus some other methods that do not have much logic
-have not been tested as it would be redundant to test core php methods.
-
-### Visual tests
+### "Visual" tests
 
 Inside `tests/visual` you'll find a script to visually check that all images
 are generated properly.
@@ -417,19 +412,20 @@ php run_them_all.php
 It will generate a bunch of files in `tests/visual/results` where you can check
 if everything is running as expected.
 
-TODO
-----
+Patches & Features
+------------------
 
-- Add a Text class to add texts to our images + a TTF class to use True Type
-  Fonts on that texts.
-- Add an `Effect` class to apply effects and move all the effects from Image to
-  that new class.
-- Add an `InstalikeEffect` class with a bunch more of image effects.
-- Any new features are welcome!
-- Fix transparency issues with gif images*
++ Fork
++ Mod, fix
++ Test - this is important, so it's not unintentionally broken
++ Commit - do not mess with license, todo, version, etc. (if you do change any, bump them into commits of
+their own that I can ignore when I pull)
++ Pull request - bonus point for topic branches
 
->\* Current transparency failing scenarios:
-    - rotate and resize gif images.
+Bugs & Feedback
+---------------
+
+See the [issues section](https://github.com/elboletaire/Watimage/issues).
 
 Changelog
 ---------
@@ -441,29 +437,4 @@ not loose them and to have the whole changelog there.
 LICENSE
 -------
 
-All the images given in this repository (for examples and testing) have a
-Creative Commons by-nc-sa 4.0 License.
-
-Since version 2.0 all the other non-image-files are licensed under a MIT license.
-
-    The MIT License (MIT)
-
-    Copyright (c) 2015 Òscar Casajuana <elboletaire at underave dot net>
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE.
+See [LICENSE.md](./LICENSE.md).

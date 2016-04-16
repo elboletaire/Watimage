@@ -3,6 +3,9 @@ namespace Elboletaire\Watimage\Test\TestCase;
 
 use Elboletaire\Watimage\Image;
 
+/**
+ * @coversDefaultClass \Elboletaire\Watimage\Image
+ */
 class ImageTest extends TestCaseBase
 {
     public function setUp()
@@ -12,26 +15,57 @@ class ImageTest extends TestCaseBase
         parent::setUp();
     }
 
-    public function testLoad()
+    /**
+     * @return void
+     */
+    public function testConstruct()
     {
-        $image = "{$this->files_path}/peke.jpg";
-
-        $instance = $this->testClass->load($image);
-
+        $image = "{$this->files_path}peke.jpg";
+        $instance = new Image($image);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
-
-        // Check filename has been properly loaded
-        $this->assertEquals($image, $this->getProperty('filename'));
-
-        // Check gd resource has been created
-        $this->assertEquals('gd', get_resource_type($this->getProperty('image')));
-
-        // Check for metadata
-        $this->assertNotEmpty($this->testClass->getMetadata());
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidMimeException
+     * @return void
+     */
+    public function testLoad()
+    {
+        $image = "{$this->files_path}peke.jpg";
+        $instance = $this->testClass->load($image);
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
+        // Check filename has been properly loaded
+        $this->assertEquals($image, $this->getProperty('filename'));
+        // Check gd resource has been created
+        $this->assertEquals('gd', get_resource_type($this->getProperty('image')));
+        // Check for metadata
+        $this->assertNotEmpty($this->testClass->getMetadata());
+
+        // Check loading passing quality
+        $this->testClass->load([
+            'file' => $image,
+            'quality' => 20
+        ]);
+        $this->assertEquals(20, $this->getProperty('quality'));
+
+        // Check gif load
+        $gif = "{$this->files_path}peke.gif";
+        $instance = $this->testClass->load($gif);
+        // Check gd resource has been created
+        $this->assertEquals('gd', get_resource_type($this->getProperty('image')));
+        // Check for metadata
+        $metadata = $this->testClass->getMetadata();
+        $this->assertNotEmpty($metadata);
+        $this->assertEquals('gif', $metadata['format']);
+
+        // Check InvalidMimeException
+        $file = "{$this->files_path}LICENSE";
+        $this->testClass->load($file);
+    }
+
+    /**
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
      */
     public function testLoadArgumentsFail()
     {
@@ -39,17 +73,21 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\FileNotExistException
+     * @expectedException \Elboletaire\Watimage\Exception\FileNotExistException
+     * @return void
      */
     public function testLoadFileNotExistFail()
     {
         $this->testClass->load('a-non-existant-file.png');
     }
 
+    /**
+     * @return void
+     */
     public function testCreate()
     {
         $image = $this->testClass->create(250, 400);
-        // Check instance
+        // Check chaining
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
         // Check size
         $this->assertEquals(250, $this->getProperty('width'));
@@ -59,7 +97,7 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(250, imagesx($resource));
         $this->assertEquals(400, imagesy($resource));
 
-        // Check that height is set to width when no height specified
+        // Check that height is set to width when there's no height specified
         $this->testClass->create(350);
         $this->assertEquals(350, $this->getProperty('width'));
         $this->assertEquals(350, $this->getProperty('height'));
@@ -71,7 +109,8 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
      */
     public function testCreateArgumentsFail()
     {
@@ -80,15 +119,16 @@ class ImageTest extends TestCaseBase
 
     /**
      * @runInSeparateProcess
+     * @return void
      */
     public function testGenerate()
     {
-        $image = "{$this->files_path}/test.png";
+        $input = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-generate.png");
 
         // Check that image can be generated and printed to screen
         ob_start();
-        $this->testClass->load($image)->generate();
+        $this->testClass->load($input)->generate();
         $buffer = ob_get_contents();
         ob_end_clean();
         $this->assertNotEmpty($buffer);
@@ -97,15 +137,39 @@ class ImageTest extends TestCaseBase
         $this->assertFileNotExists($output);
 
         // Generate saving to file
-        $image = $this->testClass->load($image)->generate($output);
+        $image = $this->testClass->load($input)->generate($output);
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $image);
+        $this->assertFileExists($output);
+        $this->assertGreaterThan(0, filesize($output));
+
+        // Check gif export
+        $output = $this->getOutputFilename('image-generate.gif');
+        $image = $this->testClass->load($input)->generate($output);
         $this->assertFileExists($output);
         $this->assertGreaterThan(0, filesize($output));
     }
 
+    /**
+     * @runInSeparateProcess
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @return void
+     */
+    public function testGenerateThrowsInvalidArgumentException()
+    {
+        $input = "{$this->files_path}test.png";
+
+        $image = $this->testClass->load($input);
+        $image->generate(null, 'invented');
+    }
+
+    /**
+     * Test save
+     *
+     * @return void
+     */
     public function testSave()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-save.png");
 
         $this->assertFileNotExists($output);
@@ -123,9 +187,13 @@ class ImageTest extends TestCaseBase
         $this->assertNotEquals($original_size, filesize($output));
     }
 
+    /**
+     * @return void
+     * @group orientation
+     */
     public function testAutoOrientate()
     {
-        $image = "{$this->files_path}/tripi.jpg";
+        $image = "{$this->files_path}tripi.jpg";
         $output = $this->getOutputFilename("image-auto-orientate.jpg");
 
         // I know that image must be rotated, so...
@@ -143,10 +211,14 @@ class ImageTest extends TestCaseBase
         $this->assertEquals($original_metadata['height'], $width);
     }
 
+    /**
+     * @return void
+     * @group orientation
+     */
     public function testRotate()
     {
         // We know this image has portrait orientation
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-rotate.png");
 
         // Check rotation image size
@@ -168,12 +240,12 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @covers Elboletaire\Watimage\Image::resize
+     * @return void
      * @group  resize
      */
     public function testResize()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
         $output = $this->getOutputFilename("image-resize.jpg");
 
         $types = [
@@ -200,21 +272,23 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @group  resize
      */
     public function testResizeFail()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
 
         $this->testClass->load($image)->resize('fail', 'fail');
     }
 
     /**
+     * @return void
      * @group  resize
      */
     public function testClassicResize()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-classic-resize.png");
 
         $this->testClass->load($image);
@@ -230,14 +304,22 @@ class ImageTest extends TestCaseBase
         // Check that the size of the image has been updated
         $this->assertEquals(182, $this->getProperty('width'));
         $this->assertEquals(300, $this->getProperty('height'));
+
+        $this->testClass->load($image);
+        $metadata = $this->testClass->getMetadata();
+        $this->testClass
+            ->classicResize($metadata['width'], $metadata['height'])
+            ->rotate(90)->classicResize(300, 200)
+        ;
     }
 
     /**
+     * @return void
      * @group  resize
      */
     public function testReduce()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-resizemin.png");
 
         $this->testClass->load($image);
@@ -256,11 +338,12 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @return void
      * @group  resize
      */
     public function testClassicCrop()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-classic-crop.png");
 
         $this->testClass->load($image);
@@ -279,11 +362,12 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @return void
      * @group  resize
      */
     public function testResizeCrop()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-resize-crop.png");
 
         $this->testClass->load($image);
@@ -302,11 +386,12 @@ class ImageTest extends TestCaseBase
     }
 
     /**
+     * @return void
      * @group  effects
      */
     public function testFlip()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-flip.png");
 
         $this->testClass->load($image);
@@ -334,11 +419,12 @@ class ImageTest extends TestCaseBase
     }
 
     /**
-     * @group  effects
+     * @return void
+     * @group  orientation
      */
     public function testConvenienceFlip()
     {
-        $image = "{$this->files_path}/test.png";
+        $image = "{$this->files_path}test.png";
         $output = $this->getOutputFilename("image-convenience-flip.png");
 
         $this->testClass->load($image);
@@ -365,6 +451,10 @@ class ImageTest extends TestCaseBase
         $this->assertEquals($metadata['height'], $height);
     }
 
+    /**
+     * @return void
+     * @group draw
+     */
     public function testFill()
     {
         // Create a 1px x 1px canvas
@@ -384,9 +474,13 @@ class ImageTest extends TestCaseBase
         ], $color);
     }
 
+    /**
+     * @return void
+     * @group resize
+     */
     public function testCrop()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
         $output = $this->getOutputFilename("image-crop.jpg");
 
         $this->testClass->load($image);
@@ -413,24 +507,23 @@ class ImageTest extends TestCaseBase
     /**
      * The blur method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testBlur()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->blur();
+        $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
 
+        $instance = $image->blur('selective');
         $this->assertInstanceOf('Elboletaire\Watimage\Image', $instance);
     }
 
     /**
-     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     * @expectedException \Elboletaire\Watimage\Exception\InvalidArgumentException
      * @group  effects
      */
     public function testBlurFail()
@@ -441,15 +534,12 @@ class ImageTest extends TestCaseBase
     /**
      * The brightness method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testBrightness()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->brightness(23);
@@ -460,15 +550,12 @@ class ImageTest extends TestCaseBase
     /**
      * The colorize method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testColorize()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->brightness(23);
@@ -479,15 +566,12 @@ class ImageTest extends TestCaseBase
     /**
      * The contrast method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testContrast()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->contrast(23);
@@ -498,15 +582,12 @@ class ImageTest extends TestCaseBase
     /**
      * The edgeDetection method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testEdgeDetection()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->edgeDetection();
@@ -517,15 +598,12 @@ class ImageTest extends TestCaseBase
     /**
      * The emboss method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testEmboss()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->emboss();
@@ -536,15 +614,12 @@ class ImageTest extends TestCaseBase
     /**
      * The grayscale method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testGrayscale()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->grayscale();
@@ -555,15 +630,12 @@ class ImageTest extends TestCaseBase
     /**
      * The meanRemove method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testMeanRemove()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->meanRemove();
@@ -574,15 +646,12 @@ class ImageTest extends TestCaseBase
     /**
      * The negate method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testNegate()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->negate();
@@ -593,15 +662,12 @@ class ImageTest extends TestCaseBase
     /**
      * The pixelate method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testPixelate()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->pixelate();
@@ -612,15 +678,12 @@ class ImageTest extends TestCaseBase
     /**
      * The sepia method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testSepia()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->sepia();
@@ -631,15 +694,12 @@ class ImageTest extends TestCaseBase
     /**
      * The smooth method test.
      *
-     * In all effects methods I can only test for the returning value (as they're
-     * php core features).
-     *
      * @return void
      * @group  effects
      */
     public function testSmooth()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $image = $this->testClass->load($image);
         $instance = $image->smooth(5);
@@ -653,12 +713,10 @@ class ImageTest extends TestCaseBase
      * @return void
      * @group  effects
      * @group  slow
-     * @covers Elboletaire\Watimage\Image::vignette
-     * @covers Elboletaire\Watimage\Image::vignetteEffect
      */
     public function testVignette()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $instance = $this->testClass->load($image);
         // Let's create a very dark vignette to check if borders are black
@@ -677,14 +735,11 @@ class ImageTest extends TestCaseBase
         ], $color);
     }
 
-    /**
-     * @covers Elboletaire\Watimage\Image::setImage
-     */
     public function testSetImage()
     {
-        $this->testClass->load("{$this->files_path}/test.png");
+        $this->testClass->load("{$this->files_path}test.png");
 
-        $rsc_image = "{$this->files_path}/peke.jpg";
+        $rsc_image = "{$this->files_path}peke.jpg";
         $resource = imagecreatefromjpeg($rsc_image);
 
         $instance = $this->testClass->setImage($resource);
@@ -695,12 +750,12 @@ class ImageTest extends TestCaseBase
         $this->assertEquals(682, $this->getProperty('height'));
 
         $this->setExpectedException('Exception');
-        $this->testClass->setImage("{$this->files_path}/peke.jpg");
+        $this->testClass->setImage("{$this->files_path}peke.jpg");
     }
 
     public function testGetMetadataFromFile()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
 
         $expected = [
             'width' => 1024,
@@ -729,9 +784,12 @@ class ImageTest extends TestCaseBase
         $method->invoke($this->testClass, 'image.bmp');
     }
 
+    /**
+     * @return void
+     */
     public function testDestroy()
     {
-        $image = "{$this->files_path}/peke.jpg";
+        $image = "{$this->files_path}peke.jpg";
         $instance = $this->testClass->load($image);
 
         $this->assertNotNull($this->getProperty('filename'));

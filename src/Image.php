@@ -95,12 +95,12 @@ class Image
                 $this->autoOrientate();
             }
         }
-
-        return $this;
     }
 
     /**
      * Ensure everything gets emptied on object destruction.
+     *
+     * @codeCoverageIgnore
      */
     public function __destruct()
     {
@@ -343,7 +343,7 @@ class Image
     {
         list($width, $height) = Normalize::size($width, $height);
 
-        if ($this->width == $width && $this->height == $width) {
+        if ($this->width == $width && $this->height == $height) {
             return $this;
         }
 
@@ -368,6 +368,7 @@ class Image
      * @param  mixed $width  Can be just max width or an array containing both params.
      * @param  int   $height Max height.
      * @return Image
+     * @deprecated
      * @codeCoverageIgnore
      */
     public function resizeMin($width, $height = null)
@@ -1041,7 +1042,7 @@ class Image
      */
     protected function getMimeFromExtension($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         switch ($extension) {
             case 'jpg':

@@ -1,18 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-date_default_timezone_set('UTC');
-
-$current_path = dirname(__FILE__) . DIRECTORY_SEPARATOR;
-$files_path = $current_path . 'files' . DIRECTORY_SEPARATOR;
-$output_path = $current_path . 'output' . DIRECTORY_SEPARATOR;
-$image_file = $files_path . 'test.png';
-$watermark_file = $files_path . 'watermark.png';
-
-require realpath($current_path . '../vendor/autoload.php');
-
 use Elboletaire\Watimage\Image;
 use Elboletaire\Watimage\Watermark;
+
+require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php';
+
+$image_file = FILES . 'test.png';
+$watermark_file = FILES . 'watermark.png';
 
 /***********************
  *** APPLY WATERMARK ***
@@ -25,7 +18,7 @@ $watermark
     ->apply($image)
     // apply method returns the Image instance (not the Watermark)
     // that's why we can directly generate
-    ->generate($output_path . 'watermark1-apply.png');
+    ->generate(OUTPUT . 'watermark1-apply.png');
 
 /**************************
  *** ALTERING WATERMARK ***
@@ -39,7 +32,7 @@ $watermark
     ->negate()
     ->setPosition('bottom right')
     ->apply($image)
-    ->generate($output_path . 'watermark2-rotate.png');
+    ->generate(OUTPUT . 'watermark2-rotate.png');
 
 /***************************
  *** EVERYTHING TOGETHER ***
@@ -91,7 +84,7 @@ $watermark = new Watermark($watermark_file);
 $watermark->setPosition('bottom right')->apply($image);
 
 // generate the resulting image
-$image->generate($output_path . 'watermark3-all-together.png');
+$image->generate(OUTPUT . 'watermark3-all-together.png');
 
 echo "All examples are now available under the 'output' folder\n";
 // END OF FILE
