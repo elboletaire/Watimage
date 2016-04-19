@@ -39,15 +39,4 @@ What Watimage brings to the table:
   <a href="https://github.com/elboletaire/Watimage" class="btn btn-success">Download Watimage</a>
 </div>
 
-{% include about-image-header.md %}
-
-~~~php
-$image = new Image('peke.jpg');
-$image
-    ->sepia(60)
-    ->vignette(.3)
-    ->generate()
-;
-~~~
-
-{% include about-image-footer.md %}
+{% include about-image/peke-sepia.md %}
