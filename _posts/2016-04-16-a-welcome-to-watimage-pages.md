@@ -21,3 +21,5 @@ Check out some of the (currently) available categories:
 - [Tutorial](/tags/#tutorial)
 - [Question](/tags/#question)
 - [Filters](/tags/#filters)
+
+{% include about-image/el-carmel-viewpoint.md %}

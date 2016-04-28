@@ -4,9 +4,9 @@ title: "Basic Watimage Usage"
 modified: 2016-04-16 19:53:21 +0200
 tags: [tutorial,question]
 image:
-  feature:
-  credit:
-  creditlink:
+  feature: peke-sepia.jpg
+  credit: elboletaire
+  creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 comments:
 share:
 ---
@@ -84,4 +84,24 @@ be detected, will guess the file type from its extension.
 For that reason you cannot use `load` to load a non-uploaded file
 [as temaqueja tried](https://github.com/elboletaire/Watimage/issues/2).
 
-But there are some workarounds.
+But there's a workaround for this.
+
+Since version 2.0.5 you have two new methods, `fromString` and `toString`, that
+can help you handle situations like this.
+
+Particulary the `fromString` method is the one that we want here:
+
+~~~php
+use Elboletaire\Watimage\Image;
+
+$image = new Image();
+$image->fromString(file_get_contents($_FILES['image']['tmp_name']));
+// now do whatever you want with the image
+$image
+  ->vignette()
+  ->contrast(-5)
+  ->generate('output.jpg')
+;
+~~~
+
+{% include about-image/peke-sepia.md %}
