@@ -172,8 +172,8 @@ class Image
      * Outputs or saves the image.
      *
      * @param  string $filename Filename to be saved. Empty to directly print on screen.
-     * @param string $output Use it to overwrite the output format when no $filename is passed.
-     * @param bool $header Wheather or not generate the output header.
+     * @param  string $output   Use it to overwrite the output format when no $filename is passed.
+     * @param  bool   $header   Wheather or not generate the output header.
      * @return Image
      * @throws InvalidArgumentException If output format is not recognised.
      */
@@ -449,10 +449,10 @@ class Image
     {
         list($width, $height) = Normalize::size($width, $height);
 
-        $start_y = ($this->height - $height) / 2;
-        $start_x = ($this->width - $width) / 2;
+        $startY = ($this->height - $height) / 2;
+        $startX = ($this->width - $width) / 2;
 
-        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $width, $height);
+        $this->image = $this->imagecopy($width, $height, $startX, $startY, $width, $height);
 
         $this->updateSize();
 
@@ -470,22 +470,22 @@ class Image
     {
         list($width, $height) = Normalize::size($width, $height);
 
-        $ratio_x = $width / $this->width;
-        $ratio_y = $height / $this->height;
-        $src_w = $this->width;
-        $src_h = $this->height;
+        $ratioX = $width / $this->width;
+        $ratioY = $height / $this->height;
+        $srcW = $this->width;
+        $srcH = $this->height;
 
-        if ($ratio_x < $ratio_y) {
-            $start_x = round(($this->width - ($width / $ratio_y)) / 2);
-            $start_y = 0;
-            $src_w = round($width / $ratio_y);
+        if ($ratioX < $ratioY) {
+            $startX = round(($this->width - ($width / $ratioY)) / 2);
+            $startY = 0;
+            $srcW = round($width / $ratioY);
         } else {
-            $start_x = 0;
-            $start_y = round(($this->height - ($height / $ratio_x)) / 2);
-            $src_h = round($height / $ratio_x);
+            $startX = 0;
+            $startY = round(($this->height - ($height / $ratioX)) / 2);
+            $srcH = round($height / $ratioX);
         }
 
-        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $src_w, $src_h);
+        $this->image = $this->imagecopy($width, $height, $startX, $startY, $srcW, $srcH);
 
         $this->updateSize();
 
@@ -507,10 +507,10 @@ class Image
             return $this;
         }
 
-        $ratio_x = $this->width / $width;
-        $ratio_y = $this->height / $height;
+        $ratioX = $this->width / $width;
+        $ratioY = $this->height / $height;
 
-        $ratio = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+        $ratio = $ratioX > $ratioY ? $ratioX : $ratioY;
 
         if ($ratio === 1) {
             return $this;
@@ -630,7 +630,7 @@ class Image
      * @param  int  $width         Canvas width.
      * @param  int  $height        Canvas height.
      * @param  bool $transparency  Whether or not to set transparency values.
-     * @return resource Image resource with the canvas.
+     * @return resource            Image resource with the canvas.
      */
     protected function imagecreate($width, $height, $transparency = true)
     {
@@ -654,33 +654,33 @@ class Image
      * Helper method for all resize methods and others that require
      * imagecopyresampled method.
      *
-     * @param  int  $dst_w New width.
-     * @param  int  $dst_h New height.
-     * @param  int  $src_x Starting source point X.
-     * @param  int  $src_y Starting source point Y.
+     * @param  int  $dstW New width.
+     * @param  int  $dstH New height.
+     * @param  int  $srcX Starting source point X.
+     * @param  int  $srcY Starting source point Y.
      * @return resource    GD image resource containing the resized image.
      */
-    protected function imagecopy($dst_w, $dst_h, $src_x = 0, $src_y = 0, $src_w = false, $src_h = false)
+    protected function imagecopy($dstW, $dstH, $srcX = 0, $srcY = 0, $srcW = false, $srcH = false)
     {
-        $dest_image = $this->imagecreate($dst_w, $dst_h);
+        $destImage = $this->imagecreate($dstW, $dstH);
 
-        if ($src_w === false) {
-            $src_w = $this->width;
+        if ($srcW === false) {
+            $srcW = $this->width;
         }
 
-        if ($src_h === false) {
-            $src_h = $this->height;
+        if ($srcH === false) {
+            $srcH = $this->height;
         }
 
         // @codingStandardsIgnoreStart
         imagecopyresampled(
-            $dest_image, $this->image,
-            0, 0, $src_x, $src_y,
-            $dst_w, $dst_h, $src_w, $src_h
+            $destImage, $this->image,
+            0, 0, $srcX, $srcY,
+            $dstW, $dstH, $srcW, $srcH
         );
         // @codingStandardsIgnoreEnd
 
-        return $dest_image;
+        return $destImage;
     }
 
     /**
@@ -905,16 +905,16 @@ class Image
     /**
      * Pixelates the image.
      *
-     * @param  int     $block_size Block size in pixels.
-     * @param  boolean $advanced   Set to true to enable advanced pixelation.
+     * @param  int  $blockSize Block size in pixels.
+     * @param  bool $advanced  Set to true to enable advanced pixelation.
      * @return Image
      */
-    public function pixelate($block_size = 3, $advanced = false)
+    public function pixelate($blockSize = 3, $advanced = false)
     {
         imagefilter(
             $this->image,
             IMG_FILTER_PIXELATE,
-            Normalize::fitInRange($block_size, 1),
+            Normalize::fitInRange($blockSize, 1),
             $advanced
         );
 

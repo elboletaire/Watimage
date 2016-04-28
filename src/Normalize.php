@@ -38,13 +38,13 @@ class Normalize
 
         // rgb(a) arrays
         if (is_array($color) && in_array(count($color), [3, 4])) {
-            $allowed_keys = [
+            $allowedKeys = [
                 'associative' => ['red', 'green', 'blue', 'alpha'],
                 'reduced'     => ['r', 'g', 'b', 'a'],
                 'numeric'     => [0, 1, 2, 3]
             ];
 
-            foreach ($allowed_keys as $keys) {
+            foreach ($allowedKeys as $keys) {
                 list($r, $g, $b, $a) = $keys;
 
                 if (!isset($color[$r], $color[$g], $color[$b])) {
@@ -117,13 +117,13 @@ class Normalize
     {
         if (!isset($y, $width, $height) && is_array($x)) {
             $values = $x;
-            $allowed_keys = [
+            $allowedKeys = [
                 'associative' => ['x', 'y', 'width', 'height'],
                 'reduced'     => ['x', 'y', 'w', 'h'],
                 'numeric'     => [0, 1, 2, 3]
             ];
 
-            foreach ($allowed_keys as $keys) {
+            foreach ($allowedKeys as $keys) {
                 list($x, $y, $width, $height) = $keys;
                 if (isset($values[$x], $values[$y], $values[$width], $values[$height])) {
                     return [
@@ -244,14 +244,14 @@ class Normalize
     public static function size($width, $height = null)
     {
         if (!isset($height) && is_array($width)) {
-            $allowed_keys = [
+            $allowedKeys = [
                 [0, 1],
                 ['x', 'y'],
                 ['w', 'h'],
                 ['width', 'height'],
             ];
 
-            foreach ($allowed_keys as $keys) {
+            foreach ($allowedKeys as $keys) {
                 list($x, $y) = $keys;
 
 

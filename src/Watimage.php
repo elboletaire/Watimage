@@ -223,11 +223,12 @@ class Watimage
                 if (empty($options['bgcolor'])) {
                     $options['bgcolor'] = -1;
                 }
+
                 $this->image->rotate($options['degrees'], $options['bgcolor']);
-            } else {
-                $this->image->rotate($options);
+                return true;
             }
 
+            $this->image->rotate($options);
             return true;
         } catch (Exception $e) {
             array_push($this->errors, $e->getMessage());
