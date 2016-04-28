@@ -114,27 +114,32 @@ class Image
      * reading this: https://thenewphalls.wordpress.com/2012/12/27/imagecreatefromstring-vs-imagecreatefromformat
      *
      * @param  string $filename Image file path/name.
-     * @param  string $format   Image format (gif, png or jpeg).
+     * @param  string $mime     Image mime or `string` if creating from string
+     *                          (no base64 encoded).
      * @return resource
      * @throws InvalidMimeException
      */
-    public function createResourceImage($filename, $format)
+    public function createResourceImage($filename, $mime)
     {
-        switch ($format) {
-            case 'gif':
+        switch ($mime) {
+            case 'image/gif':
                 $image = imagecreatefromgif($filename);
                 break;
 
-            case 'png':
+            case 'image/png':
                 $image = imagecreatefrompng($filename);
                 break;
 
-            case 'jpeg':
+            case 'image/jpeg':
                 $image =  imagecreatefromjpeg($filename);
                 break;
 
+            case 'string':
+                $image = imagecreatefromstring($filename);
+                break;
+
             default:
-                throw new InvalidMimeException($this->metadata['mime']);
+                throw new InvalidMimeException($mime);
         }
 
         // Handle transparencies
@@ -267,7 +272,39 @@ class Image
 
         $this->filename = $filename;
         $this->getMetadataForImage();
-        $this->image = $this->createResourceImage($filename, $this->metadata['format']);
+        $this->image = $this->createResourceImage($filename, $this->metadata['mime']);
+
+        return $this;
+    }
+
+    /**
+     * Loads an image from string. Can be either base64 encoded or not.
+     *
+     * @param  string $string The image string to be loaded.
+     * @return Image
+     */
+    public function fromString($string)
+    {
+        if (strpos($string, 'data:image') === 0) {
+            preg_match('/^data:(image\/[a-z]+);base64,(.+)/', $string, $matches);
+            array_shift($matches);
+            list($this->metadata['mime'], $string) = $matches;
+        }
+
+        if (!$string = base64_decode($string)) {
+            throw new InvalidArgumentException(
+                'The given value does not seem a valid base64 string'
+            );
+        }
+
+        $this->image = $this->createResourceImage($string, 'string');
+        $this->updateSize();
+
+        if (function_exists('finfo_buffer') && !isset($this->metadata['mime'])) {
+            $finfo = finfo_open();
+            $this->metadata['mime'] = finfo_buffer($finfo, $string, FILEINFO_MIME_TYPE);
+            finfo_close($finfo);
+        }
 
         return $this;
     }
@@ -579,8 +616,8 @@ class Image
         }
 
         $this->image = $this->imagecreate($width, $height);
-        $format = $exif = null;
-        $this->metadata = compact('width', 'height', 'format', 'exif');
+        $exif = null;
+        $this->metadata = compact('width', 'height', 'exif');
 
         $this->updateSize();
 
@@ -1033,11 +1070,10 @@ class Image
             'width'  => $info[0],
             'height' => $info[1],
             'mime'   => $info['mime'],
-            'format' => preg_replace('@^image/@', '', $info['mime']),
             'exif'   => null // set later, if necessary
         ];
 
-        if (function_exists('exif_read_data') && $metadata['format'] == 'jpeg') {
+        if (function_exists('exif_read_data') && $metadata['mime'] == 'image/jpeg') {
             $metadata['exif'] = exif_read_data($filename);
         }
 
