@@ -93,8 +93,17 @@ $image
 ```
 
 To export your image, just call `generate`. Indicating a filename as a
-first parameter you'll store the image in that location. If null passed the
-image will be generated on-screen creating its proper headers.
+first parameter you'll store the image in that location.
+
+```php
+$image->generate('output-filename.gif');
+```
+
+> Note that this generates a proper gif file. There's no need to specify the mime
+type, as it's guessed from the extension.
+
+If `null` is passed, the image will be generated on-screen creating its proper
+headers.
 
 
 ```php
@@ -108,7 +117,7 @@ mime type you will change your image format to that one:
 
 ```php
 // [...]
-$image->generate('output-image.jpg', 'image/jpeg');
+$image->generate(null, 'image/jpeg');
 ```
 
 Everything together:
@@ -120,7 +129,7 @@ $image
     ->resize('resizecrop', 400, 300)
     ->sepia()
     ->flip()
-    ->generate('output-image.jpg', 'image/jpeg');
+    ->generate(null, 'image/jpeg');
 ```
 
 #### Resizing images

@@ -114,27 +114,32 @@ class Image
      * reading this: https://thenewphalls.wordpress.com/2012/12/27/imagecreatefromstring-vs-imagecreatefromformat
      *
      * @param  string $filename Image file path/name.
-     * @param  string $format   Image format (gif, png or jpeg).
+     * @param  string $mime     Image mime or `string` if creating from string
+     *                          (no base64 encoded).
      * @return resource
      * @throws InvalidMimeException
      */
-    public function createResourceImage($filename, $format)
+    public function createResourceImage($filename, $mime)
     {
-        switch ($format) {
-            case 'gif':
+        switch ($mime) {
+            case 'image/gif':
                 $image = imagecreatefromgif($filename);
                 break;
 
-            case 'png':
+            case 'image/png':
                 $image = imagecreatefrompng($filename);
                 break;
 
-            case 'jpeg':
+            case 'image/jpeg':
                 $image =  imagecreatefromjpeg($filename);
                 break;
 
+            case 'string':
+                $image = imagecreatefromstring($filename);
+                break;
+
             default:
-                throw new InvalidMimeException($this->metadata['mime']);
+                throw new InvalidMimeException($mime);
         }
 
         // Handle transparencies
@@ -167,16 +172,17 @@ class Image
      * Outputs or saves the image.
      *
      * @param  string $filename Filename to be saved. Empty to directly print on screen.
-     * @param string $output Use it to overwrite the output format when no $filename is passed.
-     * @return void
+     * @param  string $output   Use it to overwrite the output format when no $filename is passed.
+     * @param  bool   $header   Wheather or not generate the output header.
+     * @return Image
      * @throws InvalidArgumentException If output format is not recognised.
      */
-    public function generate($filename = null, $output = null)
+    public function generate($filename = null, $output = null, $header = true)
     {
+        $output = $output ?: $this->metadata['mime'];
         if (!empty($filename)) {
             $output = $this->getMimeFromExtension($filename);
-        } else {
-            $output = $output ?: $this->metadata['mime'];
+        } elseif ($header) {
             header("Content-type: {$output}");
         }
 
@@ -214,6 +220,30 @@ class Image
     }
 
     /**
+     * Returns the base64 version for the current Image.
+     *
+     * @param  bool $prefix Whether or not prefix the string
+     *                      with `data:{mime};base64,`.
+     * @return string
+     */
+    public function toString($prefix = false)
+    {
+        ob_start();
+        $this->generate(null, null, false);
+        $image = ob_get_contents();
+        ob_end_clean();
+
+        $string = base64_encode($image);
+
+        if ($prefix) {
+            $prefix = "data:{$this->metadata['mime']};base64,";
+            $string = $prefix . $string;
+        }
+
+        return $string;
+    }
+
+    /**
      *  Loads image and (optionally) its options.
      *
      *  @param mixed $filename Filename string or array containing both filename and quality
@@ -223,15 +253,15 @@ class Image
      */
     public function load($filename)
     {
+        if (empty($filename)) {
+            throw new InvalidArgumentException("Image file has not been set.");
+        }
+
         if (is_array($filename)) {
             if (isset($filename['quality'])) {
                 $this->setQuality($filename['quality']);
             }
             $filename = $filename['file'];
-        }
-
-        if (empty($filename)) {
-            throw new InvalidArgumentException("Image file has not been set.");
         }
 
         if (!file_exists($filename)) {
@@ -242,7 +272,39 @@ class Image
 
         $this->filename = $filename;
         $this->getMetadataForImage();
-        $this->image = $this->createResourceImage($filename, $this->metadata['format']);
+        $this->image = $this->createResourceImage($filename, $this->metadata['mime']);
+
+        return $this;
+    }
+
+    /**
+     * Loads an image from string. Can be either base64 encoded or not.
+     *
+     * @param  string $string The image string to be loaded.
+     * @return Image
+     */
+    public function fromString($string)
+    {
+        if (strpos($string, 'data:image') === 0) {
+            preg_match('/^data:(image\/[a-z]+);base64,(.+)/', $string, $matches);
+            array_shift($matches);
+            list($this->metadata['mime'], $string) = $matches;
+        }
+
+        if (!$string = base64_decode($string)) {
+            throw new InvalidArgumentException(
+                'The given value does not seem a valid base64 string'
+            );
+        }
+
+        $this->image = $this->createResourceImage($string, 'string');
+        $this->updateSize();
+
+        if (function_exists('finfo_buffer') && !isset($this->metadata['mime'])) {
+            $finfo = finfo_open();
+            $this->metadata['mime'] = finfo_buffer($finfo, $string, FILEINFO_MIME_TYPE);
+            finfo_close($finfo);
+        }
 
         return $this;
     }
@@ -387,10 +449,10 @@ class Image
     {
         list($width, $height) = Normalize::size($width, $height);
 
-        $start_y = ($this->height - $height) / 2;
-        $start_x = ($this->width - $width) / 2;
+        $startY = ($this->height - $height) / 2;
+        $startX = ($this->width - $width) / 2;
 
-        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $width, $height);
+        $this->image = $this->imagecopy($width, $height, $startX, $startY, $width, $height);
 
         $this->updateSize();
 
@@ -408,22 +470,22 @@ class Image
     {
         list($width, $height) = Normalize::size($width, $height);
 
-        $ratio_x = $width / $this->width;
-        $ratio_y = $height / $this->height;
-        $src_w = $this->width;
-        $src_h = $this->height;
+        $ratioX = $width / $this->width;
+        $ratioY = $height / $this->height;
+        $srcW = $this->width;
+        $srcH = $this->height;
 
-        if ($ratio_x < $ratio_y) {
-            $start_x = round(($this->width - ($width / $ratio_y)) / 2);
-            $start_y = 0;
-            $src_w = round($width / $ratio_y);
+        if ($ratioX < $ratioY) {
+            $startX = round(($this->width - ($width / $ratioY)) / 2);
+            $startY = 0;
+            $srcW = round($width / $ratioY);
         } else {
-            $start_x = 0;
-            $start_y = round(($this->height - ($height / $ratio_x)) / 2);
-            $src_h = round($height / $ratio_x);
+            $startX = 0;
+            $startY = round(($this->height - ($height / $ratioX)) / 2);
+            $srcH = round($height / $ratioX);
         }
 
-        $this->image = $this->imagecopy($width, $height, $start_x, $start_y, $src_w, $src_h);
+        $this->image = $this->imagecopy($width, $height, $startX, $startY, $srcW, $srcH);
 
         $this->updateSize();
 
@@ -445,10 +507,10 @@ class Image
             return $this;
         }
 
-        $ratio_x = $this->width / $width;
-        $ratio_y = $this->height / $height;
+        $ratioX = $this->width / $width;
+        $ratioY = $this->height / $height;
 
-        $ratio = $ratio_x > $ratio_y ? $ratio_x : $ratio_y;
+        $ratio = $ratioX > $ratioY ? $ratioX : $ratioY;
 
         if ($ratio === 1) {
             return $this;
@@ -554,8 +616,8 @@ class Image
         }
 
         $this->image = $this->imagecreate($width, $height);
-        $format = $exif = null;
-        $this->metadata = compact('width', 'height', 'format', 'exif');
+        $exif = null;
+        $this->metadata = compact('width', 'height', 'exif');
 
         $this->updateSize();
 
@@ -568,7 +630,7 @@ class Image
      * @param  int  $width         Canvas width.
      * @param  int  $height        Canvas height.
      * @param  bool $transparency  Whether or not to set transparency values.
-     * @return resource Image resource with the canvas.
+     * @return resource            Image resource with the canvas.
      */
     protected function imagecreate($width, $height, $transparency = true)
     {
@@ -592,33 +654,33 @@ class Image
      * Helper method for all resize methods and others that require
      * imagecopyresampled method.
      *
-     * @param  int  $dst_w New width.
-     * @param  int  $dst_h New height.
-     * @param  int  $src_x Starting source point X.
-     * @param  int  $src_y Starting source point Y.
+     * @param  int  $dstW New width.
+     * @param  int  $dstH New height.
+     * @param  int  $srcX Starting source point X.
+     * @param  int  $srcY Starting source point Y.
      * @return resource    GD image resource containing the resized image.
      */
-    protected function imagecopy($dst_w, $dst_h, $src_x = 0, $src_y = 0, $src_w = false, $src_h = false)
+    protected function imagecopy($dstW, $dstH, $srcX = 0, $srcY = 0, $srcW = false, $srcH = false)
     {
-        $dest_image = $this->imagecreate($dst_w, $dst_h);
+        $destImage = $this->imagecreate($dstW, $dstH);
 
-        if ($src_w === false) {
-            $src_w = $this->width;
+        if ($srcW === false) {
+            $srcW = $this->width;
         }
 
-        if ($src_h === false) {
-            $src_h = $this->height;
+        if ($srcH === false) {
+            $srcH = $this->height;
         }
 
         // @codingStandardsIgnoreStart
         imagecopyresampled(
-            $dest_image, $this->image,
-            0, 0, $src_x, $src_y,
-            $dst_w, $dst_h, $src_w, $src_h
+            $destImage, $this->image,
+            0, 0, $srcX, $srcY,
+            $dstW, $dstH, $srcW, $srcH
         );
         // @codingStandardsIgnoreEnd
 
-        return $dest_image;
+        return $destImage;
     }
 
     /**
@@ -843,16 +905,16 @@ class Image
     /**
      * Pixelates the image.
      *
-     * @param  int     $block_size Block size in pixels.
-     * @param  boolean $advanced   Set to true to enable advanced pixelation.
+     * @param  int  $blockSize Block size in pixels.
+     * @param  bool $advanced  Set to true to enable advanced pixelation.
      * @return Image
      */
-    public function pixelate($block_size = 3, $advanced = false)
+    public function pixelate($blockSize = 3, $advanced = false)
     {
         imagefilter(
             $this->image,
             IMG_FILTER_PIXELATE,
-            Normalize::fitInRange($block_size, 1),
+            Normalize::fitInRange($blockSize, 1),
             $advanced
         );
 
@@ -1008,11 +1070,10 @@ class Image
             'width'  => $info[0],
             'height' => $info[1],
             'mime'   => $info['mime'],
-            'format' => preg_replace('@^image/@', '', $info['mime']),
             'exif'   => null // set later, if necessary
         ];
 
-        if (function_exists('exif_read_data') && $metadata['format'] == 'jpeg') {
+        if (function_exists('exif_read_data') && $metadata['mime'] == 'image/jpeg') {
             $metadata['exif'] = exif_read_data($filename);
         }
 

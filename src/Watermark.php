@@ -72,9 +72,10 @@ class Watermark extends Image
     /**
      * Sets the position of the watermark.
      *
-     * @param  mixed  $x  Can be a position ala CSS, just position X or an array
-     *                    containing both params.
-     * @param  int    $y  Position Y.
+     * @param  mixed $x Can be a position ala CSS, just position X or an array
+     *                  containing both params.
+     * @param  int   $y Position Y.
+     * @return Watermark
      */
     public function setPosition($x, $y = null)
     {
@@ -91,6 +92,7 @@ class Watermark extends Image
      *
      * @param  mixed  $width  Can be just width or an array containing both params.
      * @param  int    $height Height.
+     * @return Watermark
      */
     public function setSize($width, $height = null)
     {
@@ -104,6 +106,7 @@ class Watermark extends Image
      *
      * @param  mixed  $x  Can be just x position or an array containing both params.
      * @param  int    $y  Y position.
+     * @return Watermark
      */
     public function setMargin($x, $y = null)
     {
@@ -127,11 +130,11 @@ class Watermark extends Image
 
         $resource = $this->imagecreate($metadata['width'], $metadata['height']);
 
-        $is_gif = (isset($this->metadata['format']) && $this->metadata['format'] == 'gif')
+        $isGif = (isset($this->metadata['format']) && $this->metadata['format'] == 'gif')
             || (isset($metadata['format']) && $metadata['format'] == 'gif')
         ;
 
-        if ($is_gif) {
+        if ($isGif) {
             // @codingStandardsIgnoreStart
             imagecopyresized(
                 $resource, $image->getImage(),
