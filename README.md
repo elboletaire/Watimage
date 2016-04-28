@@ -14,7 +14,7 @@ watermarks and a lot more of things to your images using the PHP's GD library.
 It was initially a CakePHP component, later became a simple Vendor class and now
 is a powerful set of classes to alter images.
 
-And it maintains the transparencies in almost every scenario* :sunglasses:.
+And it maintains the transparencies in every scenario.
 
 Requirements
 ------------
