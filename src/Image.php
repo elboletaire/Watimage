@@ -644,7 +644,7 @@ class Image
             );
             imagefill($image, 0, 0, $bgcolor);
             imagesavealpha($image, true);
-            imagealphablending($image, false);
+            imagealphablending($image, true);
         }
 
         return $image;
