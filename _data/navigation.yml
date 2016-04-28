@@ -1,0 +1,12 @@
+# Menu navigation links
+- title: Watimage Setup
+  url: /usage/setup
+
+- title: Usage
+  url: /usage/
+
+- title: API
+  url: /api/
+
+- title: Github
+  url: https://github.com/elboletaire/Watimage

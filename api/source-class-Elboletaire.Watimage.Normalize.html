@@ -136,13 +136,13 @@
 </span><span id="38" class="l"><a href="#38"> 38 </a>
 </span><span id="39" class="l"><a href="#39"> 39 </a>        <span class="php-comment">// rgb(a) arrays</span>
 </span><span id="40" class="l"><a href="#40"> 40 </a>        <span class="php-keyword1">if</span> (<span class="php-keyword2">is_array</span>(<span class="php-var">$color</span>) &amp;&amp; <span class="php-keyword2">in_array</span>(<span class="php-keyword2">count</span>(<span class="php-var">$color</span>), [<span class="php-num">3</span>, <span class="php-num">4</span>])) {
-</span><span id="41" class="l"><a href="#41"> 41 </a>            <span class="php-var">$allowed_keys</span> = [
+</span><span id="41" class="l"><a href="#41"> 41 </a>            <span class="php-var">$allowedKeys</span> = [
 </span><span id="42" class="l"><a href="#42"> 42 </a>                <span class="php-quote">'associative'</span> =&gt; [<span class="php-quote">'red'</span>, <span class="php-quote">'green'</span>, <span class="php-quote">'blue'</span>, <span class="php-quote">'alpha'</span>],
 </span><span id="43" class="l"><a href="#43"> 43 </a>                <span class="php-quote">'reduced'</span>     =&gt; [<span class="php-quote">'r'</span>, <span class="php-quote">'g'</span>, <span class="php-quote">'b'</span>, <span class="php-quote">'a'</span>],
 </span><span id="44" class="l"><a href="#44"> 44 </a>                <span class="php-quote">'numeric'</span>     =&gt; [<span class="php-num">0</span>, <span class="php-num">1</span>, <span class="php-num">2</span>, <span class="php-num">3</span>]
 </span><span id="45" class="l"><a href="#45"> 45 </a>            ];
 </span><span id="46" class="l"><a href="#46"> 46 </a>
-</span><span id="47" class="l"><a href="#47"> 47 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowed_keys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
+</span><span id="47" class="l"><a href="#47"> 47 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowedKeys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
 </span><span id="48" class="l"><a href="#48"> 48 </a>                <span class="php-keyword1">list</span>(<span class="php-var">$r</span>, <span class="php-var">$g</span>, <span class="php-var">$b</span>, <span class="php-var">$a</span>) = <span class="php-var">$keys</span>;
 </span><span id="49" class="l"><a href="#49"> 49 </a>
 </span><span id="50" class="l"><a href="#50"> 50 </a>                <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$color</span>[<span class="php-var">$r</span>], <span class="php-var">$color</span>[<span class="php-var">$g</span>], <span class="php-var">$color</span>[<span class="php-var">$b</span>])) {
@@ -215,13 +215,13 @@
 </span><span id="117" class="l"><a href="#117">117 </a>    {
 </span><span id="118" class="l"><a href="#118">118 </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$y</span>, <span class="php-var">$width</span>, <span class="php-var">$height</span>) &amp;&amp; <span class="php-keyword2">is_array</span>(<span class="php-var">$x</span>)) {
 </span><span id="119" class="l"><a href="#119">119 </a>            <span class="php-var">$values</span> = <span class="php-var">$x</span>;
-</span><span id="120" class="l"><a href="#120">120 </a>            <span class="php-var">$allowed_keys</span> = [
+</span><span id="120" class="l"><a href="#120">120 </a>            <span class="php-var">$allowedKeys</span> = [
 </span><span id="121" class="l"><a href="#121">121 </a>                <span class="php-quote">'associative'</span> =&gt; [<span class="php-quote">'x'</span>, <span class="php-quote">'y'</span>, <span class="php-quote">'width'</span>, <span class="php-quote">'height'</span>],
 </span><span id="122" class="l"><a href="#122">122 </a>                <span class="php-quote">'reduced'</span>     =&gt; [<span class="php-quote">'x'</span>, <span class="php-quote">'y'</span>, <span class="php-quote">'w'</span>, <span class="php-quote">'h'</span>],
 </span><span id="123" class="l"><a href="#123">123 </a>                <span class="php-quote">'numeric'</span>     =&gt; [<span class="php-num">0</span>, <span class="php-num">1</span>, <span class="php-num">2</span>, <span class="php-num">3</span>]
 </span><span id="124" class="l"><a href="#124">124 </a>            ];
 </span><span id="125" class="l"><a href="#125">125 </a>
-</span><span id="126" class="l"><a href="#126">126 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowed_keys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
+</span><span id="126" class="l"><a href="#126">126 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowedKeys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
 </span><span id="127" class="l"><a href="#127">127 </a>                <span class="php-keyword1">list</span>(<span class="php-var">$x</span>, <span class="php-var">$y</span>, <span class="php-var">$width</span>, <span class="php-var">$height</span>) = <span class="php-var">$keys</span>;
 </span><span id="128" class="l"><a href="#128">128 </a>                <span class="php-keyword1">if</span> (<span class="php-keyword1">isset</span>(<span class="php-var">$values</span>[<span class="php-var">$x</span>], <span class="php-var">$values</span>[<span class="php-var">$y</span>], <span class="php-var">$values</span>[<span class="php-var">$width</span>], <span class="php-var">$values</span>[<span class="php-var">$height</span>])) {
 </span><span id="129" class="l"><a href="#129">129 </a>                    <span class="php-keyword1">return</span> [
@@ -342,14 +342,14 @@
 </span><span id="244" class="l"><a href="#244">244 </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> size(<span class="php-var">$width</span>, <span class="php-var">$height</span> = <span class="php-keyword1">null</span>)
 </span><span id="245" class="l"><a href="#245">245 </a>    {
 </span><span id="246" class="l"><a href="#246">246 </a>        <span class="php-keyword1">if</span> (!<span class="php-keyword1">isset</span>(<span class="php-var">$height</span>) &amp;&amp; <span class="php-keyword2">is_array</span>(<span class="php-var">$width</span>)) {
-</span><span id="247" class="l"><a href="#247">247 </a>            <span class="php-var">$allowed_keys</span> = [
+</span><span id="247" class="l"><a href="#247">247 </a>            <span class="php-var">$allowedKeys</span> = [
 </span><span id="248" class="l"><a href="#248">248 </a>                [<span class="php-num">0</span>, <span class="php-num">1</span>],
 </span><span id="249" class="l"><a href="#249">249 </a>                [<span class="php-quote">'x'</span>, <span class="php-quote">'y'</span>],
 </span><span id="250" class="l"><a href="#250">250 </a>                [<span class="php-quote">'w'</span>, <span class="php-quote">'h'</span>],
 </span><span id="251" class="l"><a href="#251">251 </a>                [<span class="php-quote">'width'</span>, <span class="php-quote">'height'</span>],
 </span><span id="252" class="l"><a href="#252">252 </a>            ];
 </span><span id="253" class="l"><a href="#253">253 </a>
-</span><span id="254" class="l"><a href="#254">254 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowed_keys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
+</span><span id="254" class="l"><a href="#254">254 </a>            <span class="php-keyword1">foreach</span> (<span class="php-var">$allowedKeys</span> <span class="php-keyword1">as</span> <span class="php-var">$keys</span>) {
 </span><span id="255" class="l"><a href="#255">255 </a>                <span class="php-keyword1">list</span>(<span class="php-var">$x</span>, <span class="php-var">$y</span>) = <span class="php-var">$keys</span>;
 </span><span id="256" class="l"><a href="#256">256 </a>
 </span><span id="257" class="l"><a href="#257">257 </a>
@@ -404,13 +404,13 @@
 </span><span id="306" class="l"><a href="#306">306 </a>    }
 </span><span id="307" class="l"><a href="#307">307 </a>
 </span><span id="308" class="l"><a href="#308">308 </a>    <span class="php-comment">/**
-</span></span><span id="309" class="l"><a href="#309">309 </a><span class="php-comment">     * Normalizes position for watermarks.
+</span></span><span id="309" class="l"><a href="#309">309 </a><span class="php-comment">     * Normalizes position + position ala css.
 </span></span><span id="310" class="l"><a href="#310">310 </a><span class="php-comment">     *
 </span></span><span id="311" class="l"><a href="#311">311 </a><span class="php-comment">     * @param  mixed $position Array with x,y or string ala CSS.
 </span></span><span id="312" class="l"><a href="#312">312 </a><span class="php-comment">     * @return mixed           Returns what you pass (array or string).
 </span></span><span id="313" class="l"><a href="#313">313 </a><span class="php-comment">     * @throws InvalidArgumentException
 </span></span><span id="314" class="l"><a href="#314">314 </a><span class="php-comment">     */</span>
-</span><span id="315" class="l"><a href="#315">315 </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> watermarkPosition(<span class="php-var">$position</span>)
+</span><span id="315" class="l"><a href="#315">315 </a>    <span class="php-keyword1">public</span> <span class="php-keyword1">static</span> <span class="php-keyword1">function</span> cssPosition(<span class="php-var">$position</span>)
 </span><span id="316" class="l"><a href="#316">316 </a>    {
 </span><span id="317" class="l"><a href="#317">317 </a>        <span class="php-keyword1">try</span> {
 </span><span id="318" class="l"><a href="#318">318 </a>            <span class="php-var">$position</span> = self::position(<span class="php-var">$position</span>);
@@ -461,7 +461,7 @@
 		 API documentation generated by <a href="http://apigen.org">ApiGen</a>
 	</div>
 </div>
-<script src="resources/combined.js?03530b167d7ee38cec9c847912cc741a2541891c"></script>
+<script src="resources/combined.js?4ddf04226a2560842a5f7f2ad92475131b95e88d"></script>
 <script src="elementlist.js?f75777b20dd26ac98c7be4483e19c6a88d65c63e"></script>
 </body>
 </html>
