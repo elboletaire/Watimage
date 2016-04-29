@@ -14,3 +14,6 @@ indent_size = 4
 
 [*.{yml,md,rb}]
 indent_size = 2
+
+[*.scss]
+indent_style = tab
