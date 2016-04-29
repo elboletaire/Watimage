@@ -11,7 +11,7 @@ comments:
 share:
 ---
 
-After you [configured Watimage](/usage/setup) you're ready to start using it and
+After you [configured Watimage](./usage/setup) you're ready to start using it and
 here's an easy usage introduction.
 
 The common use scenario usually is:
