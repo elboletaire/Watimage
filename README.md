@@ -3,7 +3,7 @@ Watimage: GD Image Helper PHP Class
 
 [![Build status](https://img.shields.io/travis/elboletaire/Watimage.svg?style=flat-square)](https://travis-ci.org/elboletaire/Watimage)
 [![Code coverage](https://img.shields.io/coveralls/elboletaire/Watimage.svg?style=flat-square)](https://coveralls.io/github/elboletaire/Watimage)
-[![License](https://img.shields.io/packagist/l/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/blob/master/LICENSE)
+[![License](https://img.shields.io/packagist/l/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/blob/master/LICENSE.md)
 [![Latest Stable Version](https://img.shields.io/github/release/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/elboletaire/Watimage.svg?style=flat-square)](https://packagist.org/packages/elboletaire/Watimage)
 [![Code Climate](https://img.shields.io/codeclimate/github/elboletaire/Watimage.svg?style=flat-square)](https://codeclimate.com/github/elboletaire/Watimage)
