@@ -16,7 +16,8 @@ php apigen.phar generate \
   --source src \
   --destination ../gh-pages/api \
   --template-theme bootstrap \
-  --title "Watimage API"
+  --title "Watimage API" \
+  --google-analytics "UA-70920203-3"
 
 cd ../gh-pages/
 
