@@ -38,7 +38,7 @@ bing_verify:
 timezone:    Europe/Madrid
 future:      true
 highlighter: pygments
-markdown:    KramdownPygments
+markdown:    Kramdown
 gems:
   - jekyll-sitemap
   - jekyll-paginate
