@@ -7,13 +7,13 @@ image:
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 share: true
-modified: 2016-04-16
+modified: 2016-04-29
 ---
 
 Installing Watimage is pretty easy if you use [composer](https://getcomposer.org):
 
 ~~~bash
-composer require elboletaire/watimage:~2.0
+composer require elboletaire/watimage:~2.0.0
 ~~~
 
 After installing Watimage, ensure you're loading composer's autoloader:
@@ -86,5 +86,7 @@ define('IMG_FLIP_HORIZONTAL', 1);
 define('IMG_FLIP_VERTICAL', 2);
 define('IMG_FLIP_BOTH', 3);
 ~~~
+
+[← Go back to Watimage Usage]({{ site.url }}/usage)
 
 {% include about-image/el-carmel-viewpoint.md %}

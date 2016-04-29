@@ -12,7 +12,8 @@ modified: 2016-04-29
 Usage pages:
 
 - [Setup](./setup)
-- Classes usage
+- [Classes usage](./classes)
 - [API]({{ site.url }}/api)
+- [Testing](./testing)
 
 {% include about-image/peke-sepia.md %}
