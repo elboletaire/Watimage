@@ -37,13 +37,12 @@ bing_verify:
 # http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone:    Europe/Madrid
 future:      true
-highlighter: pygments
-markdown:    Kramdown
+highlighter: rouge
+markdown:    kramdown
 gems:
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-gist
-  - pygments.rb
   - stringex
 sass:
   sass_dir: _sass

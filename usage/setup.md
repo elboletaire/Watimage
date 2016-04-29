@@ -18,14 +18,14 @@ composer require elboletaire/watimage:~2.0
 
 After installing Watimage, ensure you're loading composer's autoloader:
 
-~~~php
+~~~php?start_inline=1
 // In your main project's file or wherever you wanna load Watimage
 require_once 'vendor/autoload.php';
 ~~~
 
 Since that moment, simply init the classes:
 
-~~~php
+~~~php?start_inline=1
 use Elboletaire\Watimage\Image;
 use Elboletaire\Watimage\Watermark;
 
@@ -48,7 +48,7 @@ git submodule add https://github.com/elboletaire/Watimage.git vendor/Watimage
 
 After that you'll need to manually add each required file:
 
-~~~php
+~~~php?start_inline=1
 require_once 'vendor/Watimage/src/Image.php';
 require_once 'vendor/Watimage/src/Watermark.php';
 require_once 'vendor/Watimage/src/Exception/ExtensionNotLoadedException.php';
@@ -64,7 +64,7 @@ class you can skip it).
 
 Since you've loaded Watimage you can start using it:
 
-~~~php
+~~~php?start_inline=1
 use Elboletaire\Watimage\Image;
 use Elboletaire\Watimage\Watermark;
 
@@ -81,7 +81,7 @@ Using Watimage with PHP 5.4
 If you're running PHP 5.4 you need to define the following constants in order to
 get Watimage properly working (are required by the `flip` method):
 
-~~~php
+~~~php?start_inline=1
 define('IMG_FLIP_HORIZONTAL', 1);
 define('IMG_FLIP_VERTICAL', 2);
 define('IMG_FLIP_BOTH', 3);

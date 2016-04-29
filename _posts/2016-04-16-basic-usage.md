@@ -25,7 +25,7 @@ The common use scenario usually is:
 Let's see how to do this —remember that I'm considering that you already have
 loaded composer's autoloader.
 
-~~~php
+~~~php?start_inline=1
 use Elboletaire\Watimage\Image;
 
 $original = '/path/for/your/original/image-file.jpeg';
@@ -51,7 +51,7 @@ Easy, right?
 
 Let's see now how can you add a Watermark:
 
-~~~php
+~~~php?start_inline=1
 use Elboletaire\Watimage\Image;
 use Elboletaire\Watimage\Watermark;
 
@@ -91,7 +91,7 @@ can help you handle situations like this.
 
 Particulary the `fromString` method is the one that we want here:
 
-~~~php
+~~~php?start_inline=1
 use Elboletaire\Watimage\Image;
 
 $image = new Image();

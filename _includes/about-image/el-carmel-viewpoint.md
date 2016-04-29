@@ -1,6 +1,6 @@
 {% include about-image/header.md %}
 
-~~~php
+~~~php?start_inline=1
 $image = new Image('el-carmel-viewpoint.jpg');
 $image
   ->contrast(-5)
