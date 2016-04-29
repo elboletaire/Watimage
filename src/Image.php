@@ -1021,6 +1021,7 @@ class Image
      *
      * @param resource $image Image resource to be set.
      * @throws Exception      If given image is not a GD resource.
+     * @return Image
      */
     public function setImage($image)
     {

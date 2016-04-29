@@ -40,14 +40,15 @@ Installing
 With composer:
 
 ```bash
-composer require elboletaire/watimage ~2.0
+composer require elboletaire/watimage:~2.0.0
 ```
 
-As a git submodule:
+If this is the first module that you add with composer to your project you'll
+need to require composer's `autoload.php` file:
 
-```bash
-git submodule add https://github.com/elboletaire/Watimage.git Vendor/Elboletaire/Watimage
-```
+~~~php
+require_once 'vendor/autoload.php';
+~~~
 
 ### PHP 5.4
 
