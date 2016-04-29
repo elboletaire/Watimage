@@ -1,13 +1,13 @@
 ---
 layout: post
 title: "Welcome to Watimage pages"
-modified: 2016-04-29 13:52:24 +0200
+modified: 2016-04-29 22:54:21 +0200
 tags: [general]
 image:
   feature: el-carmel-viewpoint.jpg
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
-comments: false
+comments: true
 share: true
 ---
 

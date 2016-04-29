@@ -1,14 +1,14 @@
 ---
 layout: post
 title: "Basic Watimage Usage"
-modified: 2016-04-29 2:37:21 +0200
+modified: 2016-04-29 22:54:21 +0200
 tags: [tutorial,question]
 image:
   feature: peke-sepia.jpg
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
-comments:
-share:
+comments: true
+share: true
 ---
 
 After you [configured Watimage](./usage/setup) you're ready to start using it and
