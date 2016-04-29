@@ -6,9 +6,13 @@ image:
   credit: elboletaire
   creditlink: https://github.com/elboletaire/Watimage/blob/master/examples/files/LICENSE
 comments: false
-modified: 2015-12-10
+modified: 2016-04-29
 ---
+
+Usage pages:
 
 - [Setup](./setup)
 - Classes usage
-- [API](/api)
+- [API]({{ site.url }}/api)
+
+{% include about-image/peke-sepia.md %}
