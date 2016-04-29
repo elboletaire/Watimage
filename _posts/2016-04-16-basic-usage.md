@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Basic Watimage Usage"
-modified: 2016-04-16 19:53:21 +0200
+modified: 2016-04-29 2:37:21 +0200
 tags: [tutorial,question]
 image:
   feature: peke-sepia.jpg
