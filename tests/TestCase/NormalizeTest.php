@@ -130,6 +130,32 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
         $this->assertArraySubset($expected, Normalize::cssPosition(['x' => 23, 'y' => 32]));
     }
 
+    public function testCropMeasures()
+    {
+        $expected = [23, 32, 46, 64];
+        $this->assertArraySubset($expected, Normalize::cropMeasures($expected));
+        $this->assertArraySubset($expected, Normalize::cropMeasures(23, 32, 46, 64));
+        $this->assertArraySubset($expected, Normalize::cropMeasures([
+            'ox' => 23,
+            'oy' => 32,
+            'dx' => 46,
+            'dy' => 64
+        ]));
+        $this->assertArraySubset($expected, Normalize::cropMeasures([
+            'ox' => 23,
+            'oy' => 32,
+            'dx' => 46,
+            'dy' => 64,
+        ]));
+
+        $this->expectException('Elboletaire\Watimage\Exception\InvalidArgumentException');
+        Normalize::cropMeasures([
+            'ox' => 46,
+            'oy' => 56,
+            'dx' => 40,
+        ]);
+    }
+
     public function testMargin()
     {
         try {
