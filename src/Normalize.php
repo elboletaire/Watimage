@@ -234,6 +234,54 @@ class Normalize
     }
 
     /**
+     * Normalizes cropMeasures (origin X, origin Y, destiny X & destiny Y)
+     *
+     * @param  mixed $ox Can be just ox or an array containing all the params.
+     * @param  int   $oy Origin Y.
+     * @param  int   $dx Destiny X.
+     * @param  int   $dy Destiny Y.
+     * @return array
+     */
+    public static function cropMeasures($ox, $oy = null, $dx = null, $dy = null)
+    {
+        if (!isset($oy, $dx, $dy, $width, $height) && is_array($ox)) {
+            $values = $ox;
+            $allowedKeys = [
+                'associative' => ['ox', 'oy', 'dx', 'dy'],
+                'numeric'     => [0, 1, 2, 3]
+            ];
+
+            foreach ($allowedKeys as $keys) {
+                list($oxk, $oyk, $dxk, $dyk) = $keys;
+                $isset = isset(
+                    $values[$oxk],
+                    $values[$oyk],
+                    $values[$dxk],
+                    $values[$dyk]
+                );
+                if (!$isset) {
+                    continue;
+                }
+                return [
+                    $values[$oxk],
+                    $values[$oyk],
+                    $values[$dxk],
+                    $values[$dyk]
+                ];
+            }
+        }
+
+        if (!isset($ox, $oy, $dx, $dy)) {
+            throw new InvalidArgumentException(
+                "Invalid options for cropMeasures %s.",
+                compact('ox', 'oy', 'dx', 'dy')
+            );
+        }
+
+        return [$ox, $oy, $dx, $dy];
+    }
+
+    /**
      * Normalizes size (width and height).
      *
      * @param  mixed  $width  Can be just width or an array containing both params.

@@ -1036,6 +1036,46 @@ class Image
     }
 
     /**
+     * Useful method to calculate real crop measures. Used when you crop an image
+     * which is smaller than the original one. In those cases you can call
+     * calculateCropMeasures to retrieve the real $ox, $oy, $dx & $dy of the
+     * image to be cropped.
+     *
+     * Note that you need to set the destiny image and pass the smaller (cropped)
+     * image to this function.
+     *
+     * @param  string|Image $croppedFile The cropped image.
+     * @param  mixed        $ox          Origin X.
+     * @param  int          $oy          Origin Y.
+     * @param  int          $dx          Destiny X.
+     * @param  int          $dy          Destiny Y.
+     * @return array
+     */
+    public function calculateCropMeasures($croppedFile, $ox, $oy = null, $dx = null, $dy = null)
+    {
+        list($ox, $oy, $dx, $dy) = Normalize::cropMeasures($ox, $oy, $dx, $dy);
+
+        if (!($croppedFile instanceof self)) {
+            $croppedFile = new self($croppedFile);
+        }
+
+        $meta = $croppedFile->getMetadata();
+
+        $rateWidth = $this->width / $meta['width'];
+        $rateHeight = $this->height / $meta['height'];
+
+        $ox = round($ox * $rateWidth);
+        $oy = round($oy * $rateHeight);
+        $dx = round($dx * $rateHeight);
+        $dy = round($dy * $rateHeight);
+
+        $width = $dx - $ox;
+        $height = $dy - $oy;
+
+        return [$ox, $oy, $dx, $dy, $width, $height];
+    }
+
+    /**
      * Returns image resource, so you can use it however you wan.
      *
      * @return resource
@@ -1075,7 +1115,7 @@ class Image
         ];
 
         if (function_exists('exif_read_data') && $metadata['mime'] == 'image/jpeg') {
-            $metadata['exif'] = exif_read_data($filename);
+            $metadata['exif'] = @exif_read_data($filename);
         }
 
         return $metadata;
