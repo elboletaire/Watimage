@@ -789,6 +789,20 @@ class ImageTest extends TestCaseBase
             [41, 41, 205, 205, 164, 164],
             $this->testClass->calculateCropMeasures($cropped, 20, 20, 100, 100)
         );
+
+        $this->testClass->load("{$this->files_path}peke.jpg");
+        $this->assertArraySubset(
+            [26, 26, 128, 128, 102, 102],
+            $this->testClass->calculateCropMeasures(
+                "{$this->files_path}peke.gif",
+                [
+                    'ox' => 20,
+                    'oy' => 20,
+                    'dx' => 100,
+                    'dy' => 100
+                ]
+            )
+        );
     }
 
     public function testGetMetadataFromFile()
