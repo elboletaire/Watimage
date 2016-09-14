@@ -147,8 +147,13 @@ class NormalizeTest extends \PHPUnit_Framework_TestCase
             'dx' => 46,
             'dy' => 64,
         ]));
+    }
 
-        $this->expectException('Elboletaire\Watimage\Exception\InvalidArgumentException');
+    /**
+     * @expectedException Elboletaire\Watimage\Exception\InvalidArgumentException
+     */
+    public function testCropMeasuresThrowsException()
+    {
         Normalize::cropMeasures([
             'ox' => 46,
             'oy' => 56,
