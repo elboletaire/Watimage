@@ -1115,7 +1115,7 @@ class Image
         ];
 
         if (function_exists('exif_read_data') && $metadata['mime'] == 'image/jpeg') {
-            $metadata['exif'] = exif_read_data($filename);
+            $metadata['exif'] = @exif_read_data($filename);
         }
 
         return $metadata;
