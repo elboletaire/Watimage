@@ -7,6 +7,7 @@ Watimage: GD Image Helper PHP Class
 [![Latest Stable Version](https://img.shields.io/github/release/elboletaire/Watimage.svg?style=flat-square)](https://github.com/elboletaire/Watimage/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/elboletaire/Watimage.svg?style=flat-square)](https://packagist.org/packages/elboletaire/Watimage)
 [![Code Climate](https://img.shields.io/codeclimate/github/elboletaire/Watimage.svg?style=flat-square)](https://codeclimate.com/github/elboletaire/Watimage)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Felboletaire%2FWatimage.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Felboletaire%2FWatimage?ref=badge_shield)
 
 Watimage is a group of PHP classes to help you resize, rotate, apply filters,
 watermarks and a lot more of things to your images using the PHP's GD library.
@@ -111,3 +112,7 @@ LICENSE
 -------
 
 See [LICENSE.md](./LICENSE.md).
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Felboletaire%2FWatimage.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Felboletaire%2FWatimage?ref=badge_large)
